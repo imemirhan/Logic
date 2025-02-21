@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "4QGybyCLnTE=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\emir_\\RiderProjects\\Logic\\src\\ApplicationCore\\ApplicationCore.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\emir_\\.nuget\\packages\\ardalis.guardclauses\\5.0.0\\ardalis.guardclauses.5.0.0.nupkg.sha512",
+    "C:\\Users\\emir_\\.nuget\\packages\\ardalis.result\\10.1.0\\ardalis.result.10.1.0.nupkg.sha512",
+    "C:\\Users\\emir_\\.nuget\\packages\\ardalis.specification\\8.0.0\\ardalis.specification.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
