@@ -1,6 +1,6 @@
 ﻿namespace PublicApi.JobSeekerEndpoints;
 
-public class JobSeekerDto
+public class CreateJobSeekerDto
 {
     
 }
