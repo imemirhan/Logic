@@ -81,7 +81,7 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         Guard.Against.Null(skill, nameof(skill));
         _skills.Add(skill);
     }
-
+    
     public void RemoveSkill(int skillId)
     {
         var skill = _skills.FirstOrDefault(s => s.Id == skillId);

@@ -1,6 +1,18 @@
 ﻿namespace PublicApi.JobSeekerEndpoints;
 
-public class UpdateJobSeekerDto
+public class JobSeekerUpdateDto
 {
-    
+    public string? Name { get; set; }
+    public string? LastName { get; set; }
+    public string? ResumeUrl { get; set; }
+    public string? AboutMe { get; set; }
+    public string? ProfileImageUrl { get; set; }
+    public string? LinkedIn { get; set; }
+    public string? GitHub { get; set; }
+    public string? Twitter { get; set; }
+    public string? Facebook { get; set; }
+    public string? Instagram { get; set; }
+    public List<JobSeekerSkillDto>? Skills { get; set; }
+    public List<JobSeekerEducationDto>? Educations { get; set; }
+    public List<JobSeekerExperienceDto>? Experiences { get; set; }
 }

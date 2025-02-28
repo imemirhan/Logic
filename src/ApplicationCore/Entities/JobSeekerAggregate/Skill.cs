@@ -12,8 +12,6 @@ public class Skill : BaseEntity
 
     public int JobSeekerId { get; private set; }
     
-    public JobSeeker JobSeeker { get; set; }
-    
     public Skill(string title, string description, SkillType skillType, int jobSeekerId)
     {
         Guard.Against.NullOrEmpty(title, nameof(title));
