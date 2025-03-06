@@ -1,0 +1,12 @@
+src/**/bin/Debug/net9.0/
+**/bin/
+**/obj/
+# Ignore Visual Studio and build artifacts
+.vscode/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.csproj.user
+*.pdb
