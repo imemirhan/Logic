@@ -1,6 +1,6 @@
 src/**/bin/Debug/net9.0/
-**/bin/
-**/obj/
+**/**/bin
+**/**/obj
 # Ignore Visual Studio and build artifacts
 .vscode/
 bin/
