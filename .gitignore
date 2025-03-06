@@ -1,4 +1,4 @@
-src/**/bin/Debug/net9.0/
+src/**/bin
 **/**/bin
 **/**/obj
 # Ignore Visual Studio and build artifacts
