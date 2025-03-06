@@ -17,7 +17,7 @@ public class EmployerService : IEmployerService
         _employerRepository = employerRepository;
         _logger = logger;
     }
-
+    
     public async Task<Result<Employer>> CreateEmployerAsync(Employer employer)
     {
         Guard.Against.Null(employer, nameof(employer));

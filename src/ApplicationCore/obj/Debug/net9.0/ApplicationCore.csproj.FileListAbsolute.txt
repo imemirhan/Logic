@@ -10,3 +10,4 @@ C:\Users\emir_\RiderProjects\Logic\src\ApplicationCore\obj\Debug\net9.0\refint\A
 C:\Users\emir_\RiderProjects\Logic\src\ApplicationCore\obj\Debug\net9.0\ApplicationCore.pdb
 C:\Users\emir_\RiderProjects\Logic\src\ApplicationCore\obj\Debug\net9.0\ref\ApplicationCore.dll
 C:\Users\emir_\RiderProjects\Logic\src\ApplicationCore\obj\Debug\net9.0\ApplicationCore.csproj.AssemblyReference.cache
+C:\Users\emir_\RiderProjects\Logic\src\ApplicationCore\obj\Debug\net9.0\ApplicationCore.sourcelink.json

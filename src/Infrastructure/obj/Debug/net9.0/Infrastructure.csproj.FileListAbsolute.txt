@@ -15,3 +15,4 @@ C:\Users\emir_\RiderProjects\Logic\src\Infrastructure\obj\Debug\net9.0\src.dll
 C:\Users\emir_\RiderProjects\Logic\src\Infrastructure\obj\Debug\net9.0\refint\src.dll
 C:\Users\emir_\RiderProjects\Logic\src\Infrastructure\obj\Debug\net9.0\src.pdb
 C:\Users\emir_\RiderProjects\Logic\src\Infrastructure\obj\Debug\net9.0\ref\src.dll
+C:\Users\emir_\RiderProjects\Logic\src\Infrastructure\obj\Debug\net9.0\Infrastructure.sourcelink.json
