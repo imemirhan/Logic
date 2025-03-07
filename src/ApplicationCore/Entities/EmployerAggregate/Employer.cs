@@ -38,7 +38,6 @@ public class Employer : BaseEntity, IAggregateRoot
         Guard.Against.NullOrEmpty(companyName, nameof(companyName));
         Guard.Against.NullOrEmpty(description, nameof(description));
         Guard.Against.NullOrEmpty(industry, nameof(industry));
-        Guard.Against.NullOrEmpty(profileImageUrl, nameof(profileImageUrl));
         
         IdentityGuid = identityGuid;
         Name = name;
