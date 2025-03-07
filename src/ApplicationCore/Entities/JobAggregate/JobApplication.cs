@@ -20,8 +20,8 @@ public class JobApplication : BaseEntity, IAggregateRoot
 
     public string? EmployerFeedback { get; private set; }
 
-    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
     #pragma warning disable CS8618
     private JobApplication() { }
@@ -37,7 +37,6 @@ public class JobApplication : BaseEntity, IAggregateRoot
         CoverLetter = coverLetter;
 
         CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
     }
 
     public void UpdateStatus(ApplicationStatus newStatus)

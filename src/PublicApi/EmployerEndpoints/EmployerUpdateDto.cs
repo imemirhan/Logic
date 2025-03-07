@@ -1,4 +1,6 @@
-﻿namespace PublicApi.EmployerEndpoints;
+﻿using System.Runtime.InteropServices.JavaScript;
+
+namespace PublicApi.EmployerEndpoints;
 
 public class EmployerUpdateDto
 {
@@ -12,4 +14,5 @@ public class EmployerUpdateDto
     public string? Facebook { get; set; }
     public string? Instagram { get; set; }
     public string? WebsiteUrl { get; set; }
+    public DateTime? UpdatedAt { get; set; } = DateTime.Now;
 }

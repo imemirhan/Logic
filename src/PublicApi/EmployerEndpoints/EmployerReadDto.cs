@@ -3,7 +3,7 @@
 public class EmployerReadDto
 {
     public int Id { get; set; }
-    public string IdentityGuid { get; set; } = string.Empty;
+    public string IdentityGuid { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Surname { get; set; } = string.Empty;
     public string CompanyName { get; set; } = string.Empty;
@@ -14,4 +14,6 @@ public class EmployerReadDto
     public string? Facebook { get; set; }
     public string? Instagram { get; set; }
     public string? WebsiteUrl { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }

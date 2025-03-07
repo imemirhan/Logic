@@ -1,6 +1,6 @@
 ﻿namespace PublicApi.JobSeekerEndpoints;
 
-public class JobSeekerSkillDto
+public class JobSeekerSkillReadDto
 {
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;

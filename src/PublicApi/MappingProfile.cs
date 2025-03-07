@@ -15,10 +15,13 @@ public class MappingProfile : Profile
         CreateMap<EmployerCreateDto, Employer>();
         CreateMap<EmployerUpdateDto, Employer>(); 
         CreateMap<JobSeeker, JobSeekerReadDto>();
-        CreateMap<JobSeeker, JobSeekerCreateDto>();
+        CreateMap<JobSeekerCreateDto, JobSeeker>();
         CreateMap<JobSeekerUpdateDto, JobSeeker>();
-        CreateMap<Skill, JobSeekerSkillDto>();
-        CreateMap<Education, JobSeekerEducationDto>();
-        CreateMap<Experience, JobSeekerExperienceDto>();
+        CreateMap<JobSeekerSkillReadDto, Skill>();
+        CreateMap<JobSeekerSkillCreateDto, Skill>();
+        CreateMap<JobSeekerEducationReadDto, Education>();
+        CreateMap<JobSeekerEducationCreateDto, Education>();
+        CreateMap<JobSeekerExperienceReadDto, Experience>();
+        CreateMap<JobSeekerExperienceCreateDto, Experience>();
     }
 }

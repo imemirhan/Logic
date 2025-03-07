@@ -19,16 +19,20 @@ public class Job : BaseEntity, IAggregateRoot
     public bool IsRemote { get; private set; }
     public JobStatus Status { get; private set; }
     public int ApplicantCount { get; private set; } = 0;
+    
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public ICollection<JobApplication> Applications { get; private set; } = new List<JobApplication>();
 
     #pragma warning disable CS8618
     private Job() { }
 
-    public Job(int employerId, string title, string description, string location,
+    public Job(DateTime createdAt, int employerId, string title, string description, string location,
                EmploymentType employmentType, decimal salaryRange, DateTime postedDate,
                DateTime expirationDate, bool isRemote = false)
     {
+        Guard.Against.Null(createdAt, nameof(createdAt));
         Guard.Against.NullOrEmpty(title, nameof(title));
         Guard.Against.NullOrEmpty(description, nameof(description));
         Guard.Against.NullOrEmpty(location, nameof(location));
@@ -45,7 +49,8 @@ public class Job : BaseEntity, IAggregateRoot
         {
             throw new ArgumentException("Expiration date must be after the posted date.");
         }
-
+        
+        CreatedAt = createdAt;
         EmployerId = employerId;
         Title = title;
         Description = description;
@@ -58,6 +63,24 @@ public class Job : BaseEntity, IAggregateRoot
         Status = JobStatus.Open;
     }
 
+    public void UpdateJobInfo(Job job)
+    {
+        Guard.Against.Null(job, nameof(job));
+        
+        Title = job.Title;
+        Description = job.Description;
+        Location = job.Location;
+        EType = job.EType;
+        SalaryRange = job.SalaryRange;
+        PostedDate = job.PostedDate;
+        ExpirationDate = job.ExpirationDate;
+        IsRemote = job.IsRemote;
+        Status = job.Status;
+        ApplicantCount = job.ApplicantCount;
+        CreatedAt = job.CreatedAt;
+        UpdatedAt = DateTime.UtcNow;
+    }
+    
     public void ExtendExpirationDate(DateTime newExpirationDate)
     {
         Guard.Against.Default(newExpirationDate, nameof(newExpirationDate));
@@ -71,6 +94,7 @@ public class Job : BaseEntity, IAggregateRoot
         }
 
         ExpirationDate = newExpirationDate;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public void IncrementApplicantCount() => ApplicantCount++;

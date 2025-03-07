@@ -16,7 +16,9 @@ public class JobSeekerReadDto
     public string? Twitter { get; set; }
     public string? Facebook { get; set; }
     public string? Instagram { get; set; }
-    public List<JobSeekerSkillDto> Skills { get; set; } = new();
-    public List<JobSeekerEducationDto> Educations { get; set; } = new();
-    public List<JobSeekerExperienceDto> Experiences { get; set; } = new();
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    public List<JobSeekerSkillReadDto> Skills { get; set; }
+    public List<JobSeekerEducationReadDto> Educations { get; set; }
+    public List<JobSeekerExperienceReadDto> Experiences { get; set; }
 }

@@ -6,7 +6,7 @@ namespace ApplicationCore.Entities.EmployerAggregate;
 
 public class Employer : BaseEntity, IAggregateRoot
 {
-    public string IdentityGuid { get; private set; }
+    public string IdentityGuid { get; set; }
     public string Name { get; private set; }
     public string Surname { get; private set; }
     public string CompanyName { get; private set; }
@@ -19,6 +19,9 @@ public class Employer : BaseEntity, IAggregateRoot
     public string? Facebook { get; private set; }
     public string? Instagram { get; private set; }
     public string? WebsiteUrl { get; private set; }
+    
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public ICollection<Job> JobPostings { get; private set; } = new List<Job>();
 
@@ -27,7 +30,7 @@ public class Employer : BaseEntity, IAggregateRoot
 
     public Employer(string identityGuid,string name, string surname,string companyName, string description, string industry,
                      string? profileImageUrl = null, string? linkedIn = null, string? gitHub = null, 
-                     string? twitter = null, string? facebook = null, string? instagram = null, string? websiteUrl = null)
+                     string? twitter = null, string? facebook = null, string? instagram = null, string? websiteUrl = null, DateTime createdAt = default)
     {
         Guard.Against.NullOrEmpty(identityGuid, nameof(identityGuid));
         Guard.Against.NullOrEmpty(name, nameof(name));
@@ -35,6 +38,7 @@ public class Employer : BaseEntity, IAggregateRoot
         Guard.Against.NullOrEmpty(companyName, nameof(companyName));
         Guard.Against.NullOrEmpty(description, nameof(description));
         Guard.Against.NullOrEmpty(industry, nameof(industry));
+        Guard.Against.NullOrEmpty(profileImageUrl, nameof(profileImageUrl));
         
         IdentityGuid = identityGuid;
         Name = name;
@@ -50,30 +54,37 @@ public class Employer : BaseEntity, IAggregateRoot
         Facebook = facebook ?? Facebook;
         Instagram = instagram ?? Instagram;
         WebsiteUrl = websiteUrl ?? WebsiteUrl;
+        CreatedAt = createdAt;
     }
 
-    public void UpdateCompanyDetails(string companyName, string description, string industry, string websiteUrl)
+    
+    public void UpdateCompanyDetails(string companyName, string description, string industry, string websiteUrl, DateTime updatedAt)
     {
         Guard.Against.NullOrEmpty(companyName, nameof(companyName));
         Guard.Against.NullOrEmpty(description, nameof(description));
         Guard.Against.NullOrEmpty(industry, nameof(industry));
         Guard.Against.NullOrEmpty(websiteUrl, nameof(websiteUrl));
-
+        Guard.Against.Null(updatedAt, nameof(updatedAt));
+        
         CompanyName = companyName;
         Description = description;
         Industry = industry;
         WebsiteUrl = websiteUrl;
+        UpdatedAt = updatedAt;
     }
 
-    public void UpdateContactInfo(string? profileImageUrl = null, string? linkedIn = null, string? gitHub = null,
+    public void UpdateContactInfo(DateTime updatedAt, string? profileImageUrl = null, string? linkedIn = null, string? gitHub = null,
                                   string? twitter = null, string? facebook = null, string? instagram = null)
     {
+        Guard.Against.Null(updatedAt, nameof(updatedAt));
+        UpdatedAt = updatedAt;
         ProfileImageUrl = profileImageUrl ?? ProfileImageUrl;
         LinkedIn = linkedIn ?? LinkedIn;
         GitHub = gitHub ?? GitHub;
         Twitter = twitter ?? Twitter;
         Facebook = facebook ?? Facebook;
         Instagram = instagram ?? Instagram;
+        UpdatedAt = updatedAt;
     }
 
     public void AddJobPosting(Job job)

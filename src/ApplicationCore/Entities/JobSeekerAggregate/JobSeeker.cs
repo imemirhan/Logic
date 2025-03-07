@@ -1,11 +1,12 @@
-﻿using ApplicationCore.Interfaces;
+﻿using System.Runtime.InteropServices.JavaScript;
+using ApplicationCore.Interfaces;
 using Ardalis.GuardClauses;
 
 namespace ApplicationCore.Entities.JobSeekerAggregate;
 
 public class JobSeeker : BaseEntity, IAggregateRoot
 {
-    public string IdentityGuid { get; private set; }
+    public string IdentityGuid { get; set; }
     public string Name { get; private set; }
     public string LastName { get; private set; }
     public string? ResumeUrl { get; private set; }
@@ -16,6 +17,9 @@ public class JobSeeker : BaseEntity, IAggregateRoot
     public string? Twitter { get; private set; }
     public string? Facebook { get; private set; }
     public string? Instagram { get; private set; }
+    
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
     
     private readonly List<Skill> _skills = new();
     public IReadOnlyCollection<Skill> Skills => _skills.AsReadOnly();
@@ -29,7 +33,7 @@ public class JobSeeker : BaseEntity, IAggregateRoot
 #pragma warning disable CS8618
     private JobSeeker() { }
 
-    public JobSeeker(string identity, string name, string lastName,
+    public JobSeeker(DateTime createdAt, string identity, string name, string lastName,
                      string? resumeUrl = null, string? aboutMe = null,
                      string? profileImageUrl = null, string? linkedIn = null,
                      string? gitHub = null, string? twitter = null,
@@ -51,9 +55,10 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         Twitter = twitter;
         Facebook = facebook;
         Instagram = instagram;
+        CreatedAt = createdAt;
     }
 
-    public void UpdateInfo(string name, string lastName, string? aboutMe = null, string? resumeUrl = null)
+    public void UpdateInfo(string name, string lastName, DateTime updatedAt, string? aboutMe = null, string? resumeUrl = null)
     {
         Guard.Against.NullOrEmpty(name, nameof(name));
         Guard.Against.NullOrEmpty(lastName, nameof(lastName));
@@ -62,9 +67,11 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         LastName = lastName;
         AboutMe = aboutMe ?? AboutMe;
         ProfileImageUrl = resumeUrl ?? ProfileImageUrl;
+        UpdatedAt = updatedAt;
+        UpdatedAt = updatedAt;
     }
 
-    public void UpdateContactInfo(string? profileImageUrl = null, string? linkedIn = null, 
+    public void UpdateContactInfo(DateTime updatedAt, string? profileImageUrl = null, string? linkedIn = null, 
                                   string? gitHub = null, string? twitter = null, 
                                   string? facebook = null, string? instagram = null)
     {
@@ -74,6 +81,7 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         Twitter = twitter ?? Twitter;
         Facebook = facebook ?? Facebook;
         Instagram = instagram ?? Instagram;
+        UpdatedAt = updatedAt;
     }
 
     public void AddSkill(Skill skill)
