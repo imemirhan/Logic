@@ -1,4 +1,4 @@
-﻿using ApplicationCore.Entities.EmployerAggregate;
+using ApplicationCore.Entities.EmployerAggregate;
 using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
 using AutoMapper;
@@ -25,52 +25,7 @@ namespace PublicApi.EmployerEndpoints
         public void AddRoute(IEndpointRouteBuilder app)
         {
 
-            app.MapGet("api/employers", GetAllEmployers)
-                .WithName("GetAllEmployers")
-                .WithDescription("Gets all employers")
-                .Produces<List<EmployerReadDto>>(StatusCodes.Status200OK)
-                .WithTags("EmployerEndpoints");
-
-            app.MapGet("api/employers/{id:int}", GetEmployerById)
-                .WithName("GetEmployerById")
-                .WithDescription("Gets employer by id")
-                .Produces<EmployerReadDto>(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status404NotFound)
-                .WithTags("EmployerEndpoints");
-
-            app.MapPut("api/employers/{id:int}", UpdateEmployer)
-                .WithName("UpdateEmployer")
-                .WithDescription("Updates a new employer")
-                .Accepts<EmployerUpdateDto>("application/json")
-                .Produces<EmployerReadDto>(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status404NotFound)
-                .WithTags("EmployerEndpoints");
-
-            app.MapDelete("api/employers/{id:int}", DeleteEmployer)
-                .WithName("DeleteEmployer")
-                .WithDescription("Deletes a employer")
-                .Produces(StatusCodes.Status204NoContent)
-                .Produces(StatusCodes.Status404NotFound)
-                .WithTags("EmployerEndpoints");
-        }
-
-        
-        private async Task<IResult> GetAllEmployers(IRepository<Employer> employerRepository)
-        {
-            var employers = await employerRepository.ListAsync();
-            var employerDtos = _mapper.Map<List<EmployerReadDto>>(employers);
-            return Results.Ok(employerDtos);
-        }
-
-        private async Task<IResult> GetEmployerById(int id, IRepository<Employer> employerRepository)
-        {
-            var employer = await employerRepository.GetByIdAsync(id);
-            if (employer == null)
-            {
-                return Results.NotFound();
-            }
-
-            return Results.Ok(_mapper.Map<EmployerReadDto>(employer));
+            
         }
 
         private async Task<IResult> UpdateEmployer(int id, EmployerUpdateDto employerDto, IRepository<Employer> employerRepository, UserManager<ApplicationUser> userManager)

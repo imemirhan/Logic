@@ -1,4 +1,5 @@
 ﻿namespace PublicApi.JobSeekerEndpoints;
+using ApplicationCore.Entities.JobSeekerAggregate;
 
 public class JobSeekerSkillReadDto
 {
@@ -9,9 +10,9 @@ public class JobSeekerSkillReadDto
     public int JobSeekerId { get; set; }
     
 }
-public enum SkillType
-{
-    Intermediate,
-    Average,
-    Beginner
-}
+// public enum SkillType
+// {
+//     Intermediate,
+//     Average,
+//     Beginner
+// }

@@ -1,8 +1,9 @@
-﻿using Ardalis.GuardClauses;
+﻿using ApplicationCore.Interfaces;
+using Ardalis.GuardClauses;
 
 namespace ApplicationCore.Entities.JobSeekerAggregate;
 
-public class Skill : BaseEntity 
+public class Skill : BaseEntity, IAggregateRoot
 {
     public string Title { get; set; }
 

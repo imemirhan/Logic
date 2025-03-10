@@ -1,4 +1,5 @@
 ﻿namespace PublicApi.JobSeekerEndpoints;
+using ApplicationCore.Entities.JobSeekerAggregate;
 
 public class JobSeekerSkillCreateDto
 {
