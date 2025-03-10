@@ -3,6 +3,8 @@ src/**/bin
 **/**/obj
 # Ignore Visual Studio and build artifacts
 .vscode/
+.vs
+.idea
 bin/
 obj/
 *.user
