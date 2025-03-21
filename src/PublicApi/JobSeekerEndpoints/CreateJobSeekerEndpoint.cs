@@ -1,6 +1,8 @@
 ﻿using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +18,7 @@ namespace PublicApi.JobSeekerEndpoints
         public void AddRoute(IEndpointRouteBuilder app)
         {
             app.MapPost("api/jobseekers", 
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (CreateJobSeekerRequest request, IRepository<JobSeeker> itemRepository, UserManager<ApplicationUser> employerManager) =>
                 {
                     return await HandleAsync(request, itemRepository, employerManager);
@@ -23,7 +26,7 @@ namespace PublicApi.JobSeekerEndpoints
             .WithName("CreateJobSeeker")
             .WithDescription("Creates a new job seeker")
             .Produces<CreateJobSeekerResponse>(StatusCodes.Status201Created)
-            .WithTags("JobSeekerEndpoints");
+            .WithTags("JobSeeker Endpoints");
         }
 
         public async Task<IResult> HandleAsync(CreateJobSeekerRequest request, IRepository<JobSeeker> itemRepository, UserManager<ApplicationUser> employerManager)

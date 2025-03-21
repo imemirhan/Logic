@@ -2,6 +2,8 @@
 using ApplicationCore.Interfaces;
 using Ardalis.GuardClauses;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -49,6 +51,7 @@ namespace PublicApi.JobSeekerEndpoints
         public void AddRoute(IEndpointRouteBuilder app)
         {
             app.MapPut("api/jobseekers/{jobSeekerId:int}",
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (int jobSeekerId, UpdateJobSeekerRequest request, IRepository<JobSeeker> repository) =>
                 {
                     request.JobSeekerId = jobSeekerId; // Ensure the ID from the route is set
@@ -56,7 +59,7 @@ namespace PublicApi.JobSeekerEndpoints
                 })
             .Accepts<UpdateJobSeekerRequest>("application/json")
             .Produces<UpdateJobSeekerResponse>()
-            .WithTags("JobSeekerEndpoints");
+            .WithTags("JobSeeker Endpoints");
         }
     }
 }

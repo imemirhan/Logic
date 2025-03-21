@@ -1,6 +1,6 @@
 ﻿using ApplicationCore.Entities.JobSeekerAggregate;
 
-namespace PublicApi.JobSeekerEndpoints
+namespace PublicApi.JobSeekerEndpoints.SkillsEndpoint
 {
     public class AddSkillByIdRequest : BaseRequest
     {

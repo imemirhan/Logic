@@ -5,18 +5,18 @@ namespace ApplicationCore.Entities.JobSeekerAggregate;
 
 public class Experience : BaseEntity, IAggregateRoot
 {
-    public string Title { get; private set; }
-    public string Company { get; private set; }
-    public int Years { get; private set; }
-
+    public string Title { get; set; }
+    public string Company { get; set; }
+    public int Years { get; set; }
     public int JobSeekerId { get; private set; }
 
-    public Experience(string title, string company, int years)
+    public Experience(int jobSeekerId, string title, string company, int years)
     {
         Guard.Against.NullOrEmpty(title, nameof(title));
         Guard.Against.NullOrEmpty(company, nameof(company));
         Guard.Against.NegativeOrZero(years, nameof(years));
 
+        JobSeekerId = jobSeekerId;
         Title = title;
         Company = company;
         Years = years;

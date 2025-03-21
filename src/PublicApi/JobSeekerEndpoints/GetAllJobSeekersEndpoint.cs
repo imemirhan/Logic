@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using MinimalApi.Endpoint;
 
 namespace PublicApi.JobSeekerEndpoints
@@ -20,7 +21,12 @@ namespace PublicApi.JobSeekerEndpoints
         public async Task<IResult> HandleAsync(GetAllJobSeekersRequest request, IRepository<JobSeeker> repository)
         {
             // Fetch all job seekers from the repository
-            var jobSeekers = await repository.ListAsync();
+            //Include in order to get their properties too...
+            var jobSeekers = repository
+                .GetAll()
+                .Include(js => js.Skills)
+                .Include(js => js.Experiences)
+                .Include(js => js.Educations);
             if (!jobSeekers.Any())
             {
                 return Results.NotFound("No job seekers found.");
@@ -40,7 +46,7 @@ namespace PublicApi.JobSeekerEndpoints
                         return await HandleAsync(new GetAllJobSeekersRequest(), jobSeekerRepository);
                     })
                 .Produces<GetAllJobSeekersResponse>()
-                .WithTags("JobSeekerEndpoints");
+                .WithTags("JobSeeker Endpoints");
         }
     }
 }

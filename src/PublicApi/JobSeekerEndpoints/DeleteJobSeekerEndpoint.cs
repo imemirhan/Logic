@@ -1,5 +1,7 @@
 ﻿using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -12,12 +14,13 @@ namespace PublicApi.JobSeekerEndpoints
         public void AddRoute(IEndpointRouteBuilder app)
         {
             app.MapDelete("api/jobseekers/{jobSeekerId}",
+                    [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                     async (int jobSeekerId, IRepository<JobSeeker> jobSeekerRepository) =>
                     {
                         return await HandleAsync(new DeleteJobSeekerRequest(jobSeekerId), jobSeekerRepository);
                     })
                 .Produces<DeleteJobSeekerResponse>()
-                .WithTags("JobSeekerEndpoints");
+                .WithTags("JobSeeker Endpoints");
         }
 
         public async Task<IResult> HandleAsync(DeleteJobSeekerRequest request, IRepository<JobSeeker> itemRepository)

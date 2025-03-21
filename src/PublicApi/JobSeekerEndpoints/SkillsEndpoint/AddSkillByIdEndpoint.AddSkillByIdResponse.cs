@@ -1,4 +1,4 @@
-﻿namespace PublicApi.JobSeekerEndpoints;
+﻿namespace PublicApi.JobSeekerEndpoints.SkillsEndpoint;
 
 public class AddSkillByIdResponse : BaseResponse
 {

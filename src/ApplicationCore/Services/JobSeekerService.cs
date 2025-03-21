@@ -21,6 +21,7 @@ public class JobSeekerService : IJobSeekerService
     {
         Guard.Against.Null(jobSeeker, nameof(jobSeeker));
         await _jobSeekerRepository.AddAsync(jobSeeker);
+        await _jobSeekerRepository.SaveChangesAsync();
         _logger.LogInformation($"Successfully created a new job seeker for {jobSeeker.Id}");
         return Result.Success(jobSeeker);
     }
@@ -38,6 +39,7 @@ public class JobSeekerService : IJobSeekerService
         var existingJob = await _jobSeekerRepository.GetByIdAsync(jobSeeker.Id);
         Guard.Against.Null(existingJob, nameof(existingJob));
         await _jobSeekerRepository.UpdateAsync(jobSeeker);
+        await _jobSeekerRepository.SaveChangesAsync();
         _logger.LogInformation($"Job '{jobSeeker.Id}' updated successfully.");
         return Result.Success();
     }
@@ -47,6 +49,7 @@ public class JobSeekerService : IJobSeekerService
         var existingJob = await _jobSeekerRepository.GetByIdAsync(id);
         Guard.Against.Null(existingJob, nameof(existingJob));
         await _jobSeekerRepository.DeleteAsync(existingJob);
+        await _jobSeekerRepository.SaveChangesAsync();
         _logger.LogInformation($"Job '{existingJob.Id}' deleted successfully.");
         return Result.Success();
     }

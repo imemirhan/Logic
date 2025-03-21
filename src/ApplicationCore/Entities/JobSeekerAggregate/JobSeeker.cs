@@ -114,9 +114,8 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         _educations.Add(education);
     }
 
-    public void RemoveEducation(int educationId)
+    public void RemoveEducation(Education education)
     {
-        var education = _educations.FirstOrDefault(e => e.Id == educationId);
         if (education != null) _educations.Remove(education);
     }
 }

@@ -14,14 +14,22 @@ public class MappingProfile : Profile
         CreateMap<Employer, EmployerReadDto>();
         CreateMap<EmployerCreateDto, Employer>();
         CreateMap<EmployerUpdateDto, Employer>(); 
-        CreateMap<JobSeeker, JobSeekerReadDto>();
+        
+        CreateMap<JobSeeker, JobSeekerReadDto>()
+            .ForMember(dest => dest.Skills, opt => opt.MapFrom(src => src.Skills.ToList()))
+            .ForMember(dest => dest.Experiences, opt => opt.MapFrom(src => src.Experiences.ToList()))
+            .ForMember(dest => dest.Educations, opt => opt.MapFrom(src => src.Educations.ToList()));
+
         CreateMap<JobSeekerCreateDto, JobSeeker>();
         CreateMap<JobSeekerUpdateDto, JobSeeker>();
-        CreateMap<JobSeekerSkillReadDto, Skill>();
+
+        CreateMap<Skill, JobSeekerSkillReadDto>();
         CreateMap<JobSeekerSkillCreateDto, Skill>();
-        CreateMap<JobSeekerEducationReadDto, Education>();
+
+        CreateMap<Education, JobSeekerEducationReadDto>();
         CreateMap<JobSeekerEducationCreateDto, Education>();
-        CreateMap<JobSeekerExperienceReadDto, Experience>();
+
+        CreateMap<Experience, JobSeekerExperienceReadDto>();
         CreateMap<JobSeekerExperienceCreateDto, Experience>();
     }
 }

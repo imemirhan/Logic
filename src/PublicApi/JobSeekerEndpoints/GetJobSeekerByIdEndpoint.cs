@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using MinimalApi.Endpoint;
 using PublicApi.EmployerEndpoints;
 
@@ -29,16 +30,19 @@ public class GetJobSeekerByIdEndpoint : IEndpoint<IResult, GetJobSeekerByIdReque
                 {
                     return await HandleAsync(new GetJobSeekerByIdRequest{ JobSeekerId = jobSeekerId }, employerRepository);
                 })
-            .Produces<GetEmployerByIdResponse>()
-            .WithTags("EmployerEndpoints");
+            .Produces<GetEmployerByIdResponse>()    
+            .WithTags("JobSeeker Endpoints");
     }
 
     public async Task<IResult> HandleAsync(GetJobSeekerByIdRequest request, IRepository<JobSeeker> repository)
     {
-        var employer = await repository.GetByIdAsync(request.JobSeekerId);
+        var employer =  await repository
+            .GetAll()
+            .Include(js => js.Skills)
+            .FirstOrDefaultAsync(js => js.Id == request.JobSeekerId);
         if (employer == null)
-            return Results.NotFound($"Employer with ID {request.JobSeekerId} not found.");
-            
+            return Results.NotFound($"Job Seeker with ID {request.JobSeekerId} not found.");
+
         var employerByIdDto = _mapper.Map<JobSeekerReadDto>(employer);
         return Results.Ok(employerByIdDto);
     }

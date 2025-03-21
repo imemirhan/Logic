@@ -1,11 +1,13 @@
 ﻿using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MinimalApi.Endpoint;
 
-namespace PublicApi.JobSeekerEndpoints
+namespace PublicApi.JobSeekerEndpoints.SkillsEndpoint
 {
     public class AddSkillToJobSeekerEndpoint : IEndpoint<IResult, AddSkillByIdRequest, IRepository<Skill>>
     {
@@ -21,14 +23,15 @@ namespace PublicApi.JobSeekerEndpoints
 
         public void AddRoute(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/jobseekers/{jobSeekerId}/skills",
+            app.MapPost("api/skills/{jobSeekerId}/",
+                    [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                     async (AddSkillByIdRequest request, IRepository<Skill> skillRepository) =>
                     {
                         return await HandleAsync(request, skillRepository);
                     })
                 .Accepts<AddSkillByIdRequest>("application/json")
                 .Produces<AddSkillByIdResponse>()
-                .WithTags("JobSeekerEndpoints");
+                .WithTags("Skill Endpoints");
         }
     }
 }
