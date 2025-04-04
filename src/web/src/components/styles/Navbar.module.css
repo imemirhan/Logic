@@ -1,0 +1,62 @@
+/* Navbar container */
+.header {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  padding: 0;
+  background-color: #001529; /* Ant Design dark theme color */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo styling */
+.logo {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0 20px;
+  line-height: 64px;
+  cursor: pointer;
+}
+
+/* Menu container */
+.menu {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Menu item styling */
+.menuItem {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menuItem:hover {
+  color: #40a9ff; /* Ant Design primary color */
+}
+
+/* Buttons container */
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Button links */
+.buttonLink {
+  color: white;
+  text-decoration: none;
+}
+
+body {
+    display: table-caption;
+}
