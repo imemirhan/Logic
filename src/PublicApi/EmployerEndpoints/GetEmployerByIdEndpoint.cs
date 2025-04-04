@@ -23,8 +23,6 @@ public class GetEmployerByIdEndpoint : IEndpoint<IResult, GetEmployerByIdRequest
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapGet("api/employers/{employerId}", 
-                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, 
-                    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (int employerId, IRepository<Employer> employerRepository) =>
                 {
                     return await HandleAsync(new GetEmployerByIdRequest { EmployerId = employerId }, employerRepository);
