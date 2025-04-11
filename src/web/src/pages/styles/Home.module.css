@@ -1,0 +1,153 @@
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f9f9fb;
+  color: #1f1f1f;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.heroSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #e8f0ff, #f9f9fb);
+}
+
+.heroContent {
+  max-width: 800px;
+}
+
+.heroTitle {
+  font-size: 48px;
+  color: #4a90e2;
+  margin-bottom: 20px;
+}
+
+.heroSubtitle {
+  font-size: 18px;
+  color: #4a4a4a;
+  margin-bottom: 30px;
+}
+
+.heroButton {
+  background-color: #4a90e2;
+  border-color: #4a90e2;
+  color: white;
+  font-size: 16px;
+  padding: 10px 30px;
+}
+
+.heroButton:hover {
+  background-color: #3a7bd5;
+  border-color: #3a7bd5;
+}
+
+.featuresSection {
+  padding: 60px 20px;
+  text-align: center;
+  background-color: #ffffff;
+}
+
+.sectionTitle {
+  font-size: 36px;
+  color: #4a90e2;
+  margin-bottom: 40px;
+}
+
+.featureCard {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+  padding: 24px;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.featureCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.featureIcon {
+  font-size: 48px;
+  color: #7b61ff;
+  margin-bottom: 20px;
+}
+
+.featureTitle {
+  font-size: 24px;
+  color: #1f1f1f;
+  margin-bottom: 10px;
+}
+
+.featureDescription {
+  font-size: 16px;
+  color: #4a4a4a;
+}
+
+.ctaSection {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #d7e4ff, #edf3ff);
+}
+
+.ctaTitle {
+  font-size: 36px;
+  color: #1f1f1f;
+  margin-bottom: 20px;
+}
+
+.ctaSubtitle {
+  font-size: 18px;
+  color: #4a4a4a;
+  margin-bottom: 30px;
+}
+
+.ctaButton {
+  background-color: #4a90e2;
+  border-color: #4a90e2;
+  color: white;
+  font-size: 16px;
+  padding: 10px 30px;
+}
+
+.ctaButton:hover {
+  background-color: #3a7bd5;
+  border-color: #3a7bd5;
+}
+
+.testimonialsSection {
+  padding: 60px 20px;
+  background-color: #f8f9fc;
+  text-align: center;
+}
+
+.testimonialCard {
+  background: #ffffff;
+  border: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  padding: 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: #333333;
+}
+
+.testimonialCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.testimonialFooter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}

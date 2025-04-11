@@ -1,0 +1,108 @@
+/* Main container */
+.aboutContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f9f9fb; /* Light background */
+  color: #1f1f1f; /* Dark text */
+  padding: 40px 20px;
+}
+
+/* Header Section */
+.headerSection {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.headerTitle {
+  font-size: 48px;
+  color: #4a90e2; /* Primary blue */
+  margin-bottom: 10px;
+}
+
+.headerSubtitle {
+  font-size: 18px;
+  color: #4a4a4a; /* Secondary gray */
+}
+
+/* Description Section */
+.descriptionSection {
+  margin-bottom: 60px;
+}
+
+.infoCard {
+  background: #ffffff; /* White card background */
+  border: 1px solid #e0e0e0; /* Light gray border */
+  text-align: center;
+  padding: 24px;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.infoCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.infoIcon {
+  font-size: 48px;
+  color: #7b61ff; /* Purple accent */
+  margin-bottom: 20px;
+}
+
+.infoTitle {
+  font-size: 24px;
+  color: #1f1f1f; /* Dark text */
+  margin-bottom: 10px;
+}
+
+.infoDescription {
+  font-size: 16px;
+  color: #4a4a4a; /* Secondary gray */
+}
+
+/* Team Section */
+.teamSection {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.sectionTitle {
+  font-size: 36px;
+  color: #4a90e2; /* Primary blue */
+  margin-bottom: 40px;
+}
+
+.teamCard {
+  background: #ffffff; /* White card background */
+  border: 1px solid #e0e0e0; /* Light gray border */
+  text-align: center;
+  padding: 24px;
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.teamCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.teamImage {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.teamName {
+  font-size: 20px;
+  color: #1f1f1f; /* Dark text */
+  margin-bottom: 5px;
+}
+
+.teamRole {
+  font-size: 16px;
+  color: #4a4a4a; /* Secondary gray */
+}

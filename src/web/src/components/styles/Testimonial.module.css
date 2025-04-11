@@ -1,0 +1,71 @@
+/* Testimonial Section Styling */
+.testimonialsSection {
+    padding: 60px 20px;
+    background-color: #f0f4f8; /* Soft light background */
+    text-align: center;
+  }
+  
+  .testimonialCard {
+    background-color: #ffffff; /* White background for cards */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for cards */
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .testimonialCard:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+  }
+  
+  .testimonialFooter {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: center;
+  }
+  
+  .testimonialFooter div {
+    margin-left: 15px;
+    text-align: left;
+  }
+  
+  .testimonialFooter strong {
+    color: #333333; /* Dark text for name */
+    font-size: 16px;
+  }
+  
+  .testimonialFooter span {
+    color: #999999; /* Soft gray for role */
+    font-size: 14px;
+  }
+  
+  .testimonialFooter .ant-avatar {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    background-color: #04ADE6; /* Primary Blue for avatar background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; /* White color for default icon */
+  }
+  
+  /* Optional: Hover Effect for Avatar */
+  .testimonialFooter .ant-avatar:hover {
+    background-color: #039ACB; /* Slightly darker blue for hover effect */
+  }
+  
+  /* Title Style for Testimonials Section */
+  .testimonialsSection .ant-typography {
+    font-size: 36px;
+    color: #04ADE6; /* Primary Blue */
+    margin-bottom: 40px;
+  }
+  
+  .testimonialsSection .ant-typography + .ant-typography {
+    color: #E0E0E0; /* Soft Gray */
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+  

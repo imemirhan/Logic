@@ -1,0 +1,44 @@
+/* Main container */
+.notFoundContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  background-color: #f9f9fb; /* Light background */
+  color: #1f1f1f; /* Dark text */
+  text-align: center;
+}
+
+/* Content container */
+.content {
+  max-width: 600px;
+  padding: 20px;
+}
+
+/* Title styling */
+.title {
+  font-size: 96px;
+  color: #4a90e2; /* Primary blue */
+  margin-bottom: 20px;
+}
+
+/* Subtitle styling */
+.subtitle {
+  font-size: 18px;
+  color: #4a4a4a; /* Secondary gray */
+  margin-bottom: 30px;
+}
+
+/* Home button styling */
+.homeButton {
+  background-color: #4a90e2; /* Primary blue */
+  border-color: #4a90e2;
+  color: white;
+  font-size: 16px;
+  padding: 10px 30px;
+}
+
+.homeButton:hover {
+  background-color: #3a7bd5; /* Darker blue */
+  border-color: #3a7bd5;
+}
