@@ -3,28 +3,34 @@
   position: fixed;
   z-index: 1;
   width: 100%;
-  padding: 0;
+  padding: 0 20px; /* Added some padding for better spacing */
   background-color: #001529; /* Ant Design dark theme color */
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 64px; /* Consistent height for the navbar */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
 }
 
 /* Logo styling */
 .logo {
   color: white;
-  font-size: 20px;
+  font-size: 24px; /* Increased font size for better visibility */
   font-weight: bold;
-  padding: 0 20px;
   line-height: 64px;
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.logo:hover {
+  color: #40a9ff; /* Primary color on hover */
 }
 
 /* Menu container */
 .menu {
   display: flex;
-  gap: 20px;
+  gap: 25px; /* Increased gap for better spacing */
   align-items: center;
 }
 
@@ -36,27 +42,84 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 0px 15px; /* Added padding for better click targets */
   border-radius: 4px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Menu item hover effect */
 .menuItem:hover {
+  background-color: rgba(64, 169, 255, 0.2); /* Light hover background */
   color: #40a9ff; /* Ant Design primary color */
+  border-radius: 8px; /* Rounded corners on hover */
 }
 
 /* Buttons container */
 .buttons {
   display: flex;
-  gap: 10px;
+  gap: 15px; /* Increased gap for spacing between buttons */
+  align-items: center;
 }
 
-/* Button links */
-.buttonLink {
+/* Button styling */
+.navButton {
+  border-radius: 4px;
+  padding: 6px 16px; /* Slightly larger padding for better button look */
+  font-size: 14px; /* Reduced font size for better fit */
+  font-weight: 600; /* Bold text for better visibility */
+  transition: all 0.3s ease;
+}
+
+/* Primary button */
+.navButton.ant-btn-primary {
+  background-color: #40a9ff; /* Primary color */
+  border-color: #40a9ff;
   color: white;
-  text-decoration: none;
 }
 
-body {
-    display: table-caption;
+.navButton.ant-btn-primary:hover {
+  background-color: #1890ff; /* Darker blue on hover */
+  border-color: #1890ff;
+  color: white;
+}
+
+/* Default button */
+.navButton.ant-btn-default {
+  background-color: transparent;
+  border-color: #ffffff;
+  color: white;
+}
+
+.navButton.ant-btn-default:hover {
+  background-color: #ffffff;
+  border-color: #40a9ff;
+  color: #40a9ff;
+}
+
+/* Button link styling */
+.buttonLink {
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .menu {
+    display: none; /* Hide menu items on small screens */
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 10px; /* Stack buttons vertically */
+  }
+
+  .logo {
+    font-size: 18px; /* Smaller logo size on mobile */
+  }
+
+  .header {
+    flex-direction: column;
+    padding: 10px;
+  }
 }

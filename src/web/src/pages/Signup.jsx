@@ -1,14 +1,59 @@
-import React from "react";
-import { Layout, Form, Input, Button, Typography } from "antd";
+import React, { useState } from "react";
+import { Layout, Form, Input, Button, Typography, Radio, Row, Col } from "antd";
+import Swal from "sweetalert2";
 import styles from "./styles/Signup.module.css";
-import signupPhoto from "../assets/signup.jpg"; // Replace with your image path
+import signupPhoto from "../assets/signup.jpg";
+import api from "../services/api"; // Import the Axios instance
 
 const { Content } = Layout;
 const { Title } = Typography;
 
 function Signup() {
-  const onFinish = (values) => {
-    console.log("Form Values:", values);
+  const [role, setRole] = useState("jobseeker"); // Default role
+
+  const onRoleChange = (e) => {
+    setRole(e.target.value);
+  };
+
+  const onFinish = async (values) => {
+    try {
+      // Add role to the values object
+      const userData = { ...values, role };
+
+      // Determine the endpoint based on the role
+      const endpoint = role === "jobseeker" ? "/jobseekers" : "/employers";
+
+      // Send the request with the role-specific endpoint
+      const response = await api.post(endpoint, userData);
+
+      // Show success alert
+      if (response.status !== 200) {
+        throw new Error("Failed to create account");
+      }
+      Swal.fire({
+        title: "Registration Successful!",
+        text: "Your account has been created. Please log in to continue.",
+        icon: "success",
+        confirmButtonText: "Go to Login",
+      }).then(() => {
+        // Redirect to login page
+        window.location.href = "/login";
+      });
+
+      console.log("Response:", response.data);
+    } catch (error) {
+      console.error("Registration failed:", error);
+
+      // Show error alert
+      Swal.fire({
+        title: "Registration Failed",
+        text:
+          error.response?.data?.message ||
+          "An error occurred while creating your account. Please try again.",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+    }
   };
 
   return (
@@ -37,13 +82,26 @@ function Signup() {
               requiredMark="optional"
               className={styles.form}
             >
-              <Form.Item
-                label="Full Name"
-                name="fullName"
-                rules={[{ required: true, message: "Please enter your full name!" }]}
-              >
-                <Input placeholder="Enter your full name" />
-              </Form.Item>
+              <Row gutter={16}>
+                <Col xs={24} sm={12}>
+                  <Form.Item
+                    label="First Name"
+                    name="name"
+                    rules={[{ required: true, message: "Please enter your first name!" }]}
+                  >
+                    <Input placeholder="Enter your first name" />
+                  </Form.Item>
+                </Col>
+                <Col xs={24} sm={12}>
+                  <Form.Item
+                    label="Last Name"
+                    name="lastName"
+                    rules={[{ required: true, message: "Please enter your last name!" }]}
+                  >
+                    <Input placeholder="Enter your last name" />
+                  </Form.Item>
+                </Col>
+              </Row>
 
               <Form.Item
                 label="Email"
@@ -59,9 +117,23 @@ function Signup() {
               <Form.Item
                 label="Password"
                 name="password"
-                rules={[{ required: true, message: "Please enter your password!" }]}
+                rules={[
+                  { required: true, message: "Please enter your password!" },
+                  {
+                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,}$/,
+                    message: "Password must have at least 6 characters, 1 uppercase, 1 lowercase, and 1 symbol.",
+                  },
+                ]}
               >
                 <Input.Password placeholder="Enter your password" />
+              </Form.Item>
+
+              {/* Role Selection */}
+              <Form.Item label="Select Role" name="role" required>
+                <Radio.Group onChange={onRoleChange} value={role}>
+                  <Radio value="jobseeker">Job Seeker</Radio>
+                  <Radio value="employer">Employer</Radio>
+                </Radio.Group>
               </Form.Item>
 
               <Form.Item>

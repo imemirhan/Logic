@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using MinimalApi.Endpoint;
 
 namespace PublicApi.JobSeekerEndpoints
@@ -18,7 +19,6 @@ namespace PublicApi.JobSeekerEndpoints
         public void AddRoute(IEndpointRouteBuilder app)
         {
             app.MapPost("api/jobseekers", 
-                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (CreateJobSeekerRequest request, IRepository<JobSeeker> itemRepository, UserManager<ApplicationUser> employerManager) =>
                 {
                     return await HandleAsync(request, itemRepository, employerManager);
@@ -53,7 +53,9 @@ namespace PublicApi.JobSeekerEndpoints
 
             if (!result.Succeeded)
             {
-                return Results.BadRequest(result.Errors);
+                var errorMessages = string.Join("; ", result.Errors.Select(e => e.Description));
+                Console.WriteLine("Error occurred: " + errorMessages);
+                return Results.BadRequest(new { Errors = errorMessages });
             }
 
             newJobSeeker = await itemRepository.AddAsync(newJobSeeker);

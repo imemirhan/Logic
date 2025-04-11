@@ -22,8 +22,6 @@ public class CreateEmployerEndpoint : IEndpoint<IResult, CreateEmployerRequest, 
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapPost("api/employers", 
-                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS,
-                AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
             async (CreateEmployerRequest request, IRepository<Employer> itemRepository, UserManager<ApplicationUser> employerManager) =>
             {
                 return await HandleAsync(request, itemRepository, employerManager);

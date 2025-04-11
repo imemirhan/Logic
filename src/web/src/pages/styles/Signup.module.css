@@ -1,47 +1,54 @@
 /* Layout container */
 .layout {
-  height: 100vh;
+  height: 100vh; /* Full viewport height */
 }
 
 /* Main container */
 .container {
   display: flex;
-  height: 100%;
+  height: 100%; /* Full height of the layout */
 }
 
 /* Left section for image */
 .leftSection {
-    flex: 0 0 800%; /* 40% width */
-    background-color: #f0f2f5; /* Light gray background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative; /* For overlay positioning */
-    overflow: hidden; /* Ensures the image doesn't overflow */
+  flex: 0 0 40%; /* 40% width */
+  background-color: #f0f2f5; /* Light gray background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* For overlay positioning */
+  overflow: hidden; /* Ensures the image doesn't overflow */
+  z-index: 0;
 }
+
+/* Image styling */
 .image {
-    width: 100%; /* Ensures the image covers the width */
-    height: 100%; /* Ensures the image covers the height */
-    object-fit: cover; /* Ensures the image maintains its aspect ratio and fills the container */
-    filter: brightness(0.7); /* Darkens the image */
+  width: 100%; /* Ensures the image covers the width */
+  height: auto; /* Maintains the aspect ratio */
+  min-height: 100%; /* Ensures the image fills the height */
+  object-fit: cover; /* Ensures the image maintains its aspect ratio and fills the container */
+  filter: brightness(0.7); /* Darkens the image */
 }
+
+/* Dark overlay */
 .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Semi-transparent black overlay */
-    z-index: 1; /* Ensures the overlay is above the image */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Semi-transparent black overlay */
+  z-index: 1; /* Ensures the overlay is above the image */
 }
 
 /* Right section for form */
 .rightSection {
-  flex: 0 0 900%; /* 60% width */
+  flex: 0 0 60%; /* 60% width */
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: white;
+  z-index: 0;
 }
 
 /* Form container */
