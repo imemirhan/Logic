@@ -63,23 +63,28 @@ public class Job : BaseEntity, IAggregateRoot
         Status = JobStatus.Open;
     }
 
-    public void UpdateJobInfo(Job job)
+    public void UpdateJobInfo(
+        string title,
+        string description,
+        string location,
+        EmploymentType eType,
+        long salaryRange,
+        DateTime expirationDate,
+        bool isRemote,
+        JobStatus status)
     {
-        Guard.Against.Null(job, nameof(job));
-        
-        Title = job.Title;
-        Description = job.Description;
-        Location = job.Location;
-        EType = job.EType;
-        SalaryRange = job.SalaryRange;
-        PostedDate = job.PostedDate;
-        ExpirationDate = job.ExpirationDate;
-        IsRemote = job.IsRemote;
-        Status = job.Status;
-        ApplicantCount = job.ApplicantCount;
-        CreatedAt = job.CreatedAt;
+        Title = title;
+        Description = description;
+        Location = location;
+        EType = eType;
+        SalaryRange = salaryRange;
+        ExpirationDate = expirationDate;
+        IsRemote = isRemote;
+        Status = status;
         UpdatedAt = DateTime.UtcNow;
     }
+
+
     
     public void ExtendExpirationDate(DateTime newExpirationDate)
     {
@@ -141,6 +146,7 @@ public class Job : BaseEntity, IAggregateRoot
         return Applications.FirstOrDefault(a => a.Id == applicationId);
     }
 }
+
 public enum JobStatus
 {
     Open,

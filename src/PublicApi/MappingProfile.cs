@@ -1,8 +1,10 @@
 ﻿
 using ApplicationCore.Entities.EmployerAggregate;
+using ApplicationCore.Entities.JobAggregate;
 using ApplicationCore.Entities.JobSeekerAggregate;
 using AutoMapper;
 using PublicApi.EmployerEndpoints;
+using PublicApi.JobEndpoints;
 using PublicApi.JobSeekerEndpoints;
 
 namespace PublicApi;
@@ -31,5 +33,10 @@ public class MappingProfile : Profile
 
         CreateMap<Experience, JobSeekerExperienceReadDto>();
         CreateMap<JobSeekerExperienceCreateDto, Experience>();
+        
+        CreateMap<Job, JobReadDto>();
+        CreateMap<Job, JobDto>();
+        CreateMap<JobCreateDto, Job>();
+        CreateMap<JobUpdateDto, Job>();
     }
 }

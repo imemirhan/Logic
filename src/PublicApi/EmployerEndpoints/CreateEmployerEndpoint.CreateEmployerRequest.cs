@@ -1,8 +1,11 @@
-﻿namespace PublicApi.EmployerEndpoints;
+﻿using System.Text.Json.Serialization;
+
+namespace PublicApi.EmployerEndpoints;
 
 public class CreateEmployerRequest : BaseRequest
 {
     public string Name { get; set; } = string.Empty;
+    [JsonPropertyName("lastName")] 
     public string Surname { get; set; } = string.Empty;
     public string CompanyName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
