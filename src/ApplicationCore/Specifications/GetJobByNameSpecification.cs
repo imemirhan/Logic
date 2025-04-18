@@ -3,7 +3,7 @@ using Ardalis.Specification;
 
 namespace ApplicationCore.Specifications;
 
-public class GetJobByNameSpecification : Specification<Job>
+public sealed class GetJobByNameSpecification : Specification<Job>
 {
     public GetJobByNameSpecification(string name)
     {

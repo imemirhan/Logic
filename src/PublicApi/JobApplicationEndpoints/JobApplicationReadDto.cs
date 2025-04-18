@@ -2,7 +2,7 @@
 
 namespace PublicApi.JobApplicationEndpoints;
 
-public class JobApplicationDto
+public class JobApplicationReadDto
 {
     public int Id { get; set; }
     public int JobId { get; set; }

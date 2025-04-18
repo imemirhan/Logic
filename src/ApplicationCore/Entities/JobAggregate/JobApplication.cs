@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.JobSeekerAggregate;
+﻿using ApplicationCore.Entities.EmployerAggregate;
+using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
 using Ardalis.GuardClauses;
 
@@ -12,9 +13,11 @@ public class JobApplication : BaseEntity, IAggregateRoot
     public int JobSeekerId { get; private set; }
     public JobSeeker JobSeeker { get; private set; }
 
+    public int EmployerId { get; private set; }
+    public Employer Employer { get; private set; }
+    
     public string? CoverLetter { get; private set; }
     public ApplicationStatus Status { get; private set; } = ApplicationStatus.Submitted;
-
     public DateTime? InterviewScheduledDate { get; private set; }
     public string? InterviewNotes { get; private set; }
 
@@ -26,15 +29,17 @@ public class JobApplication : BaseEntity, IAggregateRoot
     #pragma warning disable CS8618
     private JobApplication() { }
 
-    public JobApplication(int jobId, int jobSeekerId, string coverLetter)
+    public JobApplication(int jobId, int employerId, int jobSeekerId, string coverLetter)
     {
         Guard.Against.Zero(jobId, nameof(jobId));
         Guard.Against.Zero(jobSeekerId, nameof(jobSeekerId));
+        Guard.Against.Zero(employerId, nameof(employerId));
         Guard.Against.NullOrEmpty(coverLetter, nameof(coverLetter));
 
         JobId = jobId;
         JobSeekerId = jobSeekerId;
         CoverLetter = coverLetter;
+        EmployerId = employerId;
 
         CreatedAt = DateTime.UtcNow;
     }

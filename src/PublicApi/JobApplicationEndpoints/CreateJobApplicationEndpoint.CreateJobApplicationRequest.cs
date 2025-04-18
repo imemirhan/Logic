@@ -1,6 +1,6 @@
 ﻿namespace PublicApi.JobApplicationEndpoints;
 
-public class CreateJobApplicationRequest
+public class CreateJobApplicationRequest : BaseRequest
 {
-    
+    public JobApplicationCreateDto JobApplication { get; set; }
 }
