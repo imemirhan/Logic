@@ -34,6 +34,7 @@ public class GetAllJobApplicationsEndpoint : IEndpoint<IResult, GetAllJobApplica
             Id = app.Id,
             JobId = app.JobId,
             JobSeekerId = app.JobSeekerId,
+            EmployerId = app.EmployerId,
             CoverLetter = app.CoverLetter,
             Status = app.Status,
             InterviewScheduledDate = app.InterviewScheduledDate,

@@ -38,6 +38,7 @@ public class GetJobApplicationByIdEndpoint
             Id = jobApp.Id,
             JobId = jobApp.JobId,
             JobSeekerId = jobApp.JobSeekerId,
+            EmployerId = jobApp.EmployerId,
             CoverLetter = jobApp.CoverLetter,
             Status = jobApp.Status,
             InterviewScheduledDate = jobApp.InterviewScheduledDate,

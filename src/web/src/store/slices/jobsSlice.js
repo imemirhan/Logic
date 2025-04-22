@@ -1,20 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../../services/api";  // Import the new Axios instance
+import api from "../../services/api"; // Import Axios instance
 
 // Fetch jobs from API using the Axios instance
 export const getJobs = createAsyncThunk("jobs/fetchJobs", async () => {
-  const response = await api.get("/jobs");  // Using the Axios instance
-  return response.data;
+  const response = await api.get("/jobs");
+  return response.data; // Make sure to return the actual array here
 });
 
 const jobsSlice = createSlice({
   name: "jobs",
   initialState: {
-    jobs: [],
+    jobs: [], // This ensures jobs is an array by default
     status: "idle",
     error: null,
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getJobs.pending, (state) => {

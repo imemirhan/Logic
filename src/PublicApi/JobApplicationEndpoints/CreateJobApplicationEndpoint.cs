@@ -28,7 +28,15 @@ public class CreateJobApplicationEndpoint
         var response = new CreateJobApplicationResponse(request.CorrelationId());
 
         var dto = request.JobApplication;
-
+        var existingApplications = await repo.ListAsync(); // get all applications
+        var alreadyExists = existingApplications.Any(a => 
+            a.JobId == dto.JobId && a.JobSeekerId == dto.JobSeekerId);
+        
+        if (alreadyExists)
+        {
+            return Results.Conflict($"Job seeker {dto.JobSeekerId} has already applied to job {dto.JobId}.");
+        }
+        
         var jobApp = new JobApplication(
             jobId: dto.JobId,
             employerId: dto.EmployerId,
@@ -43,6 +51,7 @@ public class CreateJobApplicationEndpoint
             Id = created.Id,
             JobId = created.JobId,
             JobSeekerId = created.JobSeekerId,
+            EmployerId = created.EmployerId,
             CoverLetter = created.CoverLetter,
             Status = created.Status,
             InterviewScheduledDate = created.InterviewScheduledDate,

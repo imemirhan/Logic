@@ -36,6 +36,7 @@ public class GetJobApplicationsByEmployerIdEndpoint
         {
             Id = app.Id,
             JobId = app.JobId,
+            EmployerId = app.EmployerId,
             JobSeekerId = app.JobSeekerId,
             CoverLetter = app.CoverLetter,
             Status = app.Status,
