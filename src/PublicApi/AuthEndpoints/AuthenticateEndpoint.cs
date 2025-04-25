@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ApplicationCore.Interfaces;
 using Infrastructure.Identity;
+using Npgsql.Replication;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace PublicApi.AuthEndpoints;
@@ -48,6 +49,7 @@ public class AuthenticateEndpoint : EndpointBaseAsync
         response.IsNotAllowed = result.IsNotAllowed;
         response.RequiresTwoFactor = result.RequiresTwoFactor;
         response.Username = request.Username;
+        
 
         if (result.Succeeded)
         {

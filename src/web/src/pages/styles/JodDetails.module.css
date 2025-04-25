@@ -1,0 +1,84 @@
+/* Main container */
+.jobDetailsContainer {
+  padding: 2rem;
+  background-color: #f9f9fb;
+  font-family: Arial, sans-serif;
+}
+
+/* Job Card */
+.jobCard {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Job Title */
+.jobTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4a90e2;
+  margin-bottom: 0.5rem;
+}
+
+/* Employer Name */
+.jobCompany {
+  font-size: 1.2rem;
+  color: #4a4a4a;
+}
+
+/* Job Details Section */
+.jobDetails {
+  margin-top: 1rem;
+}
+
+.jobDetails p {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #4a4a4a;
+}
+
+.jobDetails strong {
+  font-weight: bold;
+  color: #1f1f1f;
+}
+
+/* Employer Details */
+.employerDetails {
+  margin-top: 1rem;
+}
+
+.socialLinks {
+  margin-top: 1rem;
+}
+
+.socialLinks a {
+  margin-right: 10px;
+  color: #4a90e2;
+}
+
+.socialLinks a:hover {
+  text-decoration: underline;
+}
+
+/* Apply Button */
+.applyButton {
+  background-color: #4a90e2;
+  border-color: #4a90e2;
+  color: white;
+  padding: 10px 30px;
+  font-size: 1rem;
+}
+
+.applyButton:hover {
+  background-color: #3a7bd5;
+  border-color: #3a7bd5;
+}
+
+/* Error or loading messages */
+.message {
+  font-size: 1.2rem;
+  color: #7b7b7b;
+  text-align: center;
+  margin-top: 2rem;
+}

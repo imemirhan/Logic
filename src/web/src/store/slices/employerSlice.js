@@ -1,20 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/api"; // Import the Axios instance
 
-// Async thunks for fetching data
+// Async thunk for fetching all employers
 export const getEmployers = createAsyncThunk("employers/getEmployers", async (_, thunkAPI) => {
   try {
     const response = await api.get("/employers");
-    return response.data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data || error.message);
-  }
-});
-
-export const getEmployerById = createAsyncThunk("employers/getEmployerById", async (employerId, thunkAPI) => {
-  try {
-    const response = await api.get(`/employers/${employerId}`); // Fetch employer by ID
-    return response.data;
+    return response.data;  // Assuming this returns an array of employers
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data || error.message);
   }
@@ -22,9 +13,9 @@ export const getEmployerById = createAsyncThunk("employers/getEmployerById", asy
 
 // Initial state
 const initialState = {
-  employers: [], // Ensure this is an array
-  employerStatus: "idle",
-  employerError: null,
+  employers: [],  // This will hold the array of employers
+  employerStatus: "idle",  // Track the status of fetching data
+  employerError: null,  // Track any errors during fetching
 };
 
 // Slice
@@ -32,42 +23,29 @@ const employerSlice = createSlice({
   name: "employers",
   initialState,
   reducers: {
-    clearEmployer: (state) => {
-      state.employer = null;
-      state.employerError = null;
+    clearEmployers: (state) => {
+      state.employers = [];  // Clear the employers list
+      state.employerError = null;  // Clear any errors
     },
   },
   extraReducers: (builder) => {
     builder
       // getEmployers
       .addCase(getEmployers.pending, (state) => {
-        state.employerStatus = "loading";
-        state.employerError = null;
+        state.employerStatus = "loading";  // Set loading status
+        state.employerError = null;  // Clear errors while loading
       })
       .addCase(getEmployers.fulfilled, (state, action) => {
-        state.employerStatus = "succeeded";
-        state.employers = action.payload.employers || []; // Extracting the array correctly
-      }) 
+        state.employerStatus = "succeeded";  // Set success status
+        state.employers = action.payload || [];  // Store the fetched employers
+      })
       .addCase(getEmployers.rejected, (state, action) => {
-        state.employerStatus = "failed";
-        state.employerError = action.payload;
-      })
-      // getEmployerById
-      .addCase(getEmployerById.pending, (state) => {
-        state.employerStatus = "loading";
-        state.employerError = null;
-      })
-      .addCase(getEmployerById.fulfilled, (state, action) => {
-        state.employerStatus = "succeeded";
-        state.employer = action.payload;
-      })
-      .addCase(getEmployerById.rejected, (state, action) => {
-        state.employerStatus = "failed";
-        state.employerError = action.payload;
+        state.employerStatus = "failed";  // Set failure status
+        state.employerError = action.payload;  // Store the error message
       });
   },
 });
 
 // Export actions and reducer
-export const { clearEmployer } = employerSlice.actions;
+export const { clearEmployers } = employerSlice.actions;
 export default employerSlice.reducer;

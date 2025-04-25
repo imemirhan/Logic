@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Layout, Input, Button, Row, Col, Card, Checkbox, Select } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getJobs } from "../store/slices/jobsSlice"; // Import the async thunk to fetch jobs
+import { getJobs } from "../store/slices/jobsSlice";
 import styles from "./styles/Browse.module.css";
 
 const { Content, Sider } = Layout;
@@ -13,14 +14,17 @@ function Browse() {
     keyword: "",
     location: "",
     jobType: [],
+    salaryRange: "",
   });
 
   const dispatch = useDispatch();
   const { jobs, status, error } = useSelector((state) => state.jobs);
 
   useEffect(() => {
-    dispatch(getJobs()); // Fetch jobs when component mounts
+    dispatch(getJobs());
   }, [dispatch]);
+
+  const jobsArray = Object.values(jobs).flatMap((job) => Array.isArray(job) ? job : [job]);
 
   const handleSearch = () => {
     console.log("Filters applied:", filters);
@@ -30,43 +34,25 @@ function Browse() {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  let jobsArray = [];
+  const filteredJobs = jobsArray.filter((job) => {
+    const keywordMatch =
+      !filters.keyword ||
+      job.title?.toLowerCase().includes(filters.keyword.toLowerCase()) ||
+      job.description?.toLowerCase().includes(filters.keyword.toLowerCase());
 
-if (Array.isArray(jobs)) {
-  if (typeof jobs[0] === "object" && !Array.isArray(jobs[0])) {
-    jobsArray = Object.values(jobs[0]);
-  } else {
-    jobsArray = jobs;
-  }
-} else if (typeof jobs === "object") {
-  jobsArray = Object.values(jobs);
-}
+    const locationMatch =
+      !filters.location ||
+      job.location?.toLowerCase().includes(filters.location.toLowerCase());
 
+    const jobTypeMatch =
+      filters.jobType.length === 0 ||
+      filters.jobType.some((type) => {
+        if (type === "Remote") return job.isRemote;
+        return job.etype?.toLowerCase().includes(type.toLowerCase());
+      });
 
-const filteredJobs = jobsArray.filter((job) => {
-  const keywordMatch =
-    !filters.keyword ||
-    job.title?.toLowerCase().includes(filters.keyword.toLowerCase()) ||
-    job.description?.toLowerCase().includes(filters.keyword.toLowerCase());
-
-  const locationMatch =
-    !filters.location ||
-    job.location?.toLowerCase().includes(filters.location.toLowerCase());
-
-  const jobTypeMatch =
-    filters.jobType.length === 0 ||
-    filters.jobType.some((type) => {
-      if (type === "Remote") return job.isRemote;
-      return job.etype?.toLowerCase().includes(type.toLowerCase());
-    });
-
-  return keywordMatch && locationMatch && jobTypeMatch;
-});
-
-
-  // Log the filtered jobs
-  console.log("Filtered Jobs:", filteredJobs);
-  console.log("Jobs:", jobs);
+    return keywordMatch && locationMatch && jobTypeMatch;
+  });
 
   return (
     <Layout className={styles.layout}>
@@ -128,17 +114,19 @@ const filteredJobs = jobsArray.filter((job) => {
               <p>Error: {error}</p>
             ) : (
               <Row gutter={[16, 16]}>
-                {Object.values(filteredJobs).map((job, index) => (
+                {filteredJobs.map((job, index) => (
                   <Col span={24} key={job.id || index}>
-                    <Card className={styles.jobCard} hoverable>
-                      <h3 className={styles.jobTitle}>{job.title}</h3>
-                      <p className={styles.jobCompany}>{job.company}</p>
-                      <p className={styles.jobLocation}>{job.location}</p>
-                      <p className={styles.jobDescription}>{job.description}</p>
-                      <Button type="primary" className={styles.applyButton}>
-                        Apply Now
-                      </Button>
-                    </Card>
+                    <Link to={`/browse/${job.id}`}>
+                      <Card className={styles.jobCard} hoverable>
+                        <h3 className={styles.jobTitle}>{job.title}</h3>
+                        <p className={styles.jobCompany}>{job.company}</p>
+                        <p className={styles.jobLocation}>{job.location}</p>
+                        <p className={styles.jobDescription}>{job.description}</p>
+                        <Button type="primary" className={styles.applyButton}>
+                          Apply Now
+                        </Button>
+                      </Card>
+                    </Link>
                   </Col>
                 ))}
                 {filteredJobs.length === 0 && (
@@ -146,11 +134,9 @@ const filteredJobs = jobsArray.filter((job) => {
                     <p>No jobs found.</p>
                   </Col>
                 )}
-
               </Row>
             )}
           </Content>
-
         </Layout>
       </Content>
     </Layout>
