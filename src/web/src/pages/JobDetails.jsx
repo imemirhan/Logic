@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleJob } from "../store/slices/singleJobSlice";
 import { getEmployerById } from "../store/slices/singleEmployerSlice";
@@ -9,6 +9,7 @@ import styles from "./styles/JodDetails.module.css";
 const { Title, Paragraph, Text, Link } = Typography;
 
 function JobDetails() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
   const { job, status, error } = useSelector((state) => state.singleJobSlice);
@@ -30,7 +31,7 @@ function JobDetails() {
   if (status === "loading" || employerStatus === "loading") return <p className={styles.message}>Loading job details...</p>;
   if (status === "failed") return <p className={styles.message}>Error: {error}</p>;
   if (!job || !job.job) return <p className={styles.message}>Job not found.</p>;
-
+  console.log("Job:", job);
   return (
     <div className={styles.jobDetailsContainer}>
       <Card className={styles.jobCard}>
@@ -170,9 +171,14 @@ function JobDetails() {
         {/* Apply Button */}
         <Row justify="center">
           <Col>
-            <Button type="primary" size="large" className={styles.applyButton}>
-              Apply to Job
-            </Button>
+            <Button
+            type="primary"
+            size="large"
+            className={styles.applyButton}
+            onClick={() => navigate(`/browse/${job.job.id}/apply`)}
+          >
+            Apply to Job
+          </Button>
           </Col>
         </Row>
       </Card>

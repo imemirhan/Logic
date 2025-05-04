@@ -111,7 +111,7 @@ function Browse() {
             {status === "loading" ? (
               <p>Loading jobs...</p>
             ) : status === "failed" ? (
-              <p>Error: {error}</p>
+              <p>Error: {error}. No data found...</p>
             ) : (
               <Row gutter={[16, 16]}>
                 {filteredJobs.map((job, index) => (
@@ -123,7 +123,7 @@ function Browse() {
                         <p className={styles.jobLocation}>{job.location}</p>
                         <p className={styles.jobDescription}>{job.description}</p>
                         <Button type="primary" className={styles.applyButton}>
-                          Apply Now
+                          See Details
                         </Button>
                       </Card>
                     </Link>

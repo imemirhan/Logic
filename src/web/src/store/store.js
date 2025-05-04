@@ -4,6 +4,7 @@ import jobSeekerReducer from "./slices/jobSeekerSlice";
 import jobsReducer from "./slices/jobsSlice";
 import singleEmployerSlice from "./slices/singleEmployerSlice";
 import singleJobSlice from "./slices/singleJobSlice";
+import jobApplicationReducer from "./slices/jobApplicationSlice";
 
 const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
     jobSeekers: jobSeekerReducer,
     jobs: jobsReducer,
     singleJobSlice: singleJobSlice,
-    singleEmployerSlice: singleEmployerSlice, // Assuming you want to keep this for single employer
+    singleEmployerSlice: singleEmployerSlice,
+    jobApplication: jobApplicationReducer,
   },
 });
 

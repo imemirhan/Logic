@@ -2,7 +2,7 @@ import React from "react";
 import { Layout, Form, Input, Button, Typography } from "antd";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import api from "../services/api"; // Make sure your Axios instance is set up properly
+import api from "../services/api";
 import styles from "./styles/Login.module.css";
 import loginPhoto from "../assets/signup.jpg";
 
