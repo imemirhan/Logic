@@ -68,7 +68,6 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         AboutMe = aboutMe ?? AboutMe;
         ProfileImageUrl = resumeUrl ?? ProfileImageUrl;
         UpdatedAt = updatedAt;
-        UpdatedAt = updatedAt;
     }
 
     public void UpdateContactInfo(DateTime updatedAt, string? profileImageUrl = null, string? linkedIn = null, 

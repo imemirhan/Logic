@@ -37,8 +37,12 @@ namespace PublicApi.JobSeekerEndpoints
             {
                 Id = request.CorrelationId().ToString(),
                 UserName = request.Email,
+                Name = request.Name,
+                Surname = request.LastName,
                 Email = request.Email,
-                PhoneNumber = request.Phone
+                PhoneNumber = request.Phone,
+                RefreshTokenHash = Guid.NewGuid().ToString(),
+                RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7)
             };
 
             var result = await employerManager.CreateAsync(appUser, request.Password);
