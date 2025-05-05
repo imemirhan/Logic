@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../store/slices/userSlice";
 import { getSingleJob } from "../store/slices/singleJobSlice";
 import { getEmployerById } from "../store/slices/singleEmployerSlice";
 import { createJobApplication, clearJobApplicationState } from "../store/slices/jobApplicationSlice";
@@ -16,19 +17,24 @@ const JobApply = () => {
   const { job, status: jobStatus } = useSelector((state) => state.singleJobSlice);
   const { applicationStatus, applicationError } = useSelector((state) => state.jobApplication);
   const { employer, status: employerStatus, error: employerError } = useSelector((state) => state.singleEmployerSlice);
+  const { user } = useSelector((state) => state.userSlice);
 
   useEffect(() => {
     dispatch(getSingleJob(jobId));
   }, [dispatch, jobId]);
 
   useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (job?.job?.employerId) {
       dispatch(getEmployerById(job.job.employerId));
     }
   }, [dispatch, job]);
-
+  console.log("Current User:", user);
   const onFinish = (values) => {
-    dispatch(createJobApplication({ ...values, jobId, employerId: employer?.id, jobSeekerId: 6 })); //TODO => This will be replaced with the actual job seeker ID from the auth state
+    dispatch(createJobApplication({ ...values, jobId, employerId: employer?.id, jobSeekerId: user.id })); //TODO => This will be replaced with the actual job seeker ID from the auth state
   };
 
   useEffect(() => {
@@ -126,27 +132,8 @@ const JobApply = () => {
             <Form
               layout="vertical"
               onFinish={onFinish}
-              initialValues={{ name: "", email: "", coverLetter: "" }}
+              initialValues={{ coverLetter: "" }}
             >
-              <Form.Item
-                label="Full Name"
-                name="name"
-                rules={[{ required: true, message: "Please enter your full name" }]}
-              >
-                <Input placeholder="Enter your full name" />
-              </Form.Item>
-  
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  { required: true, message: "Please enter your email" },
-                  { type: "email", message: "Please enter a valid email" },
-                ]}
-              >
-                <Input placeholder="Enter your email" />
-              </Form.Item>
-  
               <Form.Item
                 label="Cover Letter"
                 name="coverLetter"

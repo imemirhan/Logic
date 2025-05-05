@@ -6,7 +6,7 @@ import styles from "./styles/Profile.module.css";
 const { Title, Paragraph, Text, Link } = Typography;
 
 function Profile() {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.userSlice);
 
   return (
     <div className={styles.profileContainer}>
@@ -16,7 +16,7 @@ function Profile() {
           <Col xs={24} sm={6}>
             <Avatar
               size={120}
-              src={user.profileImageUrl || "https://via.placeholder.com/120"}
+              src={user?.profileImageUrl || "https://picsum.photos/200/300"}
               alt={`${user.name} ${user.lastName}`}
             />
           </Col>

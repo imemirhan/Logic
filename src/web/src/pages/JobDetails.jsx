@@ -98,7 +98,7 @@ function JobDetails() {
               <Col xs={24} sm={6}>
                 <Avatar
                   size={100}
-                  src={employer.profileImageUrl || "https://via.placeholder.com/100"}
+                  src={employer.profileImageUrl || "https://picsum.photos/200/300"}
                   alt={`${employer.name} ${employer.surname}`}
                 />
               </Col>

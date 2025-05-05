@@ -11,13 +11,13 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
-import employerReducer from "./slices/employerSlice";
+import employerSlice from "./slices/employerSlice";
 import jobSeekerReducer from "./slices/jobSeekerSlice";
 import jobsReducer from "./slices/jobsSlice";
-import singleEmployerReducer from "./slices/singleEmployerSlice";
-import singleJobReducer from "./slices/singleJobSlice";
+import singleEmployerSlice from "./slices/singleEmployerSlice";
+import singleJobSlice from "./slices/singleJobSlice";
 import jobApplicationReducer from "./slices/jobApplicationSlice";
-import userReducer from "./slices/userSlice";
+import userSlice from "./slices/userSlice";
 
 const persistConfig = {
   key: "root",
@@ -26,12 +26,12 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  user: userReducer,
-  employers: employerReducer,
+  userSlice: userSlice,
+  employers: employerSlice,
   jobSeekers: jobSeekerReducer,
   jobs: jobsReducer,
-  singleEmployer: singleEmployerReducer,
-  singleJob: singleJobReducer,
+  singleEmployerSlice: singleEmployerSlice,
+  singleJobSlice: singleJobSlice,
   jobApplication: jobApplicationReducer,
 });
 
