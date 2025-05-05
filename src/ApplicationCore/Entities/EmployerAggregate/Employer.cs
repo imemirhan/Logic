@@ -100,4 +100,9 @@ public class Employer : BaseEntity, IAggregateRoot
             JobPostings.Remove(job);
         }
     }
+
+    public void RemoveProfileImage()
+    {
+        ProfileImageUrl = null;        
+    }
 }

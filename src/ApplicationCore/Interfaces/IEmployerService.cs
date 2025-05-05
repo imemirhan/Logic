@@ -7,6 +7,7 @@ public interface IEmployerService
 {
     Task<Result<Employer>> CreateEmployerAsync(Employer employer);
     Task<Result<Employer>> GetEmployerByIdAsync(int id);
+    Task<Result<Employer>> GetEmployerByIdentityGuidAsync(string identityGuid);
     Task<Result> UpdateEmployerAsync(Employer employer);
     Task<Result> DeleteEmployerAsync(int id);
 }

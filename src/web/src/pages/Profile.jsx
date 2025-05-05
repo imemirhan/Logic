@@ -1,60 +1,150 @@
 import React from "react";
-import { Card, Avatar, Typography, Row, Col, Button } from "antd";
-import { UserOutlined, MailOutlined, PhoneOutlined, EditOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { Card, Row, Col, Typography, Avatar, Button, Divider } from "antd";
+import styles from "./styles/Profile.module.css";
 
-const { Title, Text } = Typography;
+const { Title, Paragraph, Text, Link } = Typography;
 
 function Profile() {
-  const user = {
-    name: "John Doe",
-    email: "johndoe@example.com",
-    phone: "+1234567890",
-    bio: "Software engineer with a passion for building scalable web applications and exploring new technologies.",
-  };
+  const { user } = useSelector((state) => state.user);
 
   return (
-    <div style={{ padding: "20px", backgroundColor: "#f0f2f5", minHeight: "100vh" }}>
-      <Row justify="center">
-        <Col xs={24} sm={20} md={16} lg={12} xl={8}>
-          <Card
-            style={{ borderRadius: "10px", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" }}
-            cover={
-              <div style={{ backgroundColor: "#1890ff", height: "120px", borderRadius: "10px 10px 0 0" }} />
-            }
-          >
-            <div style={{ textAlign: "center", marginTop: "-50px" }}>
-              <Avatar size={100} icon={<UserOutlined />} style={{ backgroundColor: "#87d068" }} />
-              <Title level={3} style={{ marginTop: "10px" }}>
-                {user.name}
-              </Title>
-              <Text type="secondary">{user.bio}</Text>
+    <div className={styles.profileContainer}>
+      <Card className={styles.profileCard}>
+        {/* Profile Header */}
+        <Row gutter={[16, 16]} align="middle">
+          <Col xs={24} sm={6}>
+            <Avatar
+              size={120}
+              src={user.profileImageUrl || "https://via.placeholder.com/120"}
+              alt={`${user.name} ${user.lastName}`}
+            />
+          </Col>
+          <Col xs={24} sm={18}>
+            <Title level={2} className={styles.profileName}>
+              {user.name} {user.lastName}
+            </Title>
+            {user.aboutMe ? (
+              <Paragraph className={styles.aboutMe}>{user.aboutMe}</Paragraph>
+            ) : (
+              <Paragraph className={styles.aboutMe}>No "About Me" information provided.</Paragraph>
+            )}
+          </Col>
+        </Row>
+
+        <Divider />
+
+        {/* Skills Section */}
+        <Row>
+          <Col span={24}>
+            <Title level={4}>Skills</Title>
+            {user.skills && user.skills.length > 0 ? (
+              <div className={styles.skills}>
+                {user.skills.map((skill, index) => (
+                  <Tag key={index} className={styles.skillTag}>
+                    {skill}
+                  </Tag>
+                ))}
+              </div>
+            ) : (
+              <Paragraph>No skills added yet.</Paragraph>
+            )}
+          </Col>
+        </Row>
+
+        <Divider />
+
+        {/* Experiences Section */}
+        <Row>
+          <Col span={24}>
+            <Title level={4}>Experiences</Title>
+            {user.experiences && user.experiences.length > 0 ? (
+              <ul className={styles.experienceList}>
+                {user.experiences.map((experience, index) => (
+                  <li key={index}>
+                    <Text strong>{experience.title}</Text> at {experience.company} (
+                    {experience.startDate} - {experience.endDate || "Present"})
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Paragraph>No experiences added yet.</Paragraph>
+            )}
+          </Col>
+        </Row>
+
+        <Divider />
+
+        {/* Education Section */}
+        <Row>
+          <Col span={24}>
+            <Title level={4}>Education</Title>
+            {user.educations && user.educations.length > 0 ? (
+              <ul className={styles.educationList}>
+                {user.educations.map((education, index) => (
+                  <li key={index}>
+                    <Text strong>{education.degree}</Text> from {education.institution} (
+                    {education.startDate} - {education.endDate || "Present"})
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Paragraph>No education history added yet.</Paragraph>
+            )}
+          </Col>
+        </Row>
+
+        <Divider />
+
+        {/* Social Media Links */}
+        <Row>
+          <Col span={24}>
+            <Title level={4}>Social Media</Title>
+            <div className={styles.socialLinks}>
+              {user.facebook && (
+                <Link href={user.facebook} target="_blank">
+                  Facebook
+                </Link>
+              )}
+              {user.twitter && (
+                <Link href={user.twitter} target="_blank">
+                  Twitter
+                </Link>
+              )}
+              {user.instagram && (
+                <Link href={user.instagram} target="_blank">
+                  Instagram
+                </Link>
+              )}
+              {user.linkedIn && (
+                <Link href={user.linkedIn} target="_blank">
+                  LinkedIn
+                </Link>
+              )}
+              {user.gitHub && (
+                <Link href={user.gitHub} target="_blank">
+                  GitHub
+                </Link>
+              )}
             </div>
-            <div style={{ marginTop: "20px" }}>
-              <Row gutter={[16, 16]}>
-                <Col span={24}>
-                  <Text strong>
-                    <MailOutlined style={{ marginRight: "8px" }} />
-                    Email:
-                  </Text>
-                  <Text style={{ marginLeft: "8px" }}>{user.email}</Text>
-                </Col>
-                <Col span={24}>
-                  <Text strong>
-                    <PhoneOutlined style={{ marginRight: "8px" }} />
-                    Phone:
-                  </Text>
-                  <Text style={{ marginLeft: "8px" }}>{user.phone}</Text>
-                </Col>
-              </Row>
-            </div>
-            <div style={{ textAlign: "center", marginTop: "20px" }}>
-              <Button type="primary" icon={<EditOutlined />} shape="round">
-                Edit Profile
+          </Col>
+        </Row>
+
+        <Divider />
+
+        {/* Resume Section */}
+        <Row justify="center">
+          <Col>
+            {user.resumeUrl ? (
+              <Button type="primary" href={user.resumeUrl} target="_blank">
+                View Resume
               </Button>
-            </div>
-          </Card>
-        </Col>
-      </Row>
+            ) : (
+              <Paragraph>No resume uploaded yet.</Paragraph>
+            )}
+          </Col>
+        </Row>
+      </Card>
     </div>
   );
 }

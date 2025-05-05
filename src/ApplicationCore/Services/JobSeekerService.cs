@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Specifications;
 using Ardalis.GuardClauses;
 using Ardalis.Result;
 
@@ -32,6 +33,16 @@ public class JobSeekerService : IJobSeekerService
         Guard.Against.Null(jobSeeker, nameof(jobSeeker));
         _logger.LogInformation($"Successfully retrieved a job seeker for {id}");
         return Result.Success(jobSeeker);
+    }
+
+    public async Task<Result<JobSeeker>> GetJobSeekerByIdentityGuidAsync(string identityGuid)
+    {
+        var spec = new GetJobSeekerByIdentityGuidSpec(identityGuid.ToString());
+        var employer = await _jobSeekerRepository.FirstOrDefaultAsync(spec);
+
+        return employer is null
+            ? Result<JobSeeker>.NotFound()
+            : Result.Success(employer);
     }
 
     public async Task<Result> UpdateJobSeekerAsync(JobSeeker jobSeeker)

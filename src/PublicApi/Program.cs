@@ -5,9 +5,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using ApplicationCore.Constants;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
+using CloudinaryDotNet;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Logging;
+using Infrastructure.Services;
 using PublicApi;
 using PublicApi.Middleware;
 using Microsoft.Extensions.Configuration;
@@ -36,7 +39,16 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
+builder.Services.AddScoped<IEmployerService, EmployerService>();
+builder.Services.AddScoped<IJobSeekerService, JobSeekerService>();
 builder.Services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
+builder.Services.AddScoped<CloudinaryImageServiceAdapter>();
+builder.Services.AddSingleton(serviceProvider =>
+{
+    var config = serviceProvider.GetRequiredService<IConfiguration>();
+    var account = config.GetSection("CloudinaryAccount").Get<Account>();
+    return new Cloudinary(account);
+});
 
 var configSection = builder.Configuration.GetRequiredSection(BaseUrlConfiguration.CONFIG_NAME); //BlazorShared Attributes
  builder.Services.Configure<BaseUrlConfiguration>(configSection);

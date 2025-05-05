@@ -1,5 +1,7 @@
 import React from "react";
 import { Layout, Button } from "antd";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../store/slices/userSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { HomeOutlined, UserOutlined, InfoCircleOutlined, PhoneOutlined, AppstoreOutlined } from "@ant-design/icons";
 import styles from "./styles/Navbar.module.css";
@@ -8,6 +10,7 @@ import Swal from "sweetalert2";
 const { Header } = Layout;
 
 function Navbar() {
+  const dispacth = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -23,6 +26,7 @@ function Navbar() {
       timer: 2000,
     }).then(() => {
       localStorage.removeItem("token");
+      dispacth(clearUser());
       navigate("/login");
     });
   };

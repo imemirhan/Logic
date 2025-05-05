@@ -12,10 +12,13 @@ public class AppIdentityDbContextSeed
 
         if (identityDbContext.Database.IsNpgsql())
         {
-            identityDbContext.Database.Migrate();
+            await identityDbContext.Database.MigrateAsync();
         }
 
         await roleManager.CreateAsync(new IdentityRole(Shared.Authorization.Constants.Roles.ADMINISTRATORS));
+        await roleManager.CreateAsync(new IdentityRole(Shared.Authorization.Constants.Roles.USERS));
+        await roleManager.CreateAsync(new IdentityRole(Shared.Authorization.Constants.Roles.EMPLOYER));
+        await roleManager.CreateAsync(new IdentityRole(Shared.Authorization.Constants.Roles.JOBSEEKER));
 
         var defaultUser = new ApplicationUser { UserName = "demouser@microsoft.com", Email = "demouser@microsoft.com" };
         await userManager.CreateAsync(defaultUser, AuthorizationConstants.DEFAULT_PASSWORD);

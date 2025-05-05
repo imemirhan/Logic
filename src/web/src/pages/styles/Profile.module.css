@@ -1,0 +1,76 @@
+/* Main container */
+.profileContainer {
+  padding: 2rem;
+  background-color: #f9f9fb;
+  font-family: Arial, sans-serif;
+}
+
+/* Profile Card */
+.profileCard {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Profile Name */
+.profileName {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4a90e2;
+  margin-bottom: 0.5rem;
+}
+
+/* About Me Section */
+.aboutMe {
+  font-size: 1rem;
+  color: #4a4a4a;
+}
+
+/* Skills Section */
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skillTag {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+}
+
+/* Experience and Education Lists */
+.experienceList,
+.educationList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.experienceList li,
+.educationList li {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #4a4a4a;
+}
+
+/* Social Media Links */
+.socialLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.socialLinks a {
+  color: #4a90e2;
+  font-size: 1rem;
+}
+
+.socialLinks a:hover {
+  text-decoration: underline;
+}

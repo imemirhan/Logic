@@ -1,15 +1,19 @@
 import React from "react";
 import { Layout, Form, Input, Button, Typography } from "antd";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/slices/userSlice";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import styles from "./styles/Login.module.css";
 import loginPhoto from "../assets/signup.jpg";
+import axios from "axios";
 
 const { Content } = Layout;
 const { Title } = Typography;
 
 function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
@@ -23,6 +27,14 @@ function Login() {
 
       if (response.data.result) {
         localStorage.setItem("token", response.data.token);
+        console.log(response.data);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
+        if(response.data.role === 0) {
+          dispatch(setUser(response.data.jobSeeker));
+        }
+        if(response.data.role === 1) {
+          dispatch(setUser(response.data.employer));
+        }
       
         Swal.fire({
           title: "Login Successful!",

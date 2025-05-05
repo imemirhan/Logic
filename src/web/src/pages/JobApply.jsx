@@ -128,7 +128,7 @@ const JobApply = () => {
               onFinish={onFinish}
               initialValues={{ name: "", email: "", coverLetter: "" }}
             >
-              {/* <Form.Item
+              <Form.Item
                 label="Full Name"
                 name="name"
                 rules={[{ required: true, message: "Please enter your full name" }]}
@@ -145,7 +145,7 @@ const JobApply = () => {
                 ]}
               >
                 <Input placeholder="Enter your email" />
-              </Form.Item> */}
+              </Form.Item>
   
               <Form.Item
                 label="Cover Letter"
@@ -169,6 +169,7 @@ const JobApply = () => {
         </Col>
       </Row>
     </div>
-  );  
-}
+  );
+};
+
 export default JobApply;

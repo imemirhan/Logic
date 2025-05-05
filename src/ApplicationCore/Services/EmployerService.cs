@@ -35,6 +35,16 @@ public class EmployerService : IEmployerService
         return Result.Success(employer);
     }
 
+    public async Task<Result<Employer>> GetEmployerByIdentityGuidAsync(string identityGuid)
+    {
+        var spec = new GetEmployerByIdentityGuidSpec(identityGuid.ToString());
+        var employer = await _employerRepository.FirstOrDefaultAsync(spec);
+
+        return employer is null
+            ? Result<Employer>.NotFound()
+            : Result.Success(employer);
+    }
+    
     public async Task<Result> UpdateEmployerAsync(Employer employer)
     {
         var existingJob = await _employerRepository.GetByIdAsync(employer.Id);

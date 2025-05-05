@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities.JobSeekerAggregate;
+using ApplicationCore.Enums;
 
 namespace PublicApi.JobSeekerEndpoints;
 
