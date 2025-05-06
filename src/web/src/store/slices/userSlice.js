@@ -54,7 +54,11 @@ const userSlice = createSlice({
       })
       .addCase(updateJobSeekerInfo.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.user = action.payload;
+        if (action.payload?.jobSeeker) {
+          state.user = { ...state.user, ...action.payload.jobSeeker };
+        } else {
+          state.user = action.payload;
+        }
       })
       .addCase(updateJobSeekerInfo.rejected, (state, action) => {
         state.status = "failed";

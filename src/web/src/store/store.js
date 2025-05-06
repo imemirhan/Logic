@@ -18,6 +18,8 @@ import singleEmployerSlice from "./slices/singleEmployerSlice";
 import singleJobSlice from "./slices/singleJobSlice";
 import jobApplicationReducer from "./slices/jobApplicationSlice";
 import userSlice from "./slices/userSlice";
+import jobSeekerImageReducer from "./slices/jobSeekerImageSlice";
+import employerImageReducer from "./slices/employerImageSlice";
 
 const persistConfig = {
   key: "root",
@@ -33,6 +35,8 @@ const rootReducer = combineReducers({
   singleEmployerSlice: singleEmployerSlice,
   singleJobSlice: singleJobSlice,
   jobApplication: jobApplicationReducer,
+  jobSeekerImage: jobSeekerImageReducer,
+  employerImage: employerImageReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

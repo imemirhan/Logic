@@ -33,8 +33,8 @@ public class JobSeeker : BaseEntity, IAggregateRoot
 #pragma warning disable CS8618
     private JobSeeker() { }
 
-    public JobSeeker(DateTime createdAt, string identity, string name, string lastName,
-                     string? resumeUrl = null, string? aboutMe = null,
+    public JobSeeker(DateTime createdAt, string identity, string name, string lastName, 
+                     string? aboutMe = null,
                      string? profileImageUrl = null, string? linkedIn = null,
                      string? gitHub = null, string? twitter = null,
                      string? facebook = null, string? instagram = null)
@@ -46,9 +46,7 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         IdentityGuid = identity;
         Name = name;
         LastName = lastName;
-        ResumeUrl = resumeUrl;
         AboutMe = aboutMe;
-
         ProfileImageUrl = profileImageUrl;
         LinkedIn = linkedIn;
         GitHub = gitHub;
@@ -58,7 +56,7 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         CreatedAt = createdAt;
     }
 
-    public void UpdateInfo(string name, string lastName, DateTime updatedAt, string? aboutMe = null, string? resumeUrl = null)
+    public void UpdateInfo(string name, string lastName, DateTime updatedAt, string? aboutMe = null)
     {
         Guard.Against.NullOrEmpty(name, nameof(name));
         Guard.Against.NullOrEmpty(lastName, nameof(lastName));
@@ -66,7 +64,6 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         Name = name;
         LastName = lastName;
         AboutMe = aboutMe ?? AboutMe;
-        ResumeUrl = resumeUrl;
         UpdatedAt = updatedAt;
     }
 
@@ -92,6 +89,18 @@ public class JobSeeker : BaseEntity, IAggregateRoot
     public void DeleteProfileImage()
     {
         ProfileImageUrl = null;
+    }
+
+    public void AddResume(string resumeUrl)
+    {
+        Guard.Against.NullOrEmpty(resumeUrl, nameof(resumeUrl));
+        ResumeUrl = resumeUrl;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void DeleteResume()
+    {
+        ResumeUrl = null;
     }
     
     public void AddSkill(Skill skill)

@@ -33,7 +33,7 @@ namespace PublicApi.JobSeekerEndpoints
             }
 
             // Update the job seeker details
-            existingJobSeeker.UpdateInfo(request.Name, request.LastName, DateTime.UtcNow, request.AboutMe, request.ResumeUrl);
+            existingJobSeeker.UpdateInfo(request.Name, request.LastName, DateTime.UtcNow, request.AboutMe);
 
             // Update contact info
             existingJobSeeker.UpdateContactInfo(DateTime.UtcNow, request.LinkedIn, request.GitHub, request.Twitter, request.Facebook, request.Instagram);

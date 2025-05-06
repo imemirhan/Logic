@@ -12,34 +12,36 @@ using MinimalApi.Endpoint;
 
 namespace PublicApi.JobSeekerEndpoints;
 
-public class UploadJobSeekerProfilePictureEndpoint : IEndpoint<IResult, UploadJobSeekerProfilePictureRequest, IRepository<JobSeeker>>
+public class AddJobSeekerResumeEndpoint : IEndpoint<IResult, AddJobSeekerResumeRequest, IRepository<JobSeeker>>
 {
     private readonly Cloudinary _cloudinary;
 
-    public UploadJobSeekerProfilePictureEndpoint(Cloudinary cloudinary)
+    public AddJobSeekerResumeEndpoint(Cloudinary cloudinary)
     {
         _cloudinary = cloudinary;
     }
 
-    public async Task<IResult> HandleAsync(UploadJobSeekerProfilePictureRequest request, IRepository<JobSeeker> repository)
+    public async Task<IResult> HandleAsync(AddJobSeekerResumeRequest request, IRepository<JobSeeker> repository)
     {
         if (request.File == null || request.File.Length == 0)
             return Results.BadRequest("No file uploaded.");
 
-        var uploadResult = await _cloudinary.UploadAsync(new ImageUploadParams
+        if (!request.File.FileName.EndsWith(".pdf"))
+            return Results.BadRequest("Only PDF files are allowed.");
+
+        var uploadResult = await _cloudinary.UploadAsync(new RawUploadParams
         {
             File = new FileDescription(request.File.FileName, request.File.OpenReadStream()),
-            Folder = "jobseeker-profile-pictures"
+            Folder = "jobseeker-resumes"
         });
 
         if (uploadResult.StatusCode != HttpStatusCode.OK)
             return Results.StatusCode((int)uploadResult.StatusCode);
 
-        var jobSeekerId = request.JobSeekerId;
-        var jobSeeker = await repository.GetByIdAsync(jobSeekerId);
+        var jobSeeker = await repository.GetByIdAsync(request.JobSeekerId);
         if (jobSeeker == null) return Results.NotFound();
 
-        jobSeeker.UpdateProfileImage(profileImageUrl: uploadResult.SecureUrl.ToString());
+        jobSeeker.AddResume(uploadResult.SecureUrl.ToString());
         await repository.UpdateAsync(jobSeeker);
 
         return Results.Ok(new { imageUrl = uploadResult.SecureUrl.ToString() });
@@ -47,36 +49,37 @@ public class UploadJobSeekerProfilePictureEndpoint : IEndpoint<IResult, UploadJo
 
     public void AddRoute(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/jobseekers/profile-picture",
-                async (HttpRequest httpRequest, [FromForm] UploadJobSeekerProfilePictureRequest request, IRepository<JobSeeker> repository) =>
+        app.MapPost("api/jobseekers/resume",
+                async (HttpRequest httpRequest, [FromForm] AddJobSeekerResumeRequest request, IRepository<JobSeeker> repository) =>
                 {
                     if (request.File == null || request.File.Length == 0)
                         return Results.BadRequest("No file uploaded.");
 
-                    var cloudinary = app.ServiceProvider.GetRequiredService<Cloudinary>();
+                    if (!request.File.FileName.EndsWith(".pdf"))
+                        return Results.BadRequest("Only PDF files are allowed.");
 
-                    var uploadResult = await cloudinary.UploadAsync(new ImageUploadParams
+                    var cloudinary = app.ServiceProvider.GetRequiredService<Cloudinary>();
+                    //TODO => BU KOD YANLIS !!! SADECE IMAGELAR ICIN CALISIYOR, BIR YOL BULUNMALI
+                    var uploadResult = await cloudinary.UploadAsync(new RawUploadParams
                     {
                         File = new FileDescription(request.File.FileName, request.File.OpenReadStream()),
-                        Folder = "jobseeker-profile-pictures"
+                        Folder = "jobseeker-resumes"
                     });
 
                     if (uploadResult.StatusCode != HttpStatusCode.OK)
                         return Results.StatusCode((int)uploadResult.StatusCode);
 
-                    var jobSeekerId = request.JobSeekerId;
-                    var jobSeeker = await repository.GetByIdAsync(jobSeekerId);
+                    var jobSeeker = await repository.GetByIdAsync(request.JobSeekerId);
                     if (jobSeeker == null) return Results.NotFound();
 
-                    jobSeeker.UpdateProfileImage(profileImageUrl: uploadResult.SecureUrl.ToString());
+                    jobSeeker.AddResume(uploadResult.SecureUrl.ToString());
                     await repository.UpdateAsync(jobSeeker);
 
                     return Results.Ok(new { imageUrl = uploadResult.SecureUrl.ToString() });
                 })
-            .DisableAntiforgery() // 👈 this tells ASP.NET not to require anti-forgery middleware
-            .Accepts<UploadJobSeekerProfilePictureRequest>("multipart/form-data")
+            .DisableAntiforgery()
+            .Accepts<AddJobSeekerResumeRequest>("multipart/form-data")
             .Produces(StatusCodes.Status200OK)
             .WithTags("JobSeeker Endpoints");
     }
-
 }
