@@ -36,7 +36,7 @@ function Navbar() {
       <Header className={styles.header}>
         <div className={styles.logo}>
           <Link to="/" className={styles.buttonLink}>
-            MyApp
+            Logic
           </Link>
         </div>
         <div className={styles.menu}>

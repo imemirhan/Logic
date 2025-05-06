@@ -66,15 +66,14 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         Name = name;
         LastName = lastName;
         AboutMe = aboutMe ?? AboutMe;
-        ProfileImageUrl = resumeUrl ?? ProfileImageUrl;
+        ResumeUrl = resumeUrl;
         UpdatedAt = updatedAt;
     }
 
-    public void UpdateContactInfo(DateTime updatedAt, string? profileImageUrl = null, string? linkedIn = null, 
+    public void UpdateContactInfo(DateTime updatedAt,string? linkedIn = null, 
                                   string? gitHub = null, string? twitter = null, 
                                   string? facebook = null, string? instagram = null)
     {
-        ProfileImageUrl = profileImageUrl ?? ProfileImageUrl;
         LinkedIn = linkedIn ?? LinkedIn;
         GitHub = gitHub ?? GitHub;
         Twitter = twitter ?? Twitter;
@@ -83,6 +82,18 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         UpdatedAt = updatedAt;
     }
 
+    public void UpdateProfileImage(string profileImageUrl)
+    {
+        Guard.Against.NullOrEmpty(profileImageUrl, nameof(profileImageUrl));
+        ProfileImageUrl = profileImageUrl;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void DeleteProfileImage()
+    {
+        ProfileImageUrl = null;
+    }
+    
     public void AddSkill(Skill skill)
     {
         Guard.Against.Null(skill, nameof(skill));

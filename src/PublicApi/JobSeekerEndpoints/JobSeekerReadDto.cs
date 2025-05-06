@@ -11,7 +11,7 @@ public class JobSeekerReadDto
     public string LastName { get; set; } = string.Empty;
     public string? ResumeUrl { get; set; } = string.Empty;
     public string? AboutMe { get; set; } = string.Empty;
-    public string? ProfileImageUrl { get; set; }
+    public string ? ProfileImageUrl { get; set; } = string.Empty;
     public string? LinkedIn { get; set; }
     public string? GitHub { get; set; }
     public string? Twitter { get; set; }

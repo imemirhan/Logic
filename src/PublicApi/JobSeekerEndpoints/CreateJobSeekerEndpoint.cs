@@ -14,7 +14,9 @@ namespace PublicApi.JobSeekerEndpoints
 {
     public class CreateJobSeekerEndpoint : IEndpoint<IResult, CreateJobSeekerRequest, IRepository<JobSeeker>, UserManager<ApplicationUser>>
     {
-        public CreateJobSeekerEndpoint() { }
+        public CreateJobSeekerEndpoint()
+        {
+        }
 
         public void AddRoute(IEndpointRouteBuilder app)
         {
@@ -64,6 +66,8 @@ namespace PublicApi.JobSeekerEndpoints
 
             newJobSeeker = await itemRepository.AddAsync(newJobSeeker);
 
+            await employerManager.AddToRoleAsync(appUser, "JobSeeker");
+            
             var dto = new JobSeekerReadDto
             {
                 Id = newJobSeeker.Id,
@@ -72,8 +76,8 @@ namespace PublicApi.JobSeekerEndpoints
                 LastName = newJobSeeker.LastName,
                 ResumeUrl = newJobSeeker.ResumeUrl,
                 AboutMe = newJobSeeker.AboutMe,
-                ProfileImageUrl = newJobSeeker.ProfileImageUrl,
                 LinkedIn = newJobSeeker.LinkedIn,
+                ProfileImageUrl = newJobSeeker.ProfileImageUrl,
                 GitHub = newJobSeeker.GitHub,
                 Twitter = newJobSeeker.Twitter,
                 Facebook = newJobSeeker.Facebook,

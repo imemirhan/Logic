@@ -1,4 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "../../services/api";
+
+
+export const updateJobSeekerInfo = createAsyncThunk(
+  "user/updateJobSeekerInfo",
+  async ({ jobSeekerId, data }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/jobseekers/${jobSeekerId}`, data);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating job seeker:", error.response || error.message);
+
+      return rejectWithValue(error.response ? error.response.data : error.message);
+    }
+  }
+);
+
+
 
 var userData = null;
 
@@ -9,7 +27,7 @@ const initialState = {
 };
 
 const userSlice = createSlice({
-  name: "user",
+  name: "userSlice",
   initialState,
   reducers: {
     setUser: (state, action) => {
@@ -22,8 +40,26 @@ const userSlice = createSlice({
       state.error = null;
     },
     getUser: (state) => {
+      if(state.user === null) {
+        state.user = localStorage.getItem('persist:root')?.user;
+      }
       return state.user;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(updateJobSeekerInfo.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(updateJobSeekerInfo.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload;
+      })
+      .addCase(updateJobSeekerInfo.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      });
   },
 });
 

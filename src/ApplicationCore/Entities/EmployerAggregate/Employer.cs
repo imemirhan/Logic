@@ -76,7 +76,6 @@ public class Employer : BaseEntity, IAggregateRoot
                                   string? twitter = null, string? facebook = null, string? instagram = null)
     {
         Guard.Against.Null(updatedAt, nameof(updatedAt));
-        UpdatedAt = updatedAt;
         ProfileImageUrl = profileImageUrl ?? ProfileImageUrl;
         LinkedIn = linkedIn ?? LinkedIn;
         GitHub = gitHub ?? GitHub;
@@ -100,6 +99,14 @@ public class Employer : BaseEntity, IAggregateRoot
             JobPostings.Remove(job);
         }
     }
+    
+    public void UpdateProfileImage(string profileImageUrl)
+    {
+        Guard.Against.NullOrEmpty(profileImageUrl, nameof(profileImageUrl));
+        ProfileImageUrl = profileImageUrl;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
 
     public void RemoveProfileImage()
     {

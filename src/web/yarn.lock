@@ -9897,9 +9897,9 @@ svgo@^2.7.0:
     stable "^0.1.8"
 
 sweetalert2@^11.17.2:
-  version "11.19.1"
-  resolved "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.19.1.tgz"
-  integrity sha512-+8yws3Sc1srAZbrgdhmEIZny1I1UOYhJOIOdtOlv4TYaP5kkwQ9Zm8/BT23Qg+KdByCNOazltxEJAHzXVu8mhA==
+  version "11.21.0"
+  resolved "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.21.0.tgz"
+  integrity sha512-fiEK7SqRY/QD/wC2uqEHlfYGZ7qe2UcyQbJpbpj4YRVqplBgcI+euPZLZL+evLINcvbtXmL1SFUdZHKqBHGAAQ==
 
 symbol-tree@^3.2.4:
   version "3.2.4"
@@ -10374,9 +10374,9 @@ vary@~1.1.2:
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
 "vite@^4.2.0 || ^5.0.0 || ^6.0.0", vite@^6.2.2:
-  version "6.3.3"
-  resolved "https://registry.npmjs.org/vite/-/vite-6.3.3.tgz"
-  integrity sha512-5nXH+QsELbFKhsEfWLkHrvgRpTdGJzqOZ+utSdmPTvwHmvU6ITTm3xx+mRusihkcI8GeC7lCDyn3kDtiki9scw==
+  version "6.3.5"
+  resolved "https://registry.npmjs.org/vite/-/vite-6.3.5.tgz"
+  integrity sha512-cZn6NDFE7wdTpINgs++ZJ4N49W2vRp8LCKrn3Ob1kYNtOo21vfDoaV5GzBfLU4MovSAB8uNRm4jgzVQZ+mBzPQ==
   dependencies:
     esbuild "^0.25.0"
     fdir "^6.4.4"

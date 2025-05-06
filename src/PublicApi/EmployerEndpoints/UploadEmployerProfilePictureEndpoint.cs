@@ -38,7 +38,7 @@ public class UploadEmployerProfilePictureEndpoint : IEndpoint<IResult, UploadEmp
         var employer = await repository.GetByIdAsync(employerId);
         if (employer == null) return Results.NotFound();
 
-        employer.UpdateContactInfo(DateTime.UtcNow, profileImageUrl: uploadResult.SecureUrl.ToString());
+        employer.UpdateProfileImage(profileImageUrl: uploadResult.SecureUrl.ToString());
         await repository.UpdateAsync(employer);
 
         return Results.Ok(new { imageUrl = uploadResult.SecureUrl.ToString() });

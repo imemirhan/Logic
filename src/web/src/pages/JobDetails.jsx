@@ -32,6 +32,7 @@ function JobDetails() {
   if (status === "failed") return <p className={styles.message}>Error: {error}</p>;
   if (!job || !job.job) return <p className={styles.message}>Job not found.</p>;
   console.log("Job:", job);
+  console.log("Employer:", employer);
   return (
     <div className={styles.jobDetailsContainer}>
       <Card className={styles.jobCard}>
@@ -98,7 +99,7 @@ function JobDetails() {
               <Col xs={24} sm={6}>
                 <Avatar
                   size={100}
-                  src={employer.profileImageUrl || "https://picsum.photos/200/300"}
+                  src={employer?.profileImageUrl || "https://picsum.photos/200/300"}
                   alt={`${employer.name} ${employer.surname}`}
                 />
               </Col>
@@ -165,7 +166,6 @@ function JobDetails() {
             </Row>
           </>
         )}
-
         <Divider />
 
         {/* Apply Button */}

@@ -59,7 +59,7 @@ public class CreateEmployerEndpoint : IEndpoint<IResult, CreateEmployerRequest, 
             return Results.BadRequest(result.Errors);
         };
         newItem = await employerRepository.AddAsync(newItem);
-
+        await employerManager.AddToRoleAsync(appUser, "Employer");
         var dto = new EmployerReadDto
         {
             Id = newItem.Id,

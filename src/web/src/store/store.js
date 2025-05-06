@@ -22,7 +22,7 @@ import userSlice from "./slices/userSlice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user"], // Only persist the user slice
+  whitelist: ["userSlice"], // Only persist the user slice
 };
 
 const rootReducer = combineReducers({

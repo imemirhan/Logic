@@ -25,7 +25,6 @@ namespace PublicApi.JobSeekerEndpoints
             Guard.Against.Null(request, nameof(request));
             Guard.Against.NullOrWhiteSpace(request.Name, nameof(request.Name));
             Guard.Against.NullOrWhiteSpace(request.LastName, nameof(request.LastName));
-
             // Find the existing job seeker
             var existingJobSeeker = await repository.GetByIdAsync(request.JobSeekerId);
             if (existingJobSeeker == null)
@@ -37,21 +36,25 @@ namespace PublicApi.JobSeekerEndpoints
             existingJobSeeker.UpdateInfo(request.Name, request.LastName, DateTime.UtcNow, request.AboutMe, request.ResumeUrl);
 
             // Update contact info
-            existingJobSeeker.UpdateContactInfo(DateTime.UtcNow, request.ProfileImageUrl, request.LinkedIn, request.GitHub, request.Twitter, request.Facebook, request.Instagram);
+            existingJobSeeker.UpdateContactInfo(DateTime.UtcNow, request.LinkedIn, request.GitHub, request.Twitter, request.Facebook, request.Instagram);
 
             // Persist the changes
             await repository.UpdateAsync(existingJobSeeker);
 
             // Map to DTO and return the response
             var jobSeekerDto = _mapper.Map<JobSeekerReadDto>(existingJobSeeker);
+            var response = new UpdateJobSeekerResponse(request.CorrelationId())
+            {
+                JobSeeker = jobSeekerDto
+            };
 
-            return Results.Ok(new UpdateJobSeekerResponse(request.CorrelationId()) { JobSeeker = jobSeekerDto });
+            return Results.Ok(response);
+
         }
 
         public void AddRoute(IEndpointRouteBuilder app)
         {
             app.MapPut("api/jobseekers/{jobSeekerId:int}",
-                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (int jobSeekerId, UpdateJobSeekerRequest request, IRepository<JobSeeker> repository) =>
                 {
                     request.JobSeekerId = jobSeekerId; // Ensure the ID from the route is set
