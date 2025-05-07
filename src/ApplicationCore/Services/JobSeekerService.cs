@@ -3,6 +3,7 @@ using ApplicationCore.Interfaces;
 using ApplicationCore.Specifications;
 using Ardalis.GuardClauses;
 using Ardalis.Result;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationCore.Services;
 
@@ -10,7 +11,6 @@ public class JobSeekerService : IJobSeekerService
 {
     IRepository<JobSeeker> _jobSeekerRepository;
     IAppLogger<JobSeekerService> _logger;
-
 
     public JobSeekerService(IRepository<JobSeeker> jobSeekerRepository, IAppLogger<JobSeekerService> logger)
     {
@@ -39,7 +39,6 @@ public class JobSeekerService : IJobSeekerService
     {
         var spec = new GetJobSeekerByIdentityGuidSpec(identityGuid.ToString());
         var employer = await _jobSeekerRepository.FirstOrDefaultAsync(spec);
-
         return employer is null
             ? Result<JobSeeker>.NotFound()
             : Result.Success(employer);

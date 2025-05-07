@@ -6,5 +6,5 @@ public class AddSkillByIdResponse : BaseResponse
 
     public AddSkillByIdResponse() { }
         
-    public string Status { get; set; } = "Skill Added";
+    public JobSeekerSkillReadDto Skill { get; set; } = new();
 }

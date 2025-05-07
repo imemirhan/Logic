@@ -1,9 +1,6 @@
 ﻿using ApplicationCore.Entities.EmployerAggregate;
 using ApplicationCore.Interfaces;
-using Ardalis.GuardClauses;
 using Infrastructure.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -40,11 +37,15 @@ public class CreateEmployerEndpoint : IEndpoint<IResult, CreateEmployerRequest, 
             Id = request.CorrelationId().ToString(),
             UserName = request.Email,
             Email = request.Email,
-            PhoneNumber = request.Phone
+            PhoneNumber = request.Phone,
+            Name = request.Name,
+            Surname = request.Surname,
+            RefreshTokenHash = Guid.NewGuid().ToString(),
+            RefreshTokenExpiryTime = DateTime.UtcNow.AddHours(7),
         };
         var result = await employerManager.CreateAsync(appUser, request.Password);
-        
-        
+
+
         var newItem = new Employer
         (
             request.CorrelationId().ToString(),
@@ -57,7 +58,9 @@ public class CreateEmployerEndpoint : IEndpoint<IResult, CreateEmployerRequest, 
         if (!result.Succeeded)
         {
             return Results.BadRequest(result.Errors);
-        };
+        }
+
+        ;
         newItem = await employerRepository.AddAsync(newItem);
         await employerManager.AddToRoleAsync(appUser, "Employer");
         var dto = new EmployerReadDto
@@ -73,6 +76,7 @@ public class CreateEmployerEndpoint : IEndpoint<IResult, CreateEmployerRequest, 
             UpdatedAt = null
         };
         response.Employer = dto;
+
         return Results.Ok(response);
     }
 

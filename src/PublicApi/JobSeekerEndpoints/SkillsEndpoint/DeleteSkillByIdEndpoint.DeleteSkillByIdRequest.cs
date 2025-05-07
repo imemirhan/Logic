@@ -2,7 +2,7 @@
 
 public class DeleteSkillByIdRequest : BaseRequest
 {
-    public int SkillId { get; init; }
+    public int SkillId { get; set; }
 
     public DeleteSkillByIdRequest(int skillId)
     {

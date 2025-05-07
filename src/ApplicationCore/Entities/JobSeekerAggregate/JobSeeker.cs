@@ -30,6 +30,7 @@ public class JobSeeker : BaseEntity, IAggregateRoot
     private readonly List<Education> _educations = new();
     public IReadOnlyCollection<Education> Educations => _educations.AsReadOnly();
 
+
 #pragma warning disable CS8618
     private JobSeeker() { }
 

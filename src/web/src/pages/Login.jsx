@@ -29,13 +29,15 @@ function Login() {
         localStorage.setItem("token", response.data.token);
         console.log(response.data);
         axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-        if(response.data.role === 0) {
-          dispatch(setUser(response.data.jobSeeker));
-        }
-        if(response.data.role === 1) {
-          dispatch(setUser(response.data.employer));
+      
+        if (response.data.role === 0) {
+          dispatch(setUser({ ...response.data.jobSeeker, role: 0 }));
         }
       
+        if (response.data.role === 1) {
+          dispatch(setUser({ ...response.data.employer, role: 1 }));
+        }
+            
         Swal.fire({
           title: "Login Successful!",
           text: "You are now logged in.",

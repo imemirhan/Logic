@@ -16,6 +16,18 @@ export const updateJobSeekerInfo = createAsyncThunk(
   }
 );
 
+export const updateEmployerInfo = createAsyncThunk(
+  "user/updateEmployerInfo",
+  async ({ employerId, data }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/employers/${employerId}`, data);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating employer:", error.response || error.message);
+      return rejectWithValue(error.response ? error.response.data : error.message);
+    }
+  }
+);
 
 
 var userData = null;
@@ -61,6 +73,22 @@ const userSlice = createSlice({
         }
       })
       .addCase(updateJobSeekerInfo.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(updateEmployerInfo.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(updateEmployerInfo.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        if (action.payload?.employer) {
+          state.user = { ...state.user, ...action.payload.employer };
+        } else {
+          state.user = action.payload;
+        }
+      })
+      .addCase(updateEmployerInfo.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });

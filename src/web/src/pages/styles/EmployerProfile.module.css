@@ -1,0 +1,67 @@
+/* Main container */
+.profileContainer {
+  padding: 2rem;
+  background-color: #f9f9fb;
+  font-family: Arial, sans-serif;
+}
+
+/* Profile Card */
+.profileCard {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Company Name */
+.companyName {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4a90e2;
+  margin-bottom: 0.5rem;
+}
+
+/* Industry and Description */
+.industry,
+.description {
+  font-size: 1rem;
+  color: #4a4a4a;
+  margin-bottom: 0.5rem;
+}
+
+/* Social Media Links */
+.socialLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.socialLinks a {
+  color: #4a90e2;
+  font-size: 1rem;
+}
+
+.socialLinks a:hover {
+  text-decoration: underline;
+}
+
+/* Job Card */
+.jobCard {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.jobCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.jobTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}

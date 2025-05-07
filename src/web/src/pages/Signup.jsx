@@ -82,51 +82,135 @@ function Signup() {
               requiredMark="optional"
               className={styles.form}
             >
-              <Row gutter={16}>
-                <Col xs={24} sm={12}>
-                  <Form.Item
-                    label="First Name"
-                    name="name"
-                    rules={[{ required: true, message: "Please enter your first name!" }]}
-                  >
-                    <Input placeholder="Enter your first name" />
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={12}>
-                  <Form.Item
-                    label="Last Name"
-                    name="lastName"
-                    rules={[{ required: true, message: "Please enter your last name!" }]}
-                  >
-                    <Input placeholder="Enter your last name" />
-                  </Form.Item>
-                </Col>
-              </Row>
+              {role === "jobseeker" ? (
+                <>
+                  <Row gutter={16}>
+                    <Col xs={24} sm={12}>
+                      <Form.Item
+                        label="First Name"
+                        name="name"
+                        rules={[{ required: true, message: "Please enter your first name!" }]}
+                      >
+                        <Input placeholder="Enter your first name" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12}>
+                      <Form.Item
+                        label="Last Name"
+                        name="lastName"
+                        rules={[{ required: true, message: "Please enter your last name!" }]}
+                      >
+                        <Input placeholder="Enter your last name" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
 
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  { required: true, message: "Please enter your email!" },
-                  { type: "email", message: "Please enter a valid email!" },
-                ]}
-              >
-                <Input placeholder="Enter your email" />
-              </Form.Item>
+                  <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                      { required: true, message: "Please enter your email!" },
+                      { type: "email", message: "Please enter a valid email!" },
+                    ]}
+                  >
+                    <Input placeholder="Enter your email" />
+                  </Form.Item>
 
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  { required: true, message: "Please enter your password!" },
-                  {
-                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,}$/,
-                    message: "Password must have at least 6 characters, 1 uppercase, 1 lowercase, and 1 symbol.",
-                  },
-                ]}
-              >
-                <Input.Password placeholder="Enter your password" />
-              </Form.Item>
+                  <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[
+                      { required: true, message: "Please enter your password!" },
+                      {
+                        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,}$/,
+                        message: "Password must have at least 6 characters, 1 uppercase, 1 lowercase, and 1 symbol.",
+                      },
+                    ]}
+                  >
+                    <Input.Password placeholder="Enter your password" />
+                  </Form.Item>
+                </>
+              ) : (
+                <>
+                  <Row gutter={16}>
+                    <Col xs={24} sm={12}>
+                      <Form.Item
+                        label="First Name"
+                        name="name"
+                        rules={[{ required: true, message: "Please enter your first name!" }]}
+                      >
+                        <Input placeholder="Enter your first name" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12}>
+                      <Form.Item
+                        label="Last Name"
+                        name="lastName"
+                        rules={[{ required: true, message: "Please enter your last name!" }]}
+                      >
+                        <Input placeholder="Enter your last name" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+
+                  <Form.Item
+                    label="Company Name"
+                    name="companyName"
+                    rules={[{ required: true, message: "Please enter your company name!" }]}
+                  >
+                    <Input placeholder="Enter your company name" />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Description"
+                    name="description"
+                    rules={[{ required: true, message: "Please enter a description!" }]}
+                  >
+                    <Input.TextArea rows={4} placeholder="Enter a description of your company" />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Industry"
+                    name="industry"
+                    rules={[{ required: true, message: "Please enter your industry!" }]}
+                  >
+                    <Input placeholder="Enter your industry" />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                      { required: true, message: "Please enter your email!" },
+                      { type: "email", message: "Please enter a valid email!" },
+                    ]}
+                  >
+                    <Input placeholder="Enter your email" />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Phone"
+                    name="phone"
+                    rules={[{ required: true, message: "Please enter your phone number!" }]}
+                  >
+                    <Input placeholder="Enter your phone number" />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[
+                      { required: true, message: "Please enter your password!" },
+                      {
+                        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,}$/,
+                        message: "Password must have at least 6 characters, 1 uppercase, 1 lowercase, and 1 symbol.",
+                      },
+                    ]}
+                  >
+                    <Input.Password placeholder="Enter your password" />
+                  </Form.Item>
+                </>
+              )}
 
               {/* Role Selection */}
               <Form.Item label="Select Role" name="role" required>

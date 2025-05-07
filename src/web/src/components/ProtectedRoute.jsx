@@ -7,8 +7,12 @@ const ProtectedRoute = ({ children }) => {
   const user = useSelector((state) => state.userSlice.user);
 //   const roleEmployer = user.
   // If user is not logged in, redirect to login page
+  const isEmplyoer = user.jobSeeker === null ? true : false;
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
+  }
+  if (isEmplyoer) {
+    return <Navigate to="/profile" replace />;
   }
   return children;
 };

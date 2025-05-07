@@ -14,7 +14,7 @@ public class DeleteSkillByIdEndpoint : IEndpoint<IResult, DeleteSkillByIdRequest
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapDelete("api/skills/{skillId}",
-                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] async
+                async
                     (int id, IRepository<Skill> repository) =>
                 {
                     return await HandleAsync(new DeleteSkillByIdRequest(id) {SkillId = id}, repository);

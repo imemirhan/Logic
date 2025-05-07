@@ -19,7 +19,7 @@ public class JobSeekerReadDto
     public string? Instagram { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public List<JobSeekerSkillReadDto> Skills { get; set; }
-    public List<JobSeekerEducationReadDto> Educations { get; set; }
-    public List<JobSeekerExperienceReadDto> Experiences { get; set; }
+    public List<Skill> Skills { get; set; }
+    public List<Education> Educations { get; set; }
+    public List<Experience> Experiences { get; set; }
 }

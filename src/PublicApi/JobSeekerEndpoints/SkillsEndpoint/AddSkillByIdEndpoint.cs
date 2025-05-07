@@ -1,37 +1,51 @@
 ﻿using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using MinimalApi.Endpoint;
 
-namespace PublicApi.JobSeekerEndpoints.SkillsEndpoint
+namespace PublicApi.JobSeekerEndpoints.SkillsEndpoint;
+
+public class AddSkillByIdEndpoint : IEndpoint<IResult, AddSkillByIdRequest, IRepository<JobSeeker>>
 {
-    public class AddSkillToJobSeekerEndpoint : IEndpoint<IResult, AddSkillByIdRequest, IRepository<Skill>>
+    public async Task<IResult> HandleAsync(AddSkillByIdRequest request, IRepository<JobSeeker> repository)
     {
-        public async Task<IResult> HandleAsync(AddSkillByIdRequest request, IRepository<Skill> repository)
-        {
-            var skill = new Skill(request.Title, request.Description, request.SkillType, request.JobSeekerId);
+        var jobSeeker = await repository.GetByIdAsync(request.JobSeekerId);
 
-            // Save the skill to the repository (e.g., database)
-            await repository.AddAsync(skill);
+        if (jobSeeker == null)
+            return Results.NotFound($"JobSeeker with ID {request.JobSeekerId} not found");
 
-            return Results.Ok(new AddSkillByIdResponse());
-        }
+        var skill = new Skill(request.Title, request.Description, request.SkillType, request.JobSeekerId);
 
-        public void AddRoute(IEndpointRouteBuilder app)
-        {
-            app.MapPost("api/skills/{jobSeekerId}/",
-                    [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-                    async (AddSkillByIdRequest request, IRepository<Skill> skillRepository) =>
-                    {
-                        return await HandleAsync(request, skillRepository);
-                    })
-                .Accepts<AddSkillByIdRequest>("application/json")
-                .Produces<AddSkillByIdResponse>()
-                .WithTags("Skill Endpoints");
-        }
+        jobSeeker.AddSkill(skill);
+
+        await repository.UpdateAsync(jobSeeker);
+        await repository.SaveChangesAsync();
+
+        return Results.Created($"/api/skills/{request.JobSeekerId}/{skill.Id}", 
+            new AddSkillByIdResponse 
+            { 
+                Skill = new JobSeekerSkillReadDto
+                {
+                    Id = skill.Id,
+                    Title = skill.Title,
+                    Description = skill.Description,
+                    SkillType = skill.SkillType,
+                    JobSeekerId = request.JobSeekerId
+                }
+            });
+    }
+
+    public void AddRoute(IEndpointRouteBuilder app)
+    {
+        app.MapPost("api/skills",
+                async (AddSkillByIdRequest request, IRepository<JobSeeker> skillRepository) =>
+                {
+                    return await HandleAsync(request, skillRepository);
+                })
+            .Accepts<AddSkillByIdRequest>("application/json")
+            .Produces<AddSkillByIdResponse>(StatusCodes.Status201Created)
+            .WithTags("Skill Endpoints");
     }
 }

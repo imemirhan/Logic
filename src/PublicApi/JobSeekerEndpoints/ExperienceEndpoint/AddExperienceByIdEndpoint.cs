@@ -22,7 +22,6 @@ public class AddExperienceByIdEndpoint : IEndpoint<IResult, AddExperienceByIdReq
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapPost("api/experiences", 
-            [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
             async (AddExperienceByIdRequest request, IRepository<JobSeeker> jobSeekerRepository) =>
             {
                 return await HandleAsync(request, jobSeekerRepository);
@@ -51,6 +50,7 @@ public class AddExperienceByIdEndpoint : IEndpoint<IResult, AddExperienceByIdReq
         
         // Save changes
         await jobSeekerRepository.UpdateAsync(jobSeeker);
+        await jobSeekerRepository.SaveChangesAsync();
 
         return Results.Created($"/api/experiences/{request.JobSeekerId}/{newExperience.Id}", 
             new AddExperienceByIdResponse 

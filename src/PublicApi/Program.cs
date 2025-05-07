@@ -12,6 +12,7 @@ using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Logging;
 using Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
 using PublicApi;
 using PublicApi.Middleware;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
+builder.Services.AddDbContext<DbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("ConnectionStrings:LogicDbConnection")));
+
 builder.Services.AddScoped<IEmployerService, EmployerService>();
 builder.Services.AddScoped<IJobSeekerService, JobSeekerService>();
 builder.Services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();

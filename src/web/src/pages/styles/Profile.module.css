@@ -74,3 +74,44 @@
 .socialLinks a:hover {
   text-decoration: underline;
 }
+/* Education Box */
+.educationBox {
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.educationBox:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.educationBox p {
+  margin: 0;
+  font-size: 14px;
+  color: #4a4a4a;
+}
+
+/* Experience Box */
+.experienceBox {
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.experienceBox:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.experienceBox p {
+  margin: 0;
+  font-size: 14px;
+  color: #4a4a4a;
+}

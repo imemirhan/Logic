@@ -23,7 +23,6 @@ public class AddEducationByIdEndpoint : IEndpoint<IResult, AddEducationByIdReque
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapPost("api/educations",
-                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (AddEducationByIdRequest request, IRepository<JobSeeker> jobSeekerRepository) =>
                 {
                     return await HandleAsync(request, jobSeekerRepository);
@@ -48,6 +47,7 @@ public class AddEducationByIdEndpoint : IEndpoint<IResult, AddEducationByIdReque
         jobSeeker.AddEducation(newEducation);
     
         await jobSeekerRepository.UpdateAsync(jobSeeker);
+        await jobSeekerRepository.SaveChangesAsync();
         var educationDto = _mapper.Map<JobSeekerEducationReadDto>(newEducation);
         return Results.Created($"/api/educations/{request.JobSeekerId}/{newEducation.Id}", educationDto);
     }

@@ -1,20 +1,23 @@
-﻿using ApplicationCore.Entities.JobSeekerAggregate;
+﻿using System.Runtime.CompilerServices;
+using ApplicationCore.Entities.JobSeekerAggregate;
+using PublicApi;
 
-namespace PublicApi.JobSeekerEndpoints.SkillsEndpoint
+namespace PublicApi.JobSeekerEndpoints.SkillsEndpoint;
+public class AddSkillByIdRequest : BaseRequest
 {
-    public class AddSkillByIdRequest : BaseRequest
-    {
-        public int JobSeekerId { get; init; }
-        public string Title { get; init; }
-        public string Description { get; init; }
-        public SkillType SkillType { get; init; }
+    //TODO => Skill endpoint apiden çalışıyor ama fronttan çalışmıyor. Fixlenebilir mi ?
+    public int JobSeekerId { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public SkillType SkillType { get; set; }
 
-        public AddSkillByIdRequest(int jobSeekerId, string title, string description, SkillType skillType)
-        {
-            JobSeekerId = jobSeekerId;
-            Title = title;
-            Description = description;
-            SkillType = skillType;
-        }
+    public AddSkillByIdRequest() {} // Needed for model binding
+
+    public AddSkillByIdRequest(int jobSeekerId, string title, string description, SkillType skillType)
+    {
+        JobSeekerId = jobSeekerId;
+        Title = title;
+        Description = description;
+        SkillType = skillType;
     }
 }

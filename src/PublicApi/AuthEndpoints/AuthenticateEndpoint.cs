@@ -5,7 +5,9 @@ using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ApplicationCore.Interfaces;
+using Infrastructure.Data;
 using Infrastructure.Identity;
+using Microsoft.EntityFrameworkCore;
 using Npgsql.Replication;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -23,19 +25,22 @@ public class AuthenticateEndpoint : EndpointBaseAsync
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IEmployerService _employerService;
     private readonly IJobSeekerService _jobSeekerService;
+    private readonly AppDbContext _dbContext;
 
     public AuthenticateEndpoint(
         SignInManager<ApplicationUser> signInManager,
         ITokenClaimsService tokenClaimsService,
         UserManager<ApplicationUser> userManager,
         IEmployerService employerService,
-        IJobSeekerService jobSeekerService)
+        IJobSeekerService jobSeekerService,
+        AppDbContext dbContext)
     {
         _signInManager = signInManager;
         _tokenClaimsService = tokenClaimsService;
         _userManager = userManager;
         _employerService = employerService;
         _jobSeekerService = jobSeekerService;
+        _dbContext = dbContext;
     }
 
     [HttpPost("api/authenticate")]
@@ -56,7 +61,7 @@ public class AuthenticateEndpoint : EndpointBaseAsync
             IsLockedOut = result.IsLockedOut,
             IsNotAllowed = result.IsNotAllowed,
             RequiresTwoFactor = result.RequiresTwoFactor,
-            Username = request.Username
+            Username = request.Username,
         };
 
         if (!result.Succeeded) return response;
@@ -70,7 +75,7 @@ public class AuthenticateEndpoint : EndpointBaseAsync
         var roles = await _userManager.GetRolesAsync(user);
         var identityGuid = user.Id;
 
-        if (user.Role == ProjectEnums.Role.Employer)
+        if (await _userManager.IsInRoleAsync(user, "Employer"))
         {
             var employer = await _employerService.GetEmployerByIdentityGuidAsync(identityGuid);
             if (employer.Value != null)
@@ -80,12 +85,41 @@ public class AuthenticateEndpoint : EndpointBaseAsync
                 response.Employer = employer;
             }
         }
-        else if (user.Role == ProjectEnums.Role.JobSeeker)
+        else if (await _userManager.IsInRoleAsync(user, "JobSeeker"))
         {
-            var jobSeeker = await _jobSeekerService.GetJobSeekerByIdentityGuidAsync(identityGuid);
-            if (jobSeeker.Value != null)
+            var jobSeekerResult = await _jobSeekerService.GetJobSeekerByIdentityGuidAsync(identityGuid);
+            if (jobSeekerResult.Value != null)
             {
-                response.FullName = $"{jobSeeker.Value.Name} {jobSeeker.Value.LastName}";
+                var jobSeeker = jobSeekerResult.Value;
+
+                var skills = await _dbContext.Skills
+                    .Where(sk => sk.JobSeekerId == jobSeeker.Id)
+                    .ToListAsync();
+
+                foreach (var skill in skills)
+                {
+                    jobSeeker.AddSkill(skill);
+                }
+
+                var experiences = await _dbContext.Experiences
+                    .Where(ex => ex.JobSeekerId == jobSeeker.Id)
+                    .ToListAsync();
+
+                foreach (var experience in experiences)
+                {
+                    jobSeeker.AddExperience(experience);
+                }
+
+                var educations = await _dbContext.Educations
+                    .Where(ed => ed.JobSeekerId == jobSeeker.Id)
+                    .ToListAsync();
+
+                foreach (var education in educations)
+                {
+                    jobSeeker.AddEducation(education);
+                }
+
+                response.FullName = $"{jobSeeker.Name} {jobSeeker.LastName}";
                 response.Role = ProjectEnums.Role.JobSeeker;
                 response.JobSeeker = jobSeeker;
             }

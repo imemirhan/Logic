@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
@@ -11,6 +11,7 @@ import { faPlus, faPen } from "@fortawesome/free-solid-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Card,
+  Select,
   Row,
   Col,
   Typography,
@@ -24,50 +25,83 @@ import {
 } from "antd";
 import Swal from "sweetalert2";
 import styles from "./styles/Profile.module.css";
-import { updateJobSeekerInfo } from "../store/slices/userSlice";
+import { setUser, updateJobSeekerInfo } from "../store/slices/userSlice";
+import { addSkill, deleteSkill } from '../store/slices/skillsSlice';
+import { addEducation, deleteEducation } from '../store/slices/educationSlice';
+import { addExperience, deleteExperience } from '../store/slices/experienceSlice';
 
-const { Title, Paragraph, Link } = Typography;
+const { Title, Paragraph, Text, Link } = Typography;
 
 function Profile() {
   const { user } = useSelector((state) => state.userSlice);
   const dispatch = useDispatch();
-
+  const { skills } = useSelector((state) => state.skills);
+  const { educations } = useSelector((state) => state.education);
+  const { experiences } = useSelector((state) => state.experience);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
   const [form] = Form.useForm();
 
   const handleEdit = () => {
-    form.setFieldsValue({ ...user });
     setIsModalOpen(true);
     setActiveModal("editProfile");
   };
+  
+  useEffect(() => {
+    if (isModalOpen && activeModal === "editProfile" && user) {
+      // Delay setting fields to ensure modal renders
+      setTimeout(() => {
+        form.setFieldsValue({
+          name: user.name || "",
+          lastName: user.lastName || "",
+          aboutMe: user.aboutMe || "",
+          linkedIn: user.linkedIn || "",
+          gitHub: user.gitHub || "",
+          twitter: user.twitter || "",
+          facebook: user.facebook || "",
+          instagram: user.instagram || "",
+        });
+      }, 0);
+    }
+  }, [isModalOpen, activeModal, user]);
 
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      await dispatch(
-        updateJobSeekerInfo({ jobSeekerId: user.id, data: values })
-      ).unwrap();
-      Swal.fire({
-        title: "Success!",
-        text: "Your profile has been updated successfully.",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
+  
+      if (activeModal === "editProfile") {
+        await dispatch(updateJobSeekerInfo({ jobSeekerId: user.id, data: values })).unwrap();
+        Swal.fire({
+          title: "Success!",
+          text: "Your profile has been updated successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      } else if (activeModal === "Skill") {
+        handleAddSkill(values);
+      } else if (activeModal === "Experience") {
+        handleAddExperience(values);
+      } else if (activeModal === "Education") {
+        handleAddEducation(values);
+      }
+  
       setIsModalOpen(false);
       setActiveModal(null);
+      form.resetFields();
     } catch (error) {
       console.error(error);
       Swal.fire({
         title: "Error!",
-        text: "Failed to update your profile. Please try again.",
+        text: "Something went wrong. Please try again.",
         icon: "error",
         confirmButtonText: "OK",
       });
     }
   };
+  
 
   const handleCancel = () => {
+    form.resetFields();
     setIsModalOpen(false);
     setActiveModal(null);
   };
@@ -78,6 +112,86 @@ function Profile() {
     setActiveModal(type);
   };
 
+  const handleAddSkill = async (formData) => {
+    try {
+      console.log(formData);
+      const skillResponse = await dispatch(
+        addSkill({
+          jobSeekerId: user.id,
+          title: formData.title,
+          description: formData.description,
+          skillType: formData.skillType,
+        })
+      );
+  
+      if (skillResponse.meta.requestStatus === "fulfilled") {
+        dispatch(setUser({ ...user, skills: [...user.skills, skillResponse.payload] }));
+        Swal.fire({
+          title: "Success!",
+          text: "Skill added successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to add skill. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+  
+  const handleAddEducation = async (data) => {
+    try {
+      const educationResponse = await dispatch(addEducation({ ...data, jobSeekerId: user.id }));
+      if (educationResponse.meta.requestStatus === "fulfilled") {
+        dispatch(setUser({ ...user, educations: [...user.educations, data] }));
+        Swal.fire({
+          title: "Success!",
+          text: "Education added successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to add education. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+  
+  const handleAddExperience = async (data) => {
+    try {
+      const experienceResponse = await dispatch(addExperience({ ...data, jobSeekerId: user.id }));
+      if (experienceResponse.meta.requestStatus === "fulfilled") {
+        dispatch(setUser({ ...user, experiences: [...user.experiences, data] }));
+        Swal.fire({
+          title: "Success!",
+          text: "Experience added successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to add experience. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+  
+
+  const handleDeleteSkill = (id) => dispatch(deleteSkill(id));
+  const handleDeleteEducation = (id) => dispatch(deleteEducation(id));
+  const handleDeleteExperience = (id) => dispatch(deleteExperience(id));
+  console.log(user);
   const renderSectionHeader = (title, type) => (
     <Row justify="space-between" align="middle">
       <Col>
@@ -94,7 +208,7 @@ function Profile() {
       </Col>
     </Row>
   );
-
+  console.log(user);
   return (
     <div className={styles.profileContainer}>
       <Card className={styles.profileCard}>
@@ -195,9 +309,26 @@ function Profile() {
         {/* Experiences Section */}
         {renderSectionHeader("Experience", "Experience")}
         {user.experiences.length > 0 ? (
-          user.experiences.map((exp, i) => (
-            <Paragraph key={i}>{exp.title || "Experience info"}</Paragraph>
-          ))
+          <Row gutter={[16, 16]}>
+            {user.experiences.map((exp, i) => (
+              <Col xs={24} sm={12} md={8} key={i}>
+                <div className={styles.experienceBox}>
+                  <Paragraph>
+                    <Text strong>Job Title:</Text> {exp.title || "N/A"}
+                  </Paragraph>
+                  <Paragraph>
+                    <Text strong>Company:</Text> {exp.company || "N/A"}
+                  </Paragraph>
+                  <Paragraph>
+                    <Text strong>Description:</Text> {exp.description || "N/A"}
+                  </Paragraph>
+                  <Paragraph>
+                    <Text strong>Years:</Text> {exp.years || "N/A"}
+                  </Paragraph>
+                </div>
+              </Col>
+            ))}
+          </Row>
         ) : (
           <Paragraph>No experience added yet.</Paragraph>
         )}
@@ -207,52 +338,126 @@ function Profile() {
         {/* Education Section */}
         {renderSectionHeader("Education", "Education")}
         {user.educations.length > 0 ? (
-          user.educations.map((edu, i) => (
-            <Paragraph key={i}>{edu.schoolName || "Education info"}</Paragraph>
-          ))
+          <Row gutter={[16, 16]}>
+            {user.educations.map((edu, i) => (
+              <Col xs={24} sm={12} md={8} key={i}>
+                <div className={styles.educationBox}>
+                  <Paragraph>
+                    <Text strong>Degree:</Text> {edu.degree || "N/A"}
+                  </Paragraph>
+                  <Paragraph>
+                    <Text strong>Institution:</Text> {edu.institution || "N/A"}
+                  </Paragraph>
+                  <Paragraph>
+                    <Text strong>Start Year:</Text> {edu.startYear || "N/A"}
+                  </Paragraph>
+                  <Paragraph>
+                    <Text strong>Graduation Year:</Text> {edu.graduationYear || edu.endYear || "N/A"}
+                  </Paragraph>
+                </div>
+              </Col>
+            ))}
+          </Row>
         ) : (
           <Paragraph>No education added yet.</Paragraph>
         )}
       </Card>
 
       <Modal
-        title={`Add ${activeModal === "editProfile" ? "Profile" : activeModal}`}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
+      title={
+        activeModal === "editProfile"
+          ? "Edit Profile"
+          : `Add ${activeModal}`
+      }
+      open={isModalOpen}
+      onOk={handleOk}
+      onCancel={handleCancel}
+    >
+      {activeModal === "editProfile" && (
         <Form form={form} layout="vertical">
-          {activeModal === "editProfile" && (
-            <>
-              <Form.Item label="Name" name="name" rules={[{ required: true }]}> <Input /> </Form.Item>
-              <Form.Item label="Last Name" name="lastName" rules={[{ required: true }]}> <Input /> </Form.Item>
-              <Form.Item label="About Me" name="aboutMe"> <Input.TextArea rows={4} /> </Form.Item>
-              <Form.Item label="LinkedIn" name="linkedIn"> <Input /> </Form.Item>
-              <Form.Item label="GitHub" name="gitHub"> <Input /> </Form.Item>
-              <Form.Item label="Twitter" name="twitter"> <Input /> </Form.Item>
-              <Form.Item label="Facebook" name="facebook"> <Input /> </Form.Item>
-              <Form.Item label="Instagram" name="instagram"> <Input /> </Form.Item>
-            </>
-          )}
-          {activeModal === "Skill" && (
-            <Form.Item label="Skill" name="skill" rules={[{ required: true }]}> <Input /> </Form.Item>
-          )}
-          {activeModal === "Experience" && (
-            <>
-              <Form.Item label="Job Title" name="title" rules={[{ required: true }]}> <Input /> </Form.Item>
-              <Form.Item label="Company" name="company"> <Input /> </Form.Item>
-              <Form.Item label="Description" name="description"> <Input.TextArea rows={3} /> </Form.Item>
-            </>
-          )}
-          {activeModal === "Education" && (
-            <>
-              <Form.Item label="School Name" name="schoolName" rules={[{ required: true }]}> <Input /> </Form.Item>
-              <Form.Item label="Degree" name="degree"> <Input /> </Form.Item>
-              <Form.Item label="Field of Study" name="field"> <Input /> </Form.Item>
-            </>
-          )}
+          <Form.Item label="Name" name="name" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Last Name" name="lastName" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="About Me" name="aboutMe">
+            <Input.TextArea rows={4} />
+          </Form.Item>
+          <Form.Item label="LinkedIn" name="linkedIn">
+            <Input />
+          </Form.Item>
+          <Form.Item label="GitHub" name="gitHub">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Twitter" name="twitter">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Facebook" name="facebook">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Instagram" name="instagram">
+            <Input />
+          </Form.Item>
         </Form>
-      </Modal>
+      )}
+
+      {activeModal === "Skill" && (
+        <Form form={form} layout="vertical">
+          <Form.Item label="Title" name="title" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Description" name="description">
+            <Input.TextArea rows={3} />
+          </Form.Item>
+          <Form.Item label="Skill Type" name="skillType" rules={[{ required: true }]}>
+            <Select>
+              <Select.Option value="2">Beginner</Select.Option>
+              <Select.Option value="1">Average</Select.Option>
+              <Select.Option value="0">Intermediate</Select.Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      )}
+
+      {activeModal === "Experience" && (
+        <Form form={form} layout="vertical">
+          <Form.Item label="Job Title" name="title" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Company" name="company" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Description" name="description">
+            <Input.TextArea rows={3} />
+          </Form.Item>
+          <Form.Item label="Years" name="years" rules={[{ required: true }]}>
+            <Input type="number" />
+          </Form.Item>
+        </Form>
+      )}
+
+
+        {activeModal === "Education" && (
+          <Form form={form} layout="vertical">
+            <Form.Item label="Institution" name="institution" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Degree" name="degree">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Start Year" name="startYear" rules={[{ required: true }]}>
+              <Input type="number" />
+            </Form.Item>
+            <Form.Item label="Graduation Year" name="graduationYear" rules={[{ required: true }]}>
+              <Input type="number" />
+            </Form.Item>
+          </Form>
+        )}
+
+
+    </Modal>
+
     </div>
   );
 }

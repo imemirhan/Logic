@@ -14,8 +14,8 @@ public class DeleteEducationByIdEndpoint : IEndpoint<IResult, DeleteEducationByI
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapDelete("api/educations/{educationId}",
-                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] async
-                    (int id, IRepository<Education> repository) =>
+                async
+                (int id, IRepository<Education> repository) =>
                 {
                     return await HandleAsync(new DeleteEducationByIdRequest(id) { EducationId = id }, repository);
                 })
