@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Layout, Input, Button, Row, Col, Card, Checkbox, Select } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Layout, Input, Button, Row, Col, Card, Checkbox, Select, Spin } from "antd";
+import { SearchOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getJobs } from "../store/slices/jobsSlice";
 import styles from "./styles/Browse.module.css";
-
+const antIcon = <LoadingOutlined style={{ fontSize: 48 }} spin />;
 const { Content, Sider } = Layout;
 const { Option } = Select;
 
@@ -109,7 +109,10 @@ function Browse() {
           {/* Job Listings */}
           <Content className={styles.jobList}>
             {status === "loading" ? (
-              <p>Loading jobs...</p>
+              <div className={styles.loadingContainer}>
+                <Spin indicator={antIcon} />
+                <p className={styles.loadingText}>Loading jobs...</p>
+              </div>
             ) : status === "failed" ? (
               <p>Error: {error}. No data found...</p>
             ) : (

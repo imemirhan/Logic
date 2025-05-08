@@ -38,7 +38,7 @@ function Footer() {
         </div>
       </div>
       <div className={styles.copyright}>
-        <p>&copy; 2025 MyApp. All rights reserved.</p>
+        <p>&copy; 2025 Logic. All rights reserved.</p>
       </div>
     </footer>
   );

@@ -1,24 +1,41 @@
 import React from "react";
-import { Button, Typography, Row, Col, Card } from "antd"; 
+import { Button, Typography, Row, Col, Card, Input } from "antd";
 import { RocketOutlined, CloudOutlined, TeamOutlined } from "@ant-design/icons";
-import Testimonial from "../components/Testimonial"; // Import the Testimonial component
+import Testimonial from "../components/Testimonial";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import styles from "./styles/Home.module.css";
 
 const { Title, Paragraph } = Typography;
-
 function Home() {
+const { user } = useSelector((state) => state.userSlice);
+
   return (
     <div className={styles.homeContainer}>
       {/* Hero Section */}
       <div className={styles.heroSection}>
         <div className={styles.heroContent}>
-          <Title className={styles.heroTitle}>Welcome to the Future</Title>
+          <Title className={styles.heroTitle}>LOGIC</Title>
           <Paragraph className={styles.heroSubtitle}>
-            Discover the next generation of innovation and technology. Join us to explore endless possibilities.
+            Make the Best Decision for Your Career.
           </Paragraph>
-          <Button type="primary" size="large" className={styles.heroButton}>
-            Get Started
-          </Button>
+          <div className={styles.searchBar}>
+            <Input.Group compact>
+              <Input
+                style={{ width: "60%" }}
+                placeholder="Job title, keywords, or company"
+                className={styles.searchInput}
+              />
+              <Input
+                style={{ width: "30%" }}
+                placeholder="City, state, or zip code"
+                className={styles.searchInput}
+              />
+              <Button type="primary" className={styles.searchButton}>
+                Find Jobs
+              </Button>
+            </Input.Group>
+          </div>
         </div>
       </div>
 
@@ -86,17 +103,20 @@ function Home() {
           </Col>
         </Row>
       </div>
-
       {/* Call-to-Action Section */}
-      <div className={styles.ctaSection}>
-        <Title className={styles.ctaTitle}>Ready to Get Started?</Title>
-        <Paragraph className={styles.ctaSubtitle}>
-          Join us today and be part of the future.
-        </Paragraph>
-        <Button type="primary" size="large" className={styles.ctaButton}>
-          Sign Up Now
-        </Button>
-      </div>
+      {user === null && ( // Render only if user is null
+        <div className={styles.ctaSection}>
+          <Title className={styles.ctaTitle}>Ready to Get Started?</Title>
+          <Paragraph className={styles.ctaSubtitle}>
+            Join us today and be part of the future.
+          </Paragraph>
+          <Link to="/signup">
+            <Button type="primary" size="large" className={styles.ctaButton}>
+              Sign Up Now
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
