@@ -29,10 +29,10 @@ public class AddJobSeekerResumeEndpoint : IEndpoint<IResult, AddJobSeekerResumeR
         if (!request.File.FileName.EndsWith(".pdf"))
             return Results.BadRequest("Only PDF files are allowed.");
 
-        var uploadResult = await _cloudinary.UploadAsync(new RawUploadParams
+        var uploadResult = await _cloudinary.UploadAsync(new AutoUploadParams()
         {
             File = new FileDescription(request.File.FileName, request.File.OpenReadStream()),
-            Folder = "jobseeker-resumes"
+            Folder = "jobseeker-resumes",
         });
 
         if (uploadResult.StatusCode != HttpStatusCode.OK)

@@ -63,11 +63,19 @@
 
 /* Button styling */
 .navButton {
-  border-radius: 4px;
-  padding: 6px 16px; /* Slightly larger padding for better button look */
-  font-size: 14px; /* Reduced font size for better fit */
-  font-weight: 600; /* Bold text for better visibility */
+  font-size: 1rem;
+  padding: 8px 16px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.3s ease;
+}
+
+
+.navButton:hover {
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Primary button */
@@ -100,7 +108,40 @@
 .buttonLink {
   color: inherit;
   text-decoration: none;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Space between icon and text */
+}
+
+/* User Dropdown */
+.userDropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between avatar and text */
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.userDropdown:hover {
+  background-color: rgba(0, 0, 0, 0.05); /* Light hover effect */
+}
+
+/* Avatar */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* User Name */
+.userName {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff; /* Professional blue */
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 /* Mobile responsiveness */

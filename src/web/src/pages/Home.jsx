@@ -1,15 +1,38 @@
 import React from "react";
-import { Button, Typography, Row, Col, Card, Input } from "antd";
-import { RocketOutlined, CloudOutlined, TeamOutlined } from "@ant-design/icons";
-import Testimonial from "../components/Testimonial";
+import { Typography, Space, Input, Row, Col, Button, Carousel } from "antd";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import ComponentCard from "../components/ComponentCard";
 import styles from "./styles/Home.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import feature1 from "../assets/feature1.jpg";
+import feature2 from "../assets/feature2.jpg";
+import feature3 from "../assets/feature3.jpg";
 
 const { Title, Paragraph } = Typography;
-function Home() {
-const { user } = useSelector((state) => state.userSlice);
 
+function Home() {
+  const { user } = useSelector((state) => state.userSlice);
+  const recentJobs = [
+    {
+      title: "Software Engineer",
+      company: "TechCorp",
+      location: "San Francisco, CA",
+      description: "Develop and maintain cutting-edge software solutions.",
+    },
+    {
+      title: "Product Manager",
+      company: "Innovate Inc.",
+      location: "New York, NY",
+      description: "Lead product development and strategy for innovative solutions.",
+    },
+    {
+      title: "Data Scientist",
+      company: "DataWorks",
+      location: "Austin, TX",
+      description: "Analyze complex datasets to drive business decisions.",
+    },
+  ];
   return (
     <div className={styles.homeContainer}>
       {/* Hero Section */}
@@ -20,101 +43,127 @@ const { user } = useSelector((state) => state.userSlice);
             Make the Best Decision for Your Career.
           </Paragraph>
           <div className={styles.searchBar}>
-            <Input.Group compact>
+            <Space.Compact compact>
               <Input
                 style={{ width: "60%" }}
                 placeholder="Job title, keywords, or company"
                 className={styles.searchInput}
+                prefix={<FontAwesomeIcon icon={faSearch} />}
               />
               <Input
                 style={{ width: "30%" }}
                 placeholder="City, state, or zip code"
                 className={styles.searchInput}
+                prefix={<FontAwesomeIcon icon={faMapMarkerAlt} />}
               />
               <Button type="primary" className={styles.searchButton}>
                 Find Jobs
               </Button>
-            </Input.Group>
+            </Space.Compact>
+
           </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            {/* Recent Jobs Carousel */}
+      <div className={styles.carouselSection}>
+        <Title level={2} className={styles.carouselTitle}>
+          Recent Jobs
+        </Title>
+        <Carousel autoplay className={styles.carousel}>
+          {recentJobs.map((job, index) => (
+            <div key={index} className={styles.carouselItem}>
+              <Title level={4} className={styles.jobTitle}>
+                {job.title}
+              </Title>
+              <Paragraph className={styles.jobCompany}>
+                <strong>Company:</strong> {job.company}
+              </Paragraph>
+              <Paragraph className={styles.jobLocation}>
+                <strong>Location:</strong> {job.location}
+              </Paragraph>
+              <Paragraph className={styles.jobDescription}>
+                {job.description}
+              </Paragraph>
+            </div>
+          ))}
+        </Carousel>
+      </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+
         </div>
       </div>
 
-      {/* Features Section */}
+      {/* Why Choose Us Section */}
       <div className={styles.featuresSection}>
         <Title level={2} className={styles.sectionTitle}>
           Why Choose Us?
         </Title>
         <Row gutter={[16, 16]} justify="center">
-          <Col xs={24} sm={12} md={8}>
-            <Card className={styles.featureCard} hoverable>
-              <RocketOutlined className={styles.featureIcon} />
-              <Title level={3} className={styles.featureTitle}>
-                Cutting-Edge Technology
-              </Title>
-              <Paragraph className={styles.featureDescription}>
-                Experience the latest advancements in AI, cloud computing, and more.
-              </Paragraph>
-            </Card>
+          <Col xs={24}>
+            <ComponentCard
+              image={feature1}
+              title="Cutting-Edge Technology"
+              description="Our platform leverages the latest advancements in artificial intelligence, machine learning, and cloud computing to provide you with the best tools for your career growth. Stay ahead of the curve with our innovative solutions."
+            />
           </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Card className={styles.featureCard} hoverable>
-              <CloudOutlined className={styles.featureIcon} />
-              <Title level={3} className={styles.featureTitle}>
-                Seamless Integration
-              </Title>
-              <Paragraph className={styles.featureDescription}>
-                Easily integrate our solutions into your existing workflows.
-              </Paragraph>
-            </Card>
+          <Col xs={24}>
+            <ComponentCard
+              image={feature2}
+              title="Seamless Integration"
+              description="Easily integrate our platform into your existing workflows. Whether you're a job seeker or an employer, our tools are designed to work seamlessly with your current systems, saving you time and effort."
+              reverse
+            />
           </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Card className={styles.featureCard} hoverable>
-              <TeamOutlined className={styles.featureIcon} />
-              <Title level={3} className={styles.featureTitle}>
-                Community Support
-              </Title>
-              <Paragraph className={styles.featureDescription}>
-                Join a vibrant community of innovators and creators.
-              </Paragraph>
-            </Card>
+          <Col xs={24}>
+            <ComponentCard
+              image={feature3}
+              title="Community Support"
+              description="Join a vibrant community of professionals, innovators, and creators. Share insights, collaborate on projects, and grow your network with like-minded individuals who are as passionate as you are."
+            />
           </Col>
         </Row>
       </div>
 
-      {/* Testimonials Section */}
-      <div className={styles.testimonialsSection}>
-        <Title level={2} className={styles.sectionTitle}>
-          What Our Users Say
-        </Title>
-        <Row gutter={[16, 16]} justify="center">
-          <Col xs={24} sm={12} md={8}>
-            <Testimonial 
-              testimonial="“This platform transformed the way we work. It's sleek, fast, and futuristic.”"
-              name="Alex Johnson"
-              role="CTO, FutureTech"
-            />
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Testimonial 
-              testimonial="“The integration was seamless and the support team is top-notch. Highly recommended!”"
-              name="Samantha Lee"
-              role="Product Manager, InnovateX"
-            />
-          </Col>
-        </Row>
-      </div>
       {/* Call-to-Action Section */}
-      {user === null && ( // Render only if user is null
+      {user === null && (
         <div className={styles.ctaSection}>
           <Title className={styles.ctaTitle}>Ready to Get Started?</Title>
-          <Paragraph className={styles.ctaSubtitle}>
+          <p className={styles.ctaSubtitle}>
             Join us today and be part of the future.
-          </Paragraph>
-          <Link to="/signup">
-            <Button type="primary" size="large" className={styles.ctaButton}>
-              Sign Up Now
-            </Button>
-          </Link>
+          </p>
+          <a href="/signup" className={styles.ctaButton}>
+            Sign Up Now
+          </a>
         </div>
       )}
     </div>

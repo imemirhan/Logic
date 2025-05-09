@@ -302,7 +302,32 @@ function Profile() {
 
         {/* Skills Section */}
         {renderSectionHeader("Skills", "Skill")}
-        <Paragraph>{user.skills.length > 0 ? user.skills.join(", ") : "No skills added yet."}</Paragraph>
+        {user.skills.length > 0 ? (
+          <Row gutter={[16, 16]}>
+            {user.skills.map((skill, i) => (
+              <Col xs={24} sm={12} md={8} key={i}>
+                <div className={styles.skillBox}>
+                  <Paragraph>
+                    <Text strong>Title:</Text> {skill.title || "N/A"}
+                  </Paragraph>
+                  <Paragraph>
+                    <Text strong>Description:</Text> {skill.description || "N/A"}
+                  </Paragraph>
+                  <Paragraph>
+                    <Text strong>Type:</Text>{" "}
+                    {skill.skillType === "0"
+                      ? "Intermediate"
+                      : skill.skillType === "1"
+                      ? "Average"
+                      : "Beginner"}
+                  </Paragraph>
+                </div>
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          <Paragraph>No skills added yet.</Paragraph>
+        )}
 
         <Divider />
 

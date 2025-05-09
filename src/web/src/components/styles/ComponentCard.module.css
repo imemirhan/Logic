@@ -1,0 +1,55 @@
+/* Component Card */
+.componentCard {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  padding: 20px;
+  margin-bottom: 20px; /* Add spacing between cards */
+}
+
+.componentCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Reverse Layout */
+.reverse .cardContent {
+  flex-direction: row-reverse; /* Flip the layout for reverse cards */
+}
+
+/* Card Content Layout */
+.cardContent {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Space between image and text */
+}
+
+/* Image Section */
+.cardImageWrapper {
+  flex: 1; /* Allow the image to take up 1 part of the space */
+}
+
+.cardImage {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Text Section */
+.cardText {
+  flex: 2; /* Allow the text to take up 2 parts of the space */
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  color: #003a9b; /* Professional blue */
+  margin-bottom: 10px;
+}
+
+.cardDescription {
+  font-size: 1rem;
+  color: #4b5563; /* Neutral gray */
+}

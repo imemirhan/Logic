@@ -92,33 +92,6 @@ public class AuthenticateEndpoint : EndpointBaseAsync
             {
                 var jobSeeker = jobSeekerResult.Value;
 
-                var skills = await _dbContext.Skills
-                    .Where(sk => sk.JobSeekerId == jobSeeker.Id)
-                    .ToListAsync();
-
-                foreach (var skill in skills)
-                {
-                    jobSeeker.AddSkill(skill);
-                }
-
-                var experiences = await _dbContext.Experiences
-                    .Where(ex => ex.JobSeekerId == jobSeeker.Id)
-                    .ToListAsync();
-
-                foreach (var experience in experiences)
-                {
-                    jobSeeker.AddExperience(experience);
-                }
-
-                var educations = await _dbContext.Educations
-                    .Where(ed => ed.JobSeekerId == jobSeeker.Id)
-                    .ToListAsync();
-
-                foreach (var education in educations)
-                {
-                    jobSeeker.AddEducation(education);
-                }
-
                 response.FullName = $"{jobSeeker.Name} {jobSeeker.LastName}";
                 response.Role = ProjectEnums.Role.JobSeeker;
                 response.JobSeeker = jobSeeker;

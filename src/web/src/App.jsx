@@ -17,6 +17,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { useSelector } from "react-redux";
 function App() {
   const user = useSelector((state) => state.userSlice.user);
+  const isLoggedIn = user !== null;
   return (
     <>
       <Navbar />
@@ -28,8 +29,12 @@ function App() {
             user?.role === 1 ? <EmployerProfile /> : <JobSeekerProfile />
           }
         />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
+        <Route 
+        path="/signup"
+        element={<Signup />} />
+        <Route 
+        path="/login" 
+        element={<Login />} />
         <Route path="/browse" element={<Browse />} />
         <Route path="/browse/:id" element={<JobDetails />} />
         <Route

@@ -1,153 +1,186 @@
+/* Main container */
 .homeContainer {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #f9f9fb;
-  color: #1f1f1f;
+  font-family: Arial, sans-serif;
+  background-color: #f3f2f1; /* Light gray background */
+  padding: 0;
+  margin: 0;
 }
 
-.content {
-  flex: 1;
-  padding: 20px;
-}
-
+/* Hero Section */
 .heroSection {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: url('../../assets/home-bg.jpg') no-repeat center center; /* Use the provided image */
+  background-size: cover; /* Ensure the image covers the entire section */
+  color: white;
   text-align: center;
-  padding: 80px 20px;
-  background: linear-gradient(135deg, #e8f0ff, #f9f9fb);
+  padding: 120px 20px; /* Adjust padding for better spacing */
 }
 
 .heroContent {
   max-width: 800px;
+  margin: 0 auto;
 }
 
 .heroTitle {
-  font-size: 48px;
-  color: #4a90e2;
+  font-size: 5rem; /* Larger font size for better emphasis */
+  font-weight: 700; /* Bold font for a strong impact */
+  font-family: 'Poppins', sans-serif; /* Modern font for a professional look */
   margin-bottom: 20px;
+  color: white !important; /* White text color */
+  text-shadow: 2px 2px 4px black; /* Black text border for better visibility */
 }
 
 .heroSubtitle {
-  font-size: 18px;
-  color: #4a4a4a;
-  margin-bottom: 30px;
+  font-size: 1.8rem; /* Slightly larger subtitle */
+  font-weight: 400; /* Regular weight for contrast */
+  font-family: 'Roboto', sans-serif; /* Clean and readable font */
+  margin-bottom: 40px;
+  color: white; /* White text color */
+  text-shadow: 1px 1px 3px black; /* Black text border for better visibility */
 }
 
-.heroButton {
-  background-color: #4a90e2;
-  border-color: #4a90e2;
-  color: white;
+/* Search Bar */
+.searchBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.searchInput {
+  width: 35%;
+  height: 50px;
   font-size: 16px;
-  padding: 10px 30px;
+  border-radius: 5px;
+  border: 1px solid #d9d9d9; /* Neutral gray border */
+  padding: 10px;
 }
 
-.heroButton:hover {
-  background-color: #3a7bd5;
-  border-color: #3a7bd5;
+.searchButton {
+  height: 50px;
+  font-size: 16px;
+  margin-left: 10px;
+  background-color: #59ccf0; /* Indeed orange */
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
+.searchButton:hover {
+  background-color: #59ccf0; /* Darker orange on hover */
+}
+
+/* Features Section */
 .featuresSection {
-  padding: 60px 20px;
+  padding: 50px 20px;
   text-align: center;
-  background-color: #ffffff;
 }
 
 .sectionTitle {
-  font-size: 36px;
-  color: #4a90e2;
+  font-size: 2rem;
   margin-bottom: 40px;
+  color: #003a9b; /* Indeed blue */
 }
 
 .featureCard {
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  text-align: center;
-  padding: 24px;
-  border-radius: 12px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .featureCard:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-}
-
-.featureIcon {
-  font-size: 48px;
-  color: #7b61ff;
-  margin-bottom: 20px;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .featureTitle {
-  font-size: 24px;
-  color: #1f1f1f;
+  font-size: 1.5rem;
   margin-bottom: 10px;
+  color: #003a9b; /* Indeed blue */
 }
 
 .featureDescription {
-  font-size: 16px;
-  color: #4a4a4a;
+  font-size: 1rem;
+  color: #4b5563; /* Neutral gray */
 }
 
+/* Call-to-Action Section */
 .ctaSection {
+  background-color: #003a9b; /* Indeed blue */
+  color: white;
   text-align: center;
-  padding: 80px 20px;
-  background: linear-gradient(135deg, #d7e4ff, #edf3ff);
+  padding: 50px 20px;
 }
 
 .ctaTitle {
-  font-size: 36px;
-  color: #1f1f1f;
+  font-size: 2rem;
   margin-bottom: 20px;
 }
 
 .ctaSubtitle {
-  font-size: 18px;
-  color: #4a4a4a;
+  font-size: 1.2rem;
   margin-bottom: 30px;
 }
 
 .ctaButton {
-  background-color: #4a90e2;
-  border-color: #4a90e2;
+  background-color: #ff6f00; /* Indeed orange */
+  border-color: #ff6f00;
   color: white;
-  font-size: 16px;
-  padding: 10px 30px;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
 .ctaButton:hover {
-  background-color: #3a7bd5;
-  border-color: #3a7bd5;
+  background-color: #e65c00; /* Darker orange on hover */
+  border-color: #e65c00;
 }
 
-.testimonialsSection {
-  padding: 60px 20px;
-  background-color: #f8f9fc;
+.inputIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #888; /* Neutral gray for the icon */
+}
+
+/* Carousel Section */
+.carouselSection {
+  padding: 50px 20px;
   text-align: center;
+  background-color: #f9f9fb; /* Light gray background */
 }
 
-.testimonialCard {
-  background: #ffffff;
-  border: none;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  border-radius: 12px;
-  padding: 24px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  color: #333333;
+.carouselTitle {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #003a9b; /* Professional blue */
 }
 
-.testimonialCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+.carousel {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.testimonialFooter {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 16px;
+.carouselItem {
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.jobTitle {
+  font-size: 1.5rem;
+  color: #003a9b; /* Professional blue */
+  margin-bottom: 10px;
+}
+
+.jobCompany,
+.jobLocation,
+.jobDescription {
+  font-size: 1rem;
+  color: #4b5563; /* Neutral gray */
 }
