@@ -102,6 +102,16 @@
   border-color: #3a7bd5;
 }
 
+.clearButton {
+  background-color: #e0e0e0;
+  border-color: #e0e0e0;
+  color: #4a4a4a;
+}
+.clearButton:hover {
+  background-color: #d0d0d0;
+  border-color: #d0d0d0;
+}
+
 /* No Jobs Found */
 .noJobs {
   text-align: center;
