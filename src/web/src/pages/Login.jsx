@@ -29,13 +29,14 @@ function Login() {
         localStorage.setItem("token", response.data.token);
         console.log(response.data);
         axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-      
         if (response.data.role === 0) {
-          dispatch(setUser({ ...response.data.jobSeeker, role: 0 }));
+          console.log("Dispatching jobSeeker user", response.data.jobSeeker);
+          dispatch(setUser(response.data.jobSeeker));
         }
-      
+
         if (response.data.role === 1) {
-          dispatch(setUser({ ...response.data.employer, role: 1 }));
+          console.log("Dispatching employer user", response.data.employer);
+          dispatch(setUser(response.data.employer));
         }
             
         Swal.fire({

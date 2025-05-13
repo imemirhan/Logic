@@ -1,6 +1,9 @@
 import React from "react";
 import { Typography, Space, Input, Row, Col, Button, Carousel } from "antd";
-import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getJobs } from "../store/slices/jobsSlice";
+import { useSelector, useDispatch } from "react-redux";
 import ComponentCard from "../components/ComponentCard";
 import styles from "./styles/Home.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +15,22 @@ import feature3 from "../assets/feature3.jpg";
 const { Title, Paragraph } = Typography;
 
 function Home() {
+   const [title, setTitle] = useState("");
+  const [location, setLocation] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleSearch = () => {
+    const queryParams = new URLSearchParams();
+    if (title) queryParams.append("title", title);
+    if (location) queryParams.append("location", location);
+    dispatch(getJobs({
+      title,
+      location,
+    }));
+
+    // Optionally, navigate to browse page with the query string
+    navigate(`/browse?${queryParams.toString()}`);
+  };
   const { user } = useSelector((state) => state.userSlice);
   const recentJobs = [
     {
@@ -44,19 +63,21 @@ function Home() {
           </Paragraph>
           <div className={styles.searchBar}>
             <Space.Compact compact>
-              <Input
+             <Input
                 style={{ width: "60%" }}
                 placeholder="Job title, keywords, or company"
-                className={styles.searchInput}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 prefix={<FontAwesomeIcon icon={faSearch} />}
               />
               <Input
                 style={{ width: "30%" }}
                 placeholder="City, state, or zip code"
-                className={styles.searchInput}
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 prefix={<FontAwesomeIcon icon={faMapMarkerAlt} />}
               />
-              <Button type="primary" className={styles.searchButton}>
+              <Button type="primary" onClick={handleSearch} className={styles.searchButton}>
                 Find Jobs
               </Button>
             </Space.Compact>

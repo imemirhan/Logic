@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  Layout, Input, Button, Row, Col, Card, Checkbox, Select, Spin, Pagination,
-  Divider,
+  Layout, Input, Button, Row, Col, Card, Checkbox, Spin, Pagination,
 } from "antd";
 import { SearchOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,72 +9,89 @@ import { getJobs } from "../store/slices/jobsSlice";
 import styles from "./styles/Browse.module.css";
 
 const { Content, Sider } = Layout;
-const { Option } = Select;
 const antIcon = <LoadingOutlined style={{ fontSize: 48 }} spin />;
 
+
 function Browse() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { jobs, status, error, totalItems } = useSelector((state) => state.jobs);
 
-  const [filters, setFilters] = useState({
-    title: "",
-    location: "",
-    jobType: [],
+  // Parse URL query on first mount
+  const queryParams = new URLSearchParams(location.search);
+  const initialFilters = {
+    title: queryParams.get("title") || "",
+    location: queryParams.get("location") || "",
+    jobType: queryParams.get("jobType") ? queryParams.get("jobType").split(",") : [],
+  };
+
+  const [filters, setFilters] = useState(initialFilters);
+  const [pagination, setPagination] = useState({
+    page: Number(queryParams.get("page")) || 1,
+    pageSize: Number(queryParams.get("pageSize")) || 6,
   });
 
-  const [pagination, setPagination] = useState({ page: 1, pageSize: 6 });
-  const queryRef = useRef({}); // Hold the latest query
-
-  // Initial fetch on mount
   useEffect(() => {
-    dispatch(getJobs({ page: 1, pageSize: 6 }));
-  }, []);
-
-  // Update queryRef whenever filters or pagination change
-  useEffect(() => {
-    const newQuery = {
+    dispatch(getJobs({
       title: filters.title,
       location: filters.location,
-      jobType: filters.jobType.find((type) => type !== "Remote"),
+      jobType: filters.jobType.find(type => type !== "Remote"),
       isRemote: filters.jobType.includes("Remote"),
       page: pagination.page,
       pageSize: pagination.pageSize,
-    };
-    queryRef.current = newQuery;
-  }, [filters, pagination]);
+    }));
+  }, []);
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleApplyFilters = () => {
-    const newQuery = {
-      title: filters.title,
-      location: filters.location,
+    const params = new URLSearchParams();
+
+    if (filters.title) params.set("title", filters.title);
+    if (filters.location) params.set("location", filters.location);
+    if (filters.jobType.length) params.set("jobType", filters.jobType.join(","));
+    params.set("page", "1");
+    params.set("pageSize", pagination.pageSize.toString());
+
+    navigate(`/browse?${params.toString()}`);
+    setPagination((prev) => ({ ...prev, page: 1 }));
+
+    dispatch(getJobs({
+      ...filters,
       jobType: filters.jobType.find((type) => type !== "Remote"),
       isRemote: filters.jobType.includes("Remote"),
       page: 1,
       pageSize: pagination.pageSize,
-    };
-    queryRef.current = newQuery;
-    setPagination((prev) => ({ ...prev, page: 1 }));
-    dispatch(getJobs(newQuery));
+    }));
   };
 
   const clearFilters = () => {
-    const reset = { page: 1, pageSize: 6 };
-    setFilters({ title: "", location: "", jobType: [] });
-    setPagination(reset);
-    queryRef.current = reset;
-    dispatch(getJobs(reset));
+    const reset = { title: "", location: "", jobType: [] };
+    setFilters(reset);
+    setPagination({ page: 1, pageSize: 6 });
+    navigate(`/browse`);
+    dispatch(getJobs({ ...reset, page: 1, pageSize: 6 }));
   };
 
   const handlePageChange = (page, pageSize) => {
-    const updatedQuery = { ...queryRef.current, page, pageSize };
+    const params = new URLSearchParams(location.search);
+    params.set("page", page.toString());
+    params.set("pageSize", pageSize.toString());
+    navigate(`/browse?${params.toString()}`);
     setPagination({ page, pageSize });
-    dispatch(getJobs(updatedQuery));
+
+    dispatch(getJobs({
+      title: filters.title,
+      location: filters.location,
+      jobType: filters.jobType.find(type => type !== "Remote"),
+      isRemote: filters.jobType.includes("Remote"),
+      page,
+      pageSize,
+    }));
   };
-console.log(jobs, "jobs")
   return (
     <Layout className={styles.layout}>
       <Content className={styles.container}>
@@ -96,9 +112,11 @@ console.log(jobs, "jobs")
             <div className={styles.filterSection}>
               <h3 className={styles.filterTitle}>Enter Your Dream Job</h3>
               <Input
-                placeholder="Enter Title, Keywords, or Company"
+                placeholder="Search for jobs..."
+                prefix={<SearchOutlined />}
                 value={filters.title}
                 onChange={(e) => handleFilterChange("title", e.target.value)}
+                className={styles.searchInput}
               />
             </div>
             
@@ -115,14 +133,9 @@ console.log(jobs, "jobs")
               <h3 className={styles.filterTitle}>Employment Type</h3>
               <Checkbox.Group
                 options={[
-                  "Full-Time",
-                  "Part-Time",
-                  "Contract",
-                  "Internship",
-                  "Remote",
-                  "Hybrid",
+                  "Full-Time", "Part-Time", "Contract", "Internship", "Remote", "Hybrid"
                 ]}
-                value={filters.jobType.map((type) => Object.keys(employmentTypeMap).find((key) => employmentTypeMap[key] === type))}
+                value={filters.jobType}
                 onChange={(value) => handleFilterChange("jobType", value)}
               />
             </div>

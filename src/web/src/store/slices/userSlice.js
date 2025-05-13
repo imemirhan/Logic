@@ -29,14 +29,12 @@ export const updateEmployerInfo = createAsyncThunk(
   }
 );
 
-
-var userData = null;
-
 const initialState = {
-  user: userData ?? [],
+  user: null, // or {}
   status: "idle",
   error: null,
 };
+
 
 const userSlice = createSlice({
   name: "userSlice",
@@ -44,18 +42,10 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
-      userData = action.payload;
     },
     clearUser: (state) => {
       state.user = null;
-      userData = null;
       state.error = null;
-    },
-    getUser: (state) => {
-      if(state.user === null) {
-        state.user = localStorage.getItem('persist:root')?.user;
-      }
-      return state.user;
     },
   },
   extraReducers: (builder) => {
@@ -95,5 +85,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, clearUser, getUser } = userSlice.actions;
+export const { setUser, clearUser} = userSlice.actions;
 export default userSlice.reducer;

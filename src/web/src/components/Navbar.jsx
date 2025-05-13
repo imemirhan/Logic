@@ -92,7 +92,7 @@ function Navbar() {
               <span className={styles.userDropdown}>
                 <span className={styles.userName}>{`${user.name} ${user.lastName}` || "User"}</span>
                 <Avatar
-                  src={user.profileImageUrl || ""}
+                  src={user.profileImageUrl || "https://picsum.photos/200/300"}
                   alt="User"
                   className={styles.avatar}
                 />

@@ -21,6 +21,7 @@
     "antd": "^5.24.6",
     "axios": "^1.8.4",
     "process": "^0.11.10",
+    "query-string": "^9.1.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",

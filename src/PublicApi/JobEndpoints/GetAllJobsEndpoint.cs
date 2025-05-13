@@ -20,22 +20,29 @@ public class GetAllJobsEndpoint : IEndpoint<IResult, GetAllJobsRequest, IReposit
 
     public async Task<IResult> HandleAsync(GetAllJobsRequest request, IRepository<Job> repository)
     {
+        // Normalize request parameters: trim spaces and convert to lowercase
+        var normalizedTitle = string.IsNullOrWhiteSpace(request.Title) ? string.Empty : request.Title.Trim().ToLower();
+        var normalizedLocation = string.IsNullOrWhiteSpace(request.Location) ? string.Empty : request.Location.Trim().ToLower();
+
         var jobs = repository.GetAll(); // IQueryable
 
         // Apply filters based on request parameters
-        if (!string.IsNullOrWhiteSpace(request.Title) && request.Title.Length >= 3)
+        if (!string.IsNullOrWhiteSpace(normalizedTitle) && normalizedTitle.Length >= 3)
         {
-            jobs = jobs.Where(j => j.Title.Contains(request.Title) || j.Description.Contains(request.Title));
+            jobs = jobs.Where(j => 
+                j.Title.ToLower().Contains(normalizedTitle) || 
+                j.Description.ToLower().Contains(normalizedTitle)
+            );
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Location) && request.Location.Length >= 3)
+        if (!string.IsNullOrWhiteSpace(normalizedLocation) && normalizedLocation.Length >= 3)
         {
-            jobs = jobs.Where(j => j.Location.Contains(request.Location));
+            jobs = jobs.Where(j => j.Location.ToLower().Contains(normalizedLocation));
         }
 
         if (request.JobType.HasValue)
             jobs = jobs.Where(j => j.EType == request.JobType.Value);
-        
+
         var totalItems = await jobs.CountAsync();
 
         var pagedJobs = await jobs
