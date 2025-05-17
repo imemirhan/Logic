@@ -34,7 +34,7 @@ function Navbar() {
 
   const menuItems = [
   { key: "1", label: <Link to="/profile">My Profile</Link> },
-  { key: "2", label: <Link to="/settings">Settings</Link> },
+  user?.role === 0 && { key: "2", label: <Link to="/profile/applications">My Applications</Link> },
   { key: "3", label: <span onClick={handleLogout}>Logout</span> },
 ];
 

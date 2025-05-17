@@ -13,6 +13,7 @@ import Footer from "./components/Footer";
 import NotFound from "./pages/NotFound";
 import JobDetails from "./pages/JobDetails";
 import JobApply from "./pages/JobApply";
+import AppliedJobs from "./pages/AppliedJobs";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useSelector } from "react-redux";
 function App() {
@@ -27,6 +28,12 @@ function App() {
           path="/profile"
           element={
             user?.role === 1 ? <EmployerProfile /> : <JobSeekerProfile />
+          }
+        />
+        <Route
+          path="/profile/applications"
+          element={
+            user?.role === 0 ? <AppliedJobs /> : <Home />
           }
         />
         <Route 

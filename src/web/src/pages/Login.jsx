@@ -30,13 +30,14 @@ function Login() {
         console.log(response.data);
         axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
         if (response.data.role === 0) {
+          console.log("Dispatching jobSeeker user", response.data);
           console.log("Dispatching jobSeeker user", response.data.jobSeeker);
-          dispatch(setUser(response.data.jobSeeker));
+          dispatch(setUser({ ...response.data.jobSeeker, role: response.data.role }));
         }
 
         if (response.data.role === 1) {
           console.log("Dispatching employer user", response.data.employer);
-          dispatch(setUser(response.data.employer));
+          dispatch(setUser({ ...response.data.employer, role: response.data.role }));
         }
             
         Swal.fire({

@@ -23,6 +23,7 @@ import employerImageReducer from "./slices/employerImageSlice";
 import skillsReducer from "./slices/skillsSlice";
 import educationReducer from "./slices/educationSlice";
 import experienceReducer from "./slices/experienceSlice";
+import getJobApplicationsReducer from "./slices/getJobApplicationsSlice";
 
 const persistConfig = {
   key: "root",
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   singleEmployerSlice: singleEmployerSlice,
   singleJobSlice: singleJobSlice,
   jobApplication: jobApplicationReducer,
+  getJobApplications: getJobApplicationsReducer,
   jobSeekerImage: jobSeekerImageReducer,
   employerImage: employerImageReducer,
   skills: skillsReducer,
