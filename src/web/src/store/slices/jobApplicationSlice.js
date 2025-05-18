@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/api"; // Axios instance
 
+// Existing createJobApplication thunk
 export const createJobApplication = createAsyncThunk(
   "jobApplications/createJobApplication",
   async (jobApplicationData, thunkAPI) => {
@@ -13,10 +14,45 @@ export const createJobApplication = createAsyncThunk(
   }
 );
 
+// New thunk: fetch applications by employer ID
+export const fetchApplicationsByEmployerId = createAsyncThunk(
+  "jobApplications/fetchByEmployerId",
+  async (employerId, thunkAPI) => {
+    try {
+      const response = await api.get(`/job-applications/employer/${employerId}`);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+// New thunk: fetch applications by job seeker ID
+export const fetchApplicationsByJobSeekerId = createAsyncThunk(
+  "jobApplications/fetchByJobSeekerId",
+  async (jobSeekerId, thunkAPI) => {
+    try {
+      const response = await api.get(`/job-applications/job-seeker/${jobSeekerId}`);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 const initialState = {
   applicationStatus: "idle",
   applicationError: null,
   submittedApplication: null,
+
+  // Add these to hold fetched lists
+  applicationsByEmployer: [],
+  employerApplicationsStatus: "idle",
+  employerApplicationsError: null,
+
+  applicationsByJobSeeker: [],
+  jobSeekerApplicationsStatus: "idle",
+  jobSeekerApplicationsError: null,
 };
 
 const jobApplicationSlice = createSlice({
@@ -27,10 +63,19 @@ const jobApplicationSlice = createSlice({
       state.applicationStatus = "idle";
       state.applicationError = null;
       state.submittedApplication = null;
+
+      state.applicationsByEmployer = [];
+      state.employerApplicationsStatus = "idle";
+      state.employerApplicationsError = null;
+
+      state.applicationsByJobSeeker = [];
+      state.jobSeekerApplicationsStatus = "idle";
+      state.jobSeekerApplicationsError = null;
     },
   },
   extraReducers: (builder) => {
     builder
+      // createJobApplication cases
       .addCase(createJobApplication.pending, (state) => {
         state.applicationStatus = "loading";
         state.applicationError = null;
@@ -43,6 +88,36 @@ const jobApplicationSlice = createSlice({
       .addCase(createJobApplication.rejected, (state, action) => {
         state.applicationStatus = "failed";
         state.applicationError = action.payload;
+      })
+
+      // fetchApplicationsByEmployerId cases
+      .addCase(fetchApplicationsByEmployerId.pending, (state) => {
+        state.employerApplicationsStatus = "loading";
+        state.employerApplicationsError = null;
+      })
+      .addCase(fetchApplicationsByEmployerId.fulfilled, (state, action) => {
+        state.employerApplicationsStatus = "succeeded";
+        state.applicationsByEmployer = action.payload;
+        state.employerApplicationsError = null;
+      })
+      .addCase(fetchApplicationsByEmployerId.rejected, (state, action) => {
+        state.employerApplicationsStatus = "failed";
+        state.employerApplicationsError = action.payload;
+      })
+
+      // fetchApplicationsByJobSeekerId cases
+      .addCase(fetchApplicationsByJobSeekerId.pending, (state) => {
+        state.jobSeekerApplicationsStatus = "loading";
+        state.jobSeekerApplicationsError = null;
+      })
+      .addCase(fetchApplicationsByJobSeekerId.fulfilled, (state, action) => {
+        state.jobSeekerApplicationsStatus = "succeeded";
+        state.applicationsByJobSeeker = action.payload;
+        state.jobSeekerApplicationsError = null;
+      })
+      .addCase(fetchApplicationsByJobSeekerId.rejected, (state, action) => {
+        state.jobSeekerApplicationsStatus = "failed";
+        state.jobSeekerApplicationsError = action.payload;
       });
   },
 });

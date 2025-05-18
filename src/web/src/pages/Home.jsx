@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import ComponentCard from "../components/ComponentCard";
 import styles from "./styles/Home.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faMapMarkerAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import feature1 from "../assets/feature1.jpg";
 import feature2 from "../assets/feature2.jpg";
 import feature3 from "../assets/feature3.jpg";
@@ -87,6 +87,46 @@ function Home() {
             <br />
             <br />
             <br />
+            {user?.role === 1 && (
+              <div style={{ marginTop: 24, textAlign: "center" }}>
+                <Paragraph
+                  style={{
+                    fontSize: 18,
+                    color: "#1a237e",
+                    marginBottom: 20,
+                    fontWeight: 600,
+                    letterSpacing: 0.2,
+                    lineHeight: 1.6,
+                    background: "linear-gradient(90deg, #e3ffe8 0%, #f7faff 100%)",
+                    borderRadius: 8,
+                    padding: "18px 24px",
+                    display: "inline-block",
+                    boxShadow: "0 2px 12px 0 rgba(30, 136, 229, 0.08)"
+                  }}
+                >
+                  🚀 <span style={{ color: "#43a047" }}>Ready to grow your team and shape the future?</span> <br />
+                  <span style={{ color: "#1565c0" }}>
+                    Post your job opening and connect with talented professionals eager to make an impact.<br />
+                    <span style={{ color: "#ff9800", fontWeight: 700 }}>Your next great hire could be just a click away!</span>
+                  </span>
+                </Paragraph>
+                <Button
+                  type="dashed"
+                  size="large"
+                  onClick={() => navigate("/createjob")}
+                  icon={<FontAwesomeIcon icon={faPlus} />}
+                  style={{
+                    fontWeight: 600,
+                    letterSpacing: 0.5,
+                    background: "linear-gradient(90deg, #e3ffe8 0%, #f7faff 100%)",
+                    border: "1.5px solid #43a047",
+                    color: "#1565c0"
+                  }}
+                >
+                  Create a New Job Posting
+                </Button>
+              </div>
+            )}
             <br />
             <br />
             <br />

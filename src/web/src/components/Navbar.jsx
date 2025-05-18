@@ -35,8 +35,9 @@ function Navbar() {
   const menuItems = [
   { key: "1", label: <Link to="/profile">My Profile</Link> },
   user?.role === 0 && { key: "2", label: <Link to="/profile/applications">My Applications</Link> },
+  user?.role === 1 && { key: "2", label: <Link to="/mypostings">My Postings</Link> },
   { key: "3", label: <span onClick={handleLogout}>Logout</span> },
-];
+].filter(Boolean);
 
   return (
     <Layout>
@@ -90,7 +91,9 @@ function Navbar() {
           ) : (
             <Dropdown menu={{ items: menuItems }} trigger={['click']}>
               <span className={styles.userDropdown}>
-                <span className={styles.userName}>{`${user.name} ${user.lastName}` || "User"}</span>
+                <span className={styles.userName}>
+                  {`${user.name} ${user.lastName || user.surname || ""}`.trim() || "User"}
+                </span>
                 <Avatar
                   src={user.profileImageUrl || "https://picsum.photos/200/300"}
                   alt="User"

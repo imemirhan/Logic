@@ -15,6 +15,9 @@ import JobDetails from "./pages/JobDetails";
 import JobApply from "./pages/JobApply";
 import AppliedJobs from "./pages/AppliedJobs";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CreateJob from "./pages/CreateJob";
+import JobPostings from "./pages/JobPostings";
+import JobApplicants from "./pages/JobApplicants";
 import { useSelector } from "react-redux";
 function App() {
   const user = useSelector((state) => state.userSlice.user);
@@ -27,13 +30,33 @@ function App() {
         <Route
           path="/profile"
           element={
-            user?.role === 1 ? <EmployerProfile /> : <JobSeekerProfile />
+            user?.role === 1 ? <EmployerProfile />
+            : user?.role === 0 ? <JobSeekerProfile />
+            : <NotFound />
           }
         />
         <Route
           path="/profile/applications"
           element={
-            user?.role === 0 ? <AppliedJobs /> : <Home />
+            user?.role === 0 ? <AppliedJobs /> : <NotFound />
+          }
+        />
+        <Route
+          path="/createjob"
+          element={
+            user?.role === 1 ? <CreateJob /> : <NotFound />
+          }
+        />
+        <Route
+          path="/mypostings"
+          element={
+            user?.role === 1 ? <JobPostings /> : <NotFound />
+          }
+          />
+        <Route
+          path="/mypostings/:jobId"
+          element={
+            user?.role === 1 ? <JobApplicants /> : <NotFound />
           }
         />
         <Route 

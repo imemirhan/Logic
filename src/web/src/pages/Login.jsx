@@ -121,6 +121,15 @@ function Login() {
                 </Button>
               </Form.Item>
             </Form>
+            <p style={{ marginTop: 16, textAlign: "center" }}>
+              Don't have an account?{" "}
+              <span
+                style={{ color: "#1890ff", cursor: "pointer", textDecoration: "underline" }}
+                onClick={() => navigate("/signup")}
+              >
+                Register
+              </span>
+            </p>
           </div>
         </div>
       </Content>

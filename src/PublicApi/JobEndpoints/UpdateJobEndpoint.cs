@@ -2,6 +2,7 @@
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using MinimalApi.Endpoint;
 
@@ -33,10 +34,7 @@ public class UpdateJobEndpoint : IEndpoint<IResult, UpdateJobRequest, IRepositor
         {
             return Results.NotFound($"Job with ID {request.Id} not found.");
         }
-
-        var status = Enum.TryParse<JobStatus>(request.Status, out var parsedStatus)
-            ? parsedStatus
-            : JobStatus.Open; // fallback or current status
+        
 
         existingJob.UpdateJobInfo(
             request.Title,
@@ -46,7 +44,7 @@ public class UpdateJobEndpoint : IEndpoint<IResult, UpdateJobRequest, IRepositor
             request.SalaryRange,
             request.ExpirationDate,
             request.IsRemote,
-            status
+            request.Status
         );
 
 

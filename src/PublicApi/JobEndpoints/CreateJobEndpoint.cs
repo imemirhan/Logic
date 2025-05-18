@@ -34,8 +34,8 @@ public class CreateJobEndpoint : IEndpoint<IResult, CreateJobRequest, IRepositor
             location: request.Location,
             employmentType: request.EType,
             salaryRange: request.SalaryRange,
-            postedDate: request.PostedDate,
-            expirationDate: request.ExpirationDate,
+            postedDate: DateTime.SpecifyKind(request.PostedDate, DateTimeKind.Utc),
+            expirationDate: DateTime.SpecifyKind(request.ExpirationDate, DateTimeKind.Utc),
             isRemote: request.IsRemote
         );
 
@@ -58,7 +58,6 @@ public class CreateJobEndpoint : IEndpoint<IResult, CreateJobRequest, IRepositor
             CreatedAt = createdJob.CreatedAt,
             UpdatedAt = createdJob.UpdatedAt
         };
-
         return Results.Created($"/api/jobs/{createdJob.Id}", response);
     }
 }

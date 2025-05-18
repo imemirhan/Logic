@@ -132,50 +132,47 @@ function Signup() {
                 </>
               ) : (
                 <>
-                  <Row gutter={16}>
-                    <Col xs={24} sm={12}>
+                  <Row gutter={8}>
+                    <Col xs={24} sm={8}>
                       <Form.Item
                         label="First Name"
                         name="name"
                         rules={[{ required: true, message: "Please enter your first name!" }]}
                       >
-                        <Input placeholder="Enter your first name" />
+                        <Input size="small" placeholder="First name" />
                       </Form.Item>
                     </Col>
-                    <Col xs={24} sm={12}>
+                    <Col xs={24} sm={8}>
                       <Form.Item
                         label="Last Name"
                         name="lastName"
                         rules={[{ required: true, message: "Please enter your last name!" }]}
                       >
-                        <Input placeholder="Enter your last name" />
+                        <Input size="small" placeholder="Last name" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={8}>
+                      <Form.Item
+                        label="Company"
+                        name="companyName"
+                        rules={[{ required: true, message: "Please enter your company name!" }]}
+                      >
+                        <Input size="small" placeholder="Company name" />
                       </Form.Item>
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
-                    <Col xs={24} sm={12}>
-                      <Form.Item
-                        label="Company Name"
-                        name="companyName"
-                        rules={[{ required: true, message: "Please enter your company name!" }]}
-                      >
-                        <Input placeholder="Enter your company name" />
-                      </Form.Item>
-                    </Col>
-                    <Col xs={24} sm={12}>
+                  <Row gutter={8}>
+                    <Col xs={24} sm={8}>
                       <Form.Item
                         label="Industry"
                         name="industry"
                         rules={[{ required: true, message: "Please enter your industry!" }]}
                       >
-                        <Input placeholder="Enter your industry" />
+                        <Input size="small" placeholder="Industry" />
                       </Form.Item>
                     </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col xs={24} sm={12}>
+                    <Col xs={24} sm={8}>
                       <Form.Item
                         label="Email"
                         name="email"
@@ -184,34 +181,31 @@ function Signup() {
                           { type: "email", message: "Please enter a valid email!" },
                         ]}
                       >
-                        <Input placeholder="Enter your email" />
+                        <Input size="small" placeholder="Email" />
                       </Form.Item>
                     </Col>
-                    <Col xs={24} sm={12}>
+                    <Col xs={24} sm={8}>
                       <Form.Item
                         label="Phone"
                         name="phone"
                         rules={[{ required: true, message: "Please enter your phone number!" }]}
                       >
-                        <Input placeholder="Enter your phone number" />
+                        <Input size="small" placeholder="Phone" />
                       </Form.Item>
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
-                    <Col xs={24}>
+                  <Row gutter={8}>
+                    <Col xs={24} sm={16}>
                       <Form.Item
                         label="Description"
                         name="description"
                         rules={[{ required: true, message: "Please enter a description!" }]}
                       >
-                        <Input.TextArea rows={3} placeholder="Enter a description of your company" />
+                        <Input.TextArea rows={2} placeholder="Company description" style={{ fontSize: 12 }} />
                       </Form.Item>
                     </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col xs={24} sm={12}>
+                    <Col xs={24} sm={8}>
                       <Form.Item
                         label="Password"
                         name="password"
@@ -223,7 +217,7 @@ function Signup() {
                           },
                         ]}
                       >
-                        <Input.Password placeholder="Enter your password" />
+                        <Input.Password size="small" placeholder="Password" />
                       </Form.Item>
                     </Col>
                   </Row>

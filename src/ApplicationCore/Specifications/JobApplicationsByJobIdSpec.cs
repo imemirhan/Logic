@@ -7,6 +7,8 @@ public sealed class JobApplicationsByJobIdSpec : Specification<JobApplication>
 {
     public JobApplicationsByJobIdSpec(int jobId)
     {
-        Query.Where(app => app.JobId == jobId);
+        Query.Where(app => app.JobId == jobId)
+            .Include(app => app.JobSeeker)
+            .Include(app => app.Employer);
     }
 }

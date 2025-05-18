@@ -53,7 +53,7 @@ function AppliedJobs() {
                 <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                   <Avatar
                     size={56}
-                    src={app.employer?.profileImageUrl}
+                    src={app.employer?.profileImageUrl || "https://picsum.photos/200/300"}
                     style={{ backgroundColor: "#e6f7ff", color: "#1890ff" }}
                   >
                     {app.employer?.companyName?.[0] || "?"}

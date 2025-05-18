@@ -1,0 +1,87 @@
+.jobPostingsWrapper {
+  max-width: 800px;
+  margin: 32px auto;
+  padding: 16px;
+  background: #f7fafc;
+  border-radius: 12px;
+  min-height: 70vh;
+  box-shadow: 0 4px 24px 0 rgba(30, 136, 229, 0.08);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 32px;
+  font-weight: 700;
+  color: #1a237e;
+  letter-spacing: 0.5px;
+}
+
+.emptyText {
+  text-align: center;
+  margin-top: 48px;
+  color: #888;
+  font-size: 18px;
+}
+
+.jobCard {
+  border-radius: 10px !important;
+  box-shadow: 0 2px 12px #f0f1f2 !important;
+  margin-bottom: 18px;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1565c0;
+}
+
+.remoteTag {
+  margin-left: 12px;
+  background: #e3f2fd !important;
+  color: #1976d2 !important;
+  border-radius: 6px !important;
+  font-weight: 500;
+}
+
+.cardParagraph {
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.deleteButton {
+  color: #fff !important;
+  background: #e53935 !important;
+  border: none !important;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.deleteButton:hover {
+  background: #b71c1c !important;
+}
+
+.updateButton {
+  background: #1976d2 !important;
+  color: #fff !important;
+  border-radius: 6px;
+  font-weight: 500;
+  border: none !important;
+  transition: background 0.2s;
+}
+.updateButton:hover {
+  background: #1565c0 !important;
+}
+
+@media (max-width: 700px) {
+  .jobPostingsWrapper {
+    max-width: 98vw;
+    padding: 4px;
+  }
+  .cardTitle {
+    font-size: 16px;
+  }
+  .cardParagraph {
+    font-size: 14px;
+  }
+}
