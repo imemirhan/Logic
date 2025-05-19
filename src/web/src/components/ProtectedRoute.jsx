@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
-  if (isEmplyoer) {
+  if (isEmplyoer || user === null) {
     return <Navigate to="/profile" replace />;
   }
   return children;

@@ -14,6 +14,8 @@ public class DeleteExperienceByIdEndpoint : IEndpoint<IResult, DeleteExperienceR
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapDelete("api/experiences/{experienceId}",
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER, 
+                    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (int experienceId, IRepository<Experience> repository) =>
                 {
                     return await HandleAsync(new DeleteExperienceRequest(experienceId), repository);

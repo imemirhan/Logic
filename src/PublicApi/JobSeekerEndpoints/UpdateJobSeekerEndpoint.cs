@@ -55,6 +55,8 @@ namespace PublicApi.JobSeekerEndpoints
         public void AddRoute(IEndpointRouteBuilder app)
         {
             app.MapPut("api/jobseekers/{jobSeekerId:int}",
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER, 
+                    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (int jobSeekerId, UpdateJobSeekerRequest request, IRepository<JobSeeker> repository) =>
                 {
                     request.JobSeekerId = jobSeekerId; // Ensure the ID from the route is set

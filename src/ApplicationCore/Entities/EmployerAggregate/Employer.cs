@@ -72,11 +72,10 @@ public class Employer : BaseEntity, IAggregateRoot
         UpdatedAt = updatedAt;
     }
 
-    public void UpdateContactInfo(DateTime updatedAt, string? profileImageUrl = null, string? linkedIn = null, string? gitHub = null,
+    public void UpdateContactInfo(DateTime updatedAt, string? linkedIn = null, string? gitHub = null,
                                   string? twitter = null, string? facebook = null, string? instagram = null)
     {
         Guard.Against.Null(updatedAt, nameof(updatedAt));
-        ProfileImageUrl = profileImageUrl ?? ProfileImageUrl;
         LinkedIn = linkedIn ?? LinkedIn;
         GitHub = gitHub ?? GitHub;
         Twitter = twitter ?? Twitter;

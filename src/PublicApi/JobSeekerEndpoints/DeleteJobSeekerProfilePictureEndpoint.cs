@@ -47,7 +47,8 @@ public class DeleteJobSeekerProfilePictureEndpoint : IEndpoint<IResult, Guid, IR
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapDelete("api/jobseekers/{jobSeekerId:guid}/profile-picture",
-            [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+            [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER, 
+                AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
             async (Guid jobSeekerId, IRepository<JobSeeker> repository) =>
             {
                 return await HandleAsync(jobSeekerId, repository);

@@ -23,6 +23,8 @@ public class AddEducationByIdEndpoint : IEndpoint<IResult, AddEducationByIdReque
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapPost("api/educations",
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER, 
+                    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (AddEducationByIdRequest request, IRepository<JobSeeker> jobSeekerRepository) =>
                 {
                     return await HandleAsync(request, jobSeekerRepository);

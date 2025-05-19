@@ -48,7 +48,8 @@ public class DeleteEmployerProfilePictureEndpoint : IEndpoint<IResult, Guid, IRe
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapDelete("api/employers/{employerId:guid}/profile-picture",
-            [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+            [Authorize(Roles = Shared.Authorization.Constants.Roles.EMPLOYER, 
+                AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
             async (Guid employerId, IRepository<Employer> repository) =>
             {
                 return await HandleAsync(employerId, repository);

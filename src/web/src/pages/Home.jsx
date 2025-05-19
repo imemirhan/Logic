@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Space, Input, Row, Col, Button, Carousel } from "antd";
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getJobs } from "../store/slices/jobsSlice";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,6 +16,7 @@ const { Title, Paragraph } = Typography;
 
 function Home() {
    const [title, setTitle] = useState("");
+   const carouselRef = useRef();
   const [location, setLocation] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -52,6 +53,14 @@ function Home() {
       description: "Analyze complex datasets to drive business decisions.",
     },
   ];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (carouselRef.current) {
+        carouselRef.current.next();
+      }
+    }, 7000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className={styles.homeContainer}>
       {/* Hero Section */}
@@ -141,7 +150,13 @@ function Home() {
         <Title level={2} className={styles.carouselTitle}>
           Recent Jobs
         </Title>
-        <Carousel autoplay className={styles.carousel}>
+        <Carousel
+          ref={carouselRef}
+          autoplay={false}
+          dots
+          className={styles.carousel}
+          arrows
+        >
           {recentJobs.map((job, index) => (
             <div key={index} className={styles.carouselItem}>
               <Title level={4} className={styles.jobTitle}>

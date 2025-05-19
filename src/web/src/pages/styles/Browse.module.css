@@ -54,52 +54,12 @@
   background-color: #ffffff;
 }
 
-.jobCard {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.jobCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.jobTitle {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.jobCompany {
-  font-size: 14px;
-  color: #4a4a4a;
-  margin-bottom: 5px;
-}
-
-.jobLocation {
-  font-size: 14px;
+/* No Jobs Found */
+.noJobs {
+  text-align: center;
+  font-size: 16px;
   color: #7b7b7b;
-  margin-bottom: 10px;
-}
-
-.jobDescription {
-  font-size: 14px;
-  color: #4a4a4a;
-  margin-bottom: 15px;
-}
-
-.applyButton {
-  background-color: #4a90e2;
-  border-color: #4a90e2;
-  color: white;
-}
-
-.applyButton:hover {
-  background-color: #3a7bd5;
-  border-color: #3a7bd5;
+  margin-top: 20px;
 }
 
 .clearButton {
@@ -110,12 +70,4 @@
 .clearButton:hover {
   background-color: #d0d0d0;
   border-color: #d0d0d0;
-}
-
-/* No Jobs Found */
-.noJobs {
-  text-align: center;
-  font-size: 16px;
-  color: #7b7b7b;
-  margin-top: 20px;
 }

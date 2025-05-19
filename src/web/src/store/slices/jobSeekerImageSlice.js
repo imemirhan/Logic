@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../../services/api"; // Axios instance
 
 export const uploadJobSeekerImage = createAsyncThunk(
   "jobSeekerImage/upload",
@@ -9,7 +9,7 @@ export const uploadJobSeekerImage = createAsyncThunk(
       formData.append("jobSeekerId", jobSeekerId);
       formData.append("file", file);
 
-      const response = await axios.post("/api/jobseekers/profile-picture", formData, {
+      const response = await api.post("/jobseekers/profile-picture", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -37,7 +37,7 @@ public class UpdateEmployerEndpoint : IEndpoint<IResult, UpdateEmployerRequest, 
 
         // Update employer details
         existingEmployer.UpdateCompanyDetails(request.CompanyName, request.Description, request.Industry, request.WebsiteUrl ?? "", DateTime.UtcNow);
-        existingEmployer.UpdateContactInfo(DateTime.UtcNow, request.ProfileImageUrl, request.LinkedIn, request.GitHub, request.Twitter, request.Facebook, request.Instagram);
+        existingEmployer.UpdateContactInfo(DateTime.UtcNow, request.LinkedIn, request.GitHub, request.Twitter, request.Facebook, request.Instagram);
 
         await repository.UpdateAsync(existingEmployer);
 
@@ -49,7 +49,7 @@ public class UpdateEmployerEndpoint : IEndpoint<IResult, UpdateEmployerRequest, 
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapPut("api/employers/{id:int}",
-                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, 
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.EMPLOYER, 
                            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (int id, UpdateEmployerRequest request, IRepository<Employer> repository) =>
                 {

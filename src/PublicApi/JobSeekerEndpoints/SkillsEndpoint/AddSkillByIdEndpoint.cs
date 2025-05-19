@@ -1,5 +1,7 @@
 ﻿using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -40,6 +42,8 @@ public class AddSkillByIdEndpoint : IEndpoint<IResult, AddSkillByIdRequest, IRep
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapPost("api/skills",
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER, 
+                    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (AddSkillByIdRequest request, IRepository<JobSeeker> skillRepository) =>
                 {
                     return await HandleAsync(request, skillRepository);

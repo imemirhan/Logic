@@ -1,40 +1,40 @@
-/* Navbar container */
 .header {
   position: fixed;
-  z-index: 1;
-  width: 100%;
-  padding: 0 20px; /* Added some padding for better spacing */
-  background-color: #001529; /* Ant Design dark theme color */
+  z-index: 100;
+  width: 100vw;
+  min-width: 0;
+  padding: 0 20px;
+  background-color: #001529;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  height: 64px; /* Consistent height for the navbar */
-  transition: background-color 0.3s ease; /* Smooth transition for background color */
+  height: 64px;
+  transition: background-color 0.3s ease;
 }
 
-/* Logo styling */
 .logo {
   color: white;
-  font-size: 24px; /* Increased font size for better visibility */
+  font-size: 24px;
   font-weight: bold;
   line-height: 64px;
   cursor: pointer;
   transition: color 0.3s ease;
+  flex-shrink: 0;
 }
 
 .logo:hover {
-  color: #40a9ff; /* Primary color on hover */
+  color: #40a9ff;
 }
 
-/* Menu container */
 .menu {
   display: flex;
-  gap: 25px; /* Increased gap for better spacing */
+  gap: 25px;
   align-items: center;
+  flex: 1;
+  justify-content: center;
 }
 
-/* Menu item styling */
 .menuItem {
   color: white;
   text-decoration: none;
@@ -42,26 +42,25 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0px 15px; /* Added padding for better click targets */
+  padding: 0px 15px;
   border-radius: 4px;
   transition: background-color 0.3s ease, color 0.3s ease;
+  white-space: nowrap;
 }
 
-/* Menu item hover effect */
 .menuItem:hover {
-  background-color: rgba(64, 169, 255, 0.2); /* Light hover background */
-  color: #40a9ff; /* Ant Design primary color */
-  border-radius: 8px; /* Rounded corners on hover */
+  background-color: rgba(64, 169, 255, 0.2);
+  color: #40a9ff;
+  border-radius: 8px;
 }
 
-/* Buttons container */
 .buttons {
   display: flex;
-  gap: 15px; /* Increased gap for spacing between buttons */
+  gap: 15px;
   align-items: center;
+  flex-shrink: 0;
 }
 
-/* Button styling */
 .navButton {
   font-size: 1rem;
   padding: 8px 16px;
@@ -72,26 +71,23 @@
   transition: all 0.3s ease;
 }
 
-
 .navButton:hover {
-  transform: translateY(-2px); /* Slight lift on hover */
+  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Primary button */
 .navButton.ant-btn-primary {
-  background-color: #40a9ff; /* Primary color */
+  background-color: #40a9ff;
   border-color: #40a9ff;
   color: white;
 }
 
 .navButton.ant-btn-primary:hover {
-  background-color: #1890ff; /* Darker blue on hover */
+  background-color: #1890ff;
   border-color: #1890ff;
   color: white;
 }
 
-/* Default button */
 .navButton.ant-btn-default {
   background-color: transparent;
   border-color: #ffffff;
@@ -104,20 +100,18 @@
   color: #40a9ff;
 }
 
-/* Button link styling */
 .buttonLink {
   color: inherit;
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 5px; /* Space between icon and text */
+  gap: 5px;
 }
 
-/* User Dropdown */
 .userDropdown {
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between avatar and text */
+  gap: 10px;
   cursor: pointer;
   padding: 5px 10px;
   border-radius: 5px;
@@ -125,10 +119,9 @@
 }
 
 .userDropdown:hover {
-  background-color: rgba(0, 0, 0, 0.05); /* Light hover effect */
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-/* Avatar */
 .avatar {
   width: 40px;
   height: 40px;
@@ -136,31 +129,115 @@
   object-fit: cover;
 }
 
-/* User Name */
 .userName {
   font-size: 1rem;
   font-weight: 500;
-  color: #fff; /* Professional blue */
-  white-space: nowrap; /* Prevent text wrapping */
+  color: #fff;
+  white-space: nowrap;
 }
 
-/* Mobile responsiveness */
+/* Mobile styles */
+.mobileMenuButton {
+  display: none;
+}
+
+.menuIconButton {
+  color: #fff;
+  font-size: 24px;
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0 8px;
+}
+
+.mobileDrawer .ant-drawer-body {
+  padding: 0 !important;
+}
+
+.drawerMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.drawerMenu .menuItem {
+  padding: 18px 24px;
+  font-size: 18px;
+  border-radius: 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: #001529;
+  background: #fff;
+  transition: background 0.2s, color 0.2s;
+}
+
+.drawerMenu .menuItem:hover {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.drawerButtons {
+  padding: 18px 24px;
+  border-top: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+@media (max-width: 1100px) {
+  .menu {
+    gap: 10px;
+  }
+  .menuItem {
+    font-size: 15px;
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .menu {
+    gap: 2px;
+  }
+  .menuItem {
+    font-size: 14px;
+    padding: 0 4px;
+  }
+}
+
 @media (max-width: 768px) {
   .menu {
-    display: none; /* Hide menu items on small screens */
+    display: none;
   }
-
-  .buttons {
-    flex-direction: column;
-    gap: 10px; /* Stack buttons vertically */
+  .mobileMenuButton {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
   }
-
-  .logo {
-    font-size: 18px; /* Smaller logo size on mobile */
-  }
-
   .header {
-    flex-direction: column;
-    padding: 10px;
+    flex-wrap: wrap;
+    padding: 0 8px;
+    height: 56px;
+  }
+  .logo {
+    font-size: 18px;
+    line-height: 56px;
+  }
+  .buttons {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    height: 48px;
+    padding: 0 2px;
+  }
+  .logo {
+    font-size: 15px;
+    line-height: 48px;
+  }
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
+  .userName {
+    font-size: 0.95rem;
   }
 }

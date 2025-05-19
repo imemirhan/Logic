@@ -6,6 +6,7 @@ import {
 import { SearchOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getJobs } from "../store/slices/jobsSlice";
+import BrowseJobItem from "../components/BrowseJobItem";
 import styles from "./styles/Browse.module.css";
 
 const { Content, Sider } = Layout;
@@ -172,16 +173,7 @@ function Browse() {
                 <Row gutter={[16, 16]}>
                   {jobs.map((job) => (
                     <Col span={24} key={job.id}>
-                      <Link to={`/browse/${job.id}`}>
-                        <Card className={styles.jobCard} hoverable>
-                          <h3 className={styles.jobTitle}>{job.title}</h3>
-                          <p className={styles.jobLocation}>{job.location}</p>
-                          <p className={styles.jobDescription}>{job.description}</p>
-                          <Button type="primary" className={styles.applyButton}>
-                            See Details
-                          </Button>
-                        </Card>
-                      </Link>
+                      <BrowseJobItem job={job} />
                     </Col>
                   ))}
                   {jobs.length === 0 && (

@@ -3,6 +3,8 @@ using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +52,8 @@ public class AddJobSeekerResumeEndpoint : IEndpoint<IResult, AddJobSeekerResumeR
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapPost("api/jobseekers/resume",
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER, 
+                    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (HttpRequest httpRequest, [FromForm] AddJobSeekerResumeRequest request, IRepository<JobSeeker> repository) =>
                 {
                     if (request.File == null || request.File.Length == 0)

@@ -1,5 +1,7 @@
 ﻿using ApplicationCore.Entities.JobAggregate;
 using ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -13,6 +15,8 @@ public class UpdateJobApplicationEndpoint
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapPut("api/job-applications/{id:int}",
+            [Authorize(Roles = Shared.Authorization.Constants.Roles.EMPLOYER, 
+                AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
             async (int id, UpdateJobApplicationRequest request, IRepository<JobApplication> repo) =>
             {
                 request.Id = id; // ensure route and body match

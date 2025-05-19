@@ -22,6 +22,8 @@ public class AddExperienceByIdEndpoint : IEndpoint<IResult, AddExperienceByIdReq
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapPost("api/experiences", 
+            [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER, 
+                AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
             async (AddExperienceByIdRequest request, IRepository<JobSeeker> jobSeekerRepository) =>
             {
                 return await HandleAsync(request, jobSeekerRepository);

@@ -8,7 +8,6 @@ public class UpdateEmployerRequest : BaseRequest
     public string? Description { get; set; } = string.Empty;
     public string? Industry { get; set; } = string.Empty;
     public string? CompanyName { get; set; } = string.Empty;
-    public string? ProfileImageUrl { get; set; }
     public string? LinkedIn { get; set; }
     public string? GitHub { get; set; }
     public string? Twitter { get; set; }

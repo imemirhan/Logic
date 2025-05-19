@@ -1,5 +1,7 @@
 ﻿using ApplicationCore.Entities.JobAggregate;
 using ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -13,6 +15,8 @@ public class DeleteJobApplicationEndpoint
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapDelete("api/job-applications/{id:int}",
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.ADMINISTRATORS, 
+                    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                 async (int id, IRepository<JobApplication> repo) =>
                 {
                     var request = new DeleteJobApplicationRequest { Id = id };
