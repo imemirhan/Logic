@@ -1,0 +1,20 @@
+.goBackButton {
+  background: linear-gradient(90deg, #e3f2fd 0%, #e8f5e9 100%);
+  color: #1976d2;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 22px;
+  font-size: 16px;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.goBackButton:hover,
+.goBackButton:focus {
+  background: linear-gradient(90deg, #bbdefb 0%, #c8e6c9 100%);
+  color: #0d47a1;
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.18);
+}

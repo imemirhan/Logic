@@ -2,7 +2,7 @@
 
 namespace PublicApi.JobSeekerEndpoints;
 
-public class DeleteJobSeekerProfilePictureResponse
+public class DeleteJobSeekerProfilePictureResponse : BaseResponse
 {
     public DeleteJobSeekerProfilePictureResponse(Guid correlationId) { }
 

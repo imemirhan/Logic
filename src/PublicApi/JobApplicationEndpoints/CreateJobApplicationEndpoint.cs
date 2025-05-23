@@ -10,16 +10,19 @@ using MinimalApi.Endpoint;
 namespace PublicApi.JobApplicationEndpoints;
 
 public class CreateJobApplicationEndpoint
-    : IEndpoint<IResult, CreateJobApplicationRequest, IRepository<JobApplication>>
+    : IEndpoint<IResult, CreateJobApplicationRequest,
+        (IRepository<JobApplication> repo, IJobService jobService)>
 {
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapPost("api/job-applications",
-                [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER, 
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER,
                     AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-                async (CreateJobApplicationRequest request, IRepository<JobApplication> repo) =>
+                async (CreateJobApplicationRequest request,
+                    IRepository<JobApplication> repo,
+                    IJobService jobService) =>
                 {
-                    return await HandleAsync(request, repo);
+                    return await HandleAsync(request, (repo, jobService));
                 })
             .WithName("CreateJobApplication")
             .WithDescription("Creates a new job application")
@@ -27,20 +30,25 @@ public class CreateJobApplicationEndpoint
             .WithTags("Job Application Endpoints");
     }
 
-    public async Task<IResult> HandleAsync(CreateJobApplicationRequest request, IRepository<JobApplication> repo)
+    public async Task<IResult> HandleAsync(CreateJobApplicationRequest request,
+        (IRepository<JobApplication> repo, IJobService jobService) services)
     {
-        var response = new CreateJobApplicationResponse(request.CorrelationId());
+        var (repo, jobService) = services;
 
+        var response = new CreateJobApplicationResponse(request.CorrelationId());
         var dto = request.JobApplication;
-        var existingApplications = await repo.ListAsync(); // get all applications
-        var alreadyExists = existingApplications.Any(a => 
+
+        await jobService.IncrementApplicationCountAsync(dto.JobId);
+
+        var existingApplications = await repo.ListAsync();
+        var alreadyExists = existingApplications.Any(a =>
             a.JobId == dto.JobId && a.JobSeekerId == dto.JobSeekerId);
-        
+
         if (alreadyExists)
         {
             return Results.Conflict($"Job seeker {dto.JobSeekerId} has already applied to job {dto.JobId}.");
         }
-        
+
         var jobApp = new JobApplication(
             jobId: dto.JobId,
             employerId: dto.EmployerId,

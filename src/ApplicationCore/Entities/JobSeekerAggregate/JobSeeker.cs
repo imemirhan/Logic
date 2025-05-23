@@ -109,7 +109,15 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         Guard.Against.Null(skill, nameof(skill));
         _skills.Add(skill);
     }
-    
+
+    public void AddSkills(List<Skill> skills)
+    {
+        Guard.Against.Null(skills, nameof(skills));
+        foreach (var skill in skills)
+        {
+            _skills.Add(skill);
+        }
+    }
     public void RemoveSkill(int skillId)
     {
         var skill = _skills.FirstOrDefault(s => s.Id == skillId);
@@ -122,6 +130,15 @@ public class JobSeeker : BaseEntity, IAggregateRoot
         _experiences.Add(experience);
     }
 
+    public void AddExperiences(List<Experience> experiences)
+    {
+        Guard.Against.Null(experiences, nameof(experiences));
+        foreach (var experience in experiences)
+        {
+           _experiences.Add(experience); 
+        }
+    }
+
     public void RemoveExperience(int experienceId)
     {
         var experience = _experiences.FirstOrDefault(e => e.Id == experienceId);
@@ -132,6 +149,15 @@ public class JobSeeker : BaseEntity, IAggregateRoot
     {
         Guard.Against.Null(education, nameof(education));
         _educations.Add(education);
+    }
+
+    public void AddEducations(List<Education> educations)
+    {
+        Guard.Against.Null(educations, nameof(educations));
+        foreach (var education in educations)
+        {
+            _educations.Add(education);
+        }
     }
 
     public void RemoveEducation(Education education)

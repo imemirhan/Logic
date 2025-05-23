@@ -63,7 +63,6 @@ public class AddJobSeekerResumeEndpoint : IEndpoint<IResult, AddJobSeekerResumeR
                         return Results.BadRequest("Only PDF files are allowed.");
 
                     var cloudinary = app.ServiceProvider.GetRequiredService<Cloudinary>();
-                    //TODO => BU KOD YANLIS !!! SADECE IMAGELAR ICIN CALISIYOR, BIR YOL BULUNMALI
                     var uploadResult = await cloudinary.UploadAsync(new RawUploadParams
                     {
                         File = new FileDescription(request.File.FileName, request.File.OpenReadStream()),

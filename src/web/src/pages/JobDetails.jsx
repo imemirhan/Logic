@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSingleJob } from "../store/slices/singleJobSlice";
 import { getEmployerById } from "../store/slices/singleEmployerSlice";
 import { Card, Row, Col, Button, Typography, Divider, Avatar } from "antd";
+import GoBack from "../components/GoBack";
 import styles from "./styles/JodDetails.module.css";
 
 const { Title, Paragraph, Text, Link } = Typography;
@@ -31,10 +32,9 @@ function JobDetails() {
   if (status === "loading" || employerStatus === "loading") return <p className={styles.message}>Loading job details...</p>;
   if (status === "failed") return <p className={styles.message}>Error: {error}</p>;
   if (!job || !job.job) return <p className={styles.message}>Job not found.</p>;
-  console.log("Job:", job);
-  console.log("Employer:", employer);
   return (
     <div className={styles.jobDetailsContainer}>
+      <GoBack />
       <Card className={styles.jobCard}>
         {/* Job Title and Employer */}
         <Row gutter={[16, 16]}>

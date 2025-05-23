@@ -2,7 +2,7 @@
 
 namespace PublicApi.JobSeekerEndpoints;
 
-public class UploadJobSeekerProfilePictureResponse
+public class UploadJobSeekerProfilePictureResponse : BaseResponse
 {
     public UploadJobSeekerProfilePictureResponse(Guid correlationId) { }
 

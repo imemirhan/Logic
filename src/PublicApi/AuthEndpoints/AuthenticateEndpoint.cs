@@ -91,7 +91,9 @@ public class AuthenticateEndpoint : EndpointBaseAsync
             if (jobSeekerResult.Value != null)
             {
                 var jobSeeker = jobSeekerResult.Value;
-
+                var jSkills = _dbContext.Skills.Where(s => s.JobSeekerId == jobSeeker.Id).ToList();
+                var jEducation = _dbContext.Educations.Where(ed => ed.JobSeekerId == jobSeeker.Id).ToList();
+                var jExperience = _dbContext.Experiences.Where(e => e.JobSeekerId == jobSeeker.Id).ToList();
                 response.FullName = $"{jobSeeker.Name} {jobSeeker.LastName}";
                 response.Role = ProjectEnums.Role.JobSeeker;
                 response.JobSeeker = jobSeeker;

@@ -6,6 +6,7 @@ import { getJobs } from "../store/slices/jobsSlice";
 import { useSelector, useDispatch } from "react-redux";
 import ComponentCard from "../components/ComponentCard";
 import styles from "./styles/Home.module.css";
+import { getRecentJobs} from "../store/slices/jobsSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faMapMarkerAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import feature1 from "../assets/feature1.jpg";

@@ -50,6 +50,8 @@ public class CreateEmployerEndpoint : IEndpoint<IResult, CreateEmployerRequest, 
         (
             request.CorrelationId().ToString(),
             request.Name,
+            request.Email,
+            request.Phone,
             request.Surname,
             request.CompanyName,
             request.Description,

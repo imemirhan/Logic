@@ -7,8 +7,7 @@ import {
   faGithub,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
-
-// Solid icons (UI icons like plus, pen, upload)
+import { uploadResume, deleteResume } from "../store/slices/jobSeekerResumeSlice";
 import {
   faPlus,
   faPen,
@@ -30,6 +29,7 @@ import {
   Tooltip,
   Upload,
   Spin,
+  Tag,
 } from "antd";
 import Swal from "sweetalert2";
 import styles from "./styles/Profile.module.css";
@@ -38,12 +38,17 @@ import { addSkill, deleteSkill } from '../store/slices/skillsSlice';
 import { addEducation, deleteEducation } from '../store/slices/educationSlice';
 import { addExperience, deleteExperience } from '../store/slices/experienceSlice';
 import { uploadJobSeekerImage } from "../store/slices/jobSeekerImageSlice";
+import { getJobSeekerById } from "../store/slices/jobSeekerSlice";
 
-const { Title, Paragraph, Text, Link } = Typography;
+const { Title, Paragraph, Text } = Typography;
+const { Option } = Select;
 
 function Profile() {
   const { user } = useSelector((state) => state.userSlice);
   const dispatch = useDispatch();
+  const { resumeUrl, status: resumeStatus } = useSelector((state) => state.jobSeekerResume);
+  const [resumeFile, setResumeFile] = useState(null);
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
   const { skills } = useSelector((state) => state.skills);
   const { educations } = useSelector((state) => state.education);
   const { experiences } = useSelector((state) => state.experience);
@@ -56,7 +61,6 @@ function Profile() {
   const [avatarHover, setAvatarHover] = useState(false);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
-  const uploadInputRef = useRef();
 
   const handleEdit = () => {
     setIsModalOpen(true);
@@ -93,11 +97,47 @@ function Profile() {
           confirmButtonText: "OK",
         });
       } else if (activeModal === "Skill") {
-        handleAddSkill(values);
+        await dispatch(addSkill({
+          jobSeekerId: user.id,
+          title: values.title,
+          description: values.description,
+          skillType: Number(values.skillType),
+        })).unwrap();
+        Swal.fire({
+          title: "Success!",
+          text: "Skill added successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
       } else if (activeModal === "Experience") {
-        handleAddExperience(values);
+        await dispatch(addExperience({
+          jobSeekerId: user.id,
+          companyName: values.companyName,
+          position: values.position,
+          startDate: values.startDate,
+          endDate: values.endDate,
+        })).unwrap();
+        Swal.fire({
+          title: "Success!",
+          text: "Experience added successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
       } else if (activeModal === "Education") {
-        handleAddEducation(values);
+        await dispatch(addEducation({
+          jobSeekerId: user.id,
+          schoolName: values.schoolName,
+          degree: values.degree,
+          fieldOfStudy: values.fieldOfStudy,
+          startDate: values.startDate,
+          endDate: values.endDate,
+        })).unwrap();
+        Swal.fire({
+          title: "Success!",
+          text: "Education added successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
       }
 
       setIsModalOpen(false);
@@ -108,6 +148,57 @@ function Profile() {
       Swal.fire({
         title: "Error!",
         text: "Something went wrong. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+
+  const handleResumeUpload = async () => {
+    if (!resumeFile) {
+      Swal.fire({
+        title: "No file selected",
+        text: "Please select a resume to upload.",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+    try {
+      var response = await dispatch(uploadResume({ jobSeekerId: user.id, file: resumeFile })).unwrap();
+      Swal.fire({
+        title: "Success!",
+        text: "Resume uploaded successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+      setIsResumeModalOpen(false);
+      setResumeFile(null);
+      await dispatch(setUser({ ...user, resumeUrl: response.data }));
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to upload resume. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+
+  const handleRemoveResume = async () => {
+    try {
+      await dispatch(deleteResume(user.id)).unwrap();
+      Swal.fire({
+        title: "Removed!",
+        text: "Your resume has been removed.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+      await dispatch(setUser({ ...user, resumeUrl: null }));
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to remove resume. Please try again.",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -152,7 +243,6 @@ function Profile() {
       });
       setIsAvatarModalOpen(false);
       setAvatarFile(null);
-      // Optionally, refresh user info here
     } catch (error) {
       Swal.fire({
         title: "Error!",
@@ -178,7 +268,148 @@ function Profile() {
         </Tooltip>
       </Col>
     </Row>
-  );
+  );  
+  console.log("User:", user);
+
+  // Modal form content based on activeModal
+  const renderModalForm = () => {
+    if (activeModal === "Skill") {
+      return (
+        <>
+          <Form.Item
+            label="Title"
+            name="title"
+            rules={[{ required: true, message: "Please enter a skill title" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Description"
+            name="description"
+            rules={[{ required: true, message: "Please enter a description" }]}
+          >
+            <Input.TextArea rows={2} />
+          </Form.Item>
+          <Form.Item
+            label="Skill Type"
+            name="skillType"
+            rules={[{ required: true, message: "Please select a skill type" }]}
+            initialValue={0}
+          >
+            <Select>
+              <Option value={0}>Intermediate</Option>
+              <Option value={1}>Average</Option>
+              <Option value={2}>Beginner</Option>
+            </Select>
+          </Form.Item>
+        </>
+      );
+    }
+    if (activeModal === "Education") {
+      return (
+        <>
+          <Form.Item
+            label="School Name"
+            name="schoolName"
+            rules={[{ required: true, message: "Please enter the school name" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Degree"
+            name="degree"
+            rules={[{ required: true, message: "Please enter the degree" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Field of Study"
+            name="fieldOfStudy"
+            rules={[{ required: true, message: "Please enter the field of study" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Start Date"
+            name="startDate"
+            rules={[{ required: true, message: "Please select the start date" }]}
+          >
+            <Input type="date" />
+          </Form.Item>
+          <Form.Item
+            label="End Date"
+            name="endDate"
+            rules={[{ required: true, message: "Please select the end date" }]}
+          >
+            <Input type="date" />
+          </Form.Item>
+        </>
+      );
+    }
+    if (activeModal === "Experience") {
+      return (
+        <>
+          <Form.Item
+            label="Company Name"
+            name="companyName"
+            rules={[{ required: true, message: "Please enter the company name" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Position"
+            name="position"
+            rules={[{ required: true, message: "Please enter the position" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Start Date"
+            name="startDate"
+            rules={[{ required: true, message: "Please select the start date" }]}
+          >
+            <Input type="date" />
+          </Form.Item>
+          <Form.Item
+            label="End Date"
+            name="endDate"
+            rules={[{ required: true, message: "Please select the end date" }]}
+          >
+            <Input type="date" />
+          </Form.Item>
+        </>
+      );
+    }
+    // Default: edit profile
+    return (
+      <>
+        <Form.Item label="First Name" name="name" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="Last Name" name="lastName" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="About Me" name="aboutMe">
+          <Input.TextArea rows={3} />
+        </Form.Item>
+        <Form.Item label="LinkedIn" name="linkedIn">
+          <Input />
+        </Form.Item>
+        <Form.Item label="GitHub" name="gitHub">
+          <Input />
+        </Form.Item>
+        <Form.Item label="Twitter" name="twitter">
+          <Input />
+        </Form.Item>
+        <Form.Item label="Facebook" name="facebook">
+          <Input />
+        </Form.Item>
+        <Form.Item label="Instagram" name="instagram">
+          <Input />
+        </Form.Item>
+      </>
+    );
+  };
 
   return (
     <div className={styles.profileContainer}>
@@ -229,7 +460,6 @@ function Profile() {
             <Title level={2} className={styles.profileName}>
               {user.name} {user.lastName}
             </Title>
-            {/* Edit Icon in Top Right */}
             <Tooltip title={`Update Information`}>
               <div
                 onClick={handleEdit}
@@ -252,22 +482,132 @@ function Profile() {
           </Col>
         </Row>
 
+        {/* Resume Section */}
+        <Divider className={styles.divider} />
+        <Title level={4}>Resume</Title>
+        <div className={styles.sectionContent}>
+          {user.resumeUrl ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <Button
+                type="primary"
+                icon={<FontAwesomeIcon icon={faUpload} />}
+                href={user.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                View Uploaded Resume
+              </Button>
+              <Button
+                danger
+                type="default"
+                icon={<FontAwesomeIcon icon={faPen} />}
+                onClick={handleRemoveResume}
+                style={{ display: "flex", alignItems: "center" }}
+                loading={resumeStatus === "loading"}
+              >
+                Remove Resume
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <Paragraph style={{ color: "#888" }}>
+                You have not uploaded a resume yet.
+              </Paragraph>
+              <Button
+                type="primary"
+                icon={<FontAwesomeIcon icon={faUpload} />}
+                onClick={() => setIsResumeModalOpen(true)}
+              >
+                Upload Resume
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <Modal
+          title="Upload Resume"
+          open={isResumeModalOpen}
+          onOk={handleResumeUpload}
+          onCancel={() => setIsResumeModalOpen(false)}
+          okText="Upload"
+          confirmLoading={resumeStatus === "loading"}
+        >
+          <Upload.Dragger
+            accept=".pdf,.doc,.docx"
+            beforeUpload={file => {
+              setResumeFile(file);
+              return false; // prevent auto upload
+            }}
+            showUploadList={resumeFile ? [{ name: resumeFile.name }] : false}
+            fileList={resumeFile ? [resumeFile] : []}
+            maxCount={1}
+            style={{ marginBottom: 16 }}
+          >
+            <p className="ant-upload-drag-icon">
+              <FontAwesomeIcon icon={faUpload} style={{ fontSize: 32, color: "#1976d2" }} />
+            </p>
+            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+            <p className="ant-upload-hint">Only PDF, DOC, and DOCX files are accepted.</p>
+          </Upload.Dragger>
+          {resumeFile && (
+            <div style={{ marginTop: 12 }}>
+              <Text type="secondary">Selected: {resumeFile.name}</Text>
+            </div>
+          )}
+        </Modal>
+
         {/* Skills Section */}
         <Divider className={styles.divider} />
         {renderSectionHeader("Skills", "Skill")}
         <div className={styles.sectionContent}>
-          {skills && skills.length > 0 ? (
-            skills.map((skill, idx) => (
-              <Tag
-                className={styles.skillTag}
-                key={idx}
-                color="blue"
-                closable
-                onClose={() => dispatch(deleteSkill(skill.id))}
-              >
-                {skill.name}
-              </Tag>
-            ))
+          {user.skills && user.skills.length > 0 ? (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+              {user.skills.map((skill, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    background: "#f4f8fd",
+                    borderRadius: 8,
+                    padding: "8px 16px",
+                    marginBottom: 8,
+                    boxShadow: "0 1px 4px #e3eafc",
+                    minWidth: 220,
+                    maxWidth: 340,
+                  }}
+                >
+                  <Tag
+                    className={styles.skillTag}
+                    color="blue"
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 500,
+                      marginRight: 10,
+                      marginBottom: 0,
+                      padding: "4px 12px",
+                      borderRadius: 6,
+                    }}
+                    closable
+                    onClose={() => dispatch(deleteSkill(skill.id))}
+                  >
+                    {skill.title}
+                  </Tag>
+                  <div style={{ marginLeft: 6, flex: 1 }}>
+                    <div style={{ fontSize: 13, color: "#1976d2", fontWeight: 500 }}>
+                      {typeof skill.skillType === "number" &&
+                        ["Intermediate", "Average", "Beginner"][skill.skillType]}
+                    </div>
+                    {skill.description && (
+                      <div style={{ fontSize: 12, color: "#888", marginTop: 2 }}>
+                        {skill.description}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
             <span style={{ color: "#888" }}>No skills added yet.</span>
           )}
@@ -277,25 +617,45 @@ function Profile() {
         <Divider className={styles.divider} />
         {renderSectionHeader("Education", "Education")}
         <div className={styles.sectionContent}>
-          {educations && educations.length > 0 ? (
-            educations.map((edu, idx) => (
-              <div key={idx} className={styles.educationItem}>
-                <Text strong>{edu.schoolName || "School"}</Text>
-                {edu.degree && <> - {edu.degree}</>}
-                {edu.fieldOfStudy && <> ({edu.fieldOfStudy})</>}
-                {edu.startDate && <> | {edu.startDate}</>}
-                {edu.endDate && <> - {edu.endDate}</>}
-                <Button
-                  type="link"
-                  danger
-                  size="small"
-                  onClick={() => dispatch(deleteEducation(edu.id))}
-                  style={{ marginLeft: 8 }}
+          {user.educations && user.educations.length > 0 ? (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+              {user.educations.map((edu, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    background: "#f4f8fd",
+                    borderRadius: 8,
+                    padding: "8px 16px",
+                    marginBottom: 8,
+                    boxShadow: "0 1px 4px #e3eafc",
+                    minWidth: 220,
+                    maxWidth: 400,
+                  }}
                 >
-                  Remove
-                </Button>
-              </div>
-            ))
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: "#1976d2" }}>
+                      At: {edu.institution || "School"}
+                      {edu.degree && <><br/> AGNO: {edu.degree}</>}
+                    </div>
+                    <div style={{ fontSize: 13, color: "#888" }}>
+                      {edu.startYear && <>| {edu.startYear}</>}
+                      {edu.graduationYear && <> - {edu.graduationYear}</>}
+                    </div>
+                  </div>
+                  <Button
+                    type="link"
+                    danger
+                    size="small"
+                    onClick={() => dispatch(deleteEducation(edu.id))}
+                    style={{ marginLeft: 8 }}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              ))}
+            </div>
           ) : (
             <span style={{ color: "#888" }}>No education information added yet.</span>
           )}
@@ -305,24 +665,46 @@ function Profile() {
         <Divider className={styles.divider} />
         {renderSectionHeader("Experience", "Experience")}
         <div className={styles.sectionContent}>
-          {experiences && experiences.length > 0 ? (
-            experiences.map((exp, idx) => (
-              <div key={idx} className={styles.experienceItem}>
-                <Text strong>{exp.companyName || "Company"}</Text>
-                {exp.position && <> - {exp.position}</>}
-                {exp.startDate && <> | {exp.startDate}</>}
-                {exp.endDate && <> - {exp.endDate}</>}
-                <Button
-                  type="link"
-                  danger
-                  size="small"
-                  onClick={() => dispatch(deleteExperience(exp.id))}
-                  style={{ marginLeft: 8 }}
+          {user.experiences && user.experiences.length > 0 ? (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+              {user.experiences.map((exp, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    background: "#f4f8fd",
+                    borderRadius: 8,
+                    padding: "8px 16px",
+                    marginBottom: 8,
+                    boxShadow: "0 1px 4px #e3eafc",
+                    minWidth: 220,
+                    maxWidth: 400,
+                  }}
                 >
-                  Remove
-                </Button>
-              </div>
-            ))
+                  {console.log("Experience:", exp.id)}
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: "#1976d2" }}>
+                      Şirket: {exp.company || "Company"}
+                      {exp.title && <><br/>Konum: {exp.title}</>}
+                    </div>
+                    <div style={{ fontSize: 13, color: "#888" }}>
+                      {exp.years && <>Geçirilien yıl: {exp.years}</>}
+                      {exp.endDate && <> - {exp.endDate}</>}
+                    </div>
+                  </div>
+                  <Button
+                    type="link"
+                    danger
+                    size="small"
+                    onClick={() => dispatch(deleteExperience(exp.id))}
+                    style={{ marginLeft: 8 }}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              ))}
+            </div>
           ) : (
             <span style={{ color: "#888" }}>No experience information added yet.</span>
           )}
@@ -359,39 +741,24 @@ function Profile() {
           )}
         </div>
 
-        {/* Edit Modal */}
+        {/* Add/Edit Modal */}
         <Modal
-          title="Edit Profile"
+          title={
+            activeModal === "Skill"
+              ? "Add Skill"
+              : activeModal === "Education"
+              ? "Add Education"
+              : activeModal === "Experience"
+              ? "Add Experience"
+              : "Edit Profile"
+          }
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
           okText="Save"
         >
           <Form form={form} layout="vertical">
-            <Form.Item label="First Name" name="name" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item label="Last Name" name="lastName" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item label="About Me" name="aboutMe">
-              <Input.TextArea rows={3} />
-            </Form.Item>
-            <Form.Item label="LinkedIn" name="linkedIn">
-              <Input />
-            </Form.Item>
-            <Form.Item label="GitHub" name="gitHub">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Twitter" name="twitter">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Facebook" name="facebook">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Instagram" name="instagram">
-              <Input />
-            </Form.Item>
+            {renderModalForm()}
           </Form>
         </Modal>
 
@@ -430,9 +797,6 @@ function Profile() {
           </div>
         </Modal>
       </Card>
-
-      {/* ...rest of your modals and sections... */}
-      {/* (Keep your skills, experience, education, and edit modals as before) */}
     </div>
   );
 }

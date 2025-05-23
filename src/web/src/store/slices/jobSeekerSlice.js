@@ -1,25 +1,31 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../../services/api"; // Import the Axios instance
+import api from "../../services/api";
 
-// Async thunks for fetching data
 export const getJobSeekers = createAsyncThunk("jobseekers/getJobSeekers", async (_, thunkAPI) => {
   try {
-    const response = await api.get("/jobseekers"); // Fetch job seekers directly using the Axios instance
+    const response = await api.get("/jobseekers");
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response?.data || error.message);
   }
 });
 
-// Initial state
+export const getJobSeekerById = createAsyncThunk("jobseekers/getJobSeekerById", async (jobSeekerId, thunkAPI) => {
+  try {
+    const response = await api.get(`/jobseekers/${jobSeekerId}`);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data || error.message);
+  }
+});
+
 const initialState = {
-  jobSeekers: {},
+  jobSeekers: [],
   jobSeeker: null,
-  jobSeekerStatus: "idle", // idle | loading | succeeded | failed
+  jobSeekerStatus: "idle",
   jobSeekerError: null,
 };
 
-// Slice
 const jobSeekerSlice = createSlice({
   name: "jobSeekers",
   initialState,
@@ -31,23 +37,35 @@ const jobSeekerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // getJobSeekers
       .addCase(getJobSeekers.pending, (state) => {
         state.jobSeekerStatus = "loading";
         state.jobSeekerError = null;
       })
       .addCase(getJobSeekers.fulfilled, (state, action) => {
         state.jobSeekerStatus = "succeeded";
-        state.jobSeekers = action.payload.jobSeekers || []; // Extracting the array correctly
+        state.jobSeekers = action.payload.jobSeekers || [];
         state.jobSeekerError = null;
       })
       .addCase(getJobSeekers.rejected, (state, action) => {
         state.jobSeekerStatus = "failed";
-        state.jobSeeker = action.payload;
+        state.jobSeekerError = action.payload || action.error.message;
       })
+
+      .addCase(getJobSeekerById.pending, (state) => {
+        state.jobSeekerStatus = "loading";
+        state.jobSeekerError = null;
+      })
+      .addCase(getJobSeekerById.fulfilled, (state, action) => {
+        state.jobSeekerStatus = "succeeded";
+        state.jobSeeker = action.payload;
+        state.jobSeekerError = null;
+      })
+      .addCase(getJobSeekerById.rejected, (state, action) => {
+        state.jobSeekerStatus = "failed";
+        state.jobSeekerError = action.payload || action.error.message;
+      });
   },
 });
 
-// Export actions and reducer
 export const { clearJobSeeker } = jobSeekerSlice.actions;
 export default jobSeekerSlice.reducer;

@@ -8,6 +8,8 @@ public class Employer : BaseEntity, IAggregateRoot
 {
     public string IdentityGuid { get; set; }
     public string Name { get; private set; }
+    public string Email { get; private set; }
+    public string Phone { get; private set; }
     public string Surname { get; private set; }
     public string CompanyName { get; private set; }
     public string Description { get; private set; }
@@ -28,11 +30,13 @@ public class Employer : BaseEntity, IAggregateRoot
 #pragma warning disable CS8618
     private Employer() { }
 
-    public Employer(string identityGuid,string name, string surname,string companyName, string description, string industry,
+    public Employer(string identityGuid,string name, string email, string phone, string surname,string companyName, string description, string industry,
                      string? profileImageUrl = null, string? linkedIn = null, string? gitHub = null, 
                      string? twitter = null, string? facebook = null, string? instagram = null, string? websiteUrl = null, DateTime createdAt = default)
     {
         Guard.Against.NullOrEmpty(identityGuid, nameof(identityGuid));
+        Guard.Against.NullOrEmpty(email, nameof(email));
+        Guard.Against.Null(phone, nameof(phone));
         Guard.Against.NullOrEmpty(name, nameof(name));
         Guard.Against.NullOrEmpty(surname, nameof(surname));
         Guard.Against.NullOrEmpty(companyName, nameof(companyName));
@@ -45,7 +49,9 @@ public class Employer : BaseEntity, IAggregateRoot
         CompanyName = companyName;
         Description = description;
         Industry = industry;
-
+        Email = email;
+        Phone = phone;
+        
         ProfileImageUrl = profileImageUrl ?? ProfileImageUrl;
         LinkedIn = linkedIn ?? LinkedIn;
         GitHub = gitHub ?? GitHub;

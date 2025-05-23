@@ -7,10 +7,12 @@ import { FilePdfOutlined, LinkedinOutlined, GithubOutlined, FacebookOutlined, Tw
 const { Title, Paragraph, Text } = Typography;
 
 const statusMap = {
-  0: { color: "blue", text: "Pending" },
-  1: { color: "green", text: "Accepted" },
-  2: { color: "red", text: "Rejected" },
-  3: { color: "orange", text: "Interview Scheduled" },
+  0: { text: "Submitted", color: "gold" },
+  1: { text: "Under Review", color: "pink" },
+  2: { text: "Interview Scheduled", color: "darkblue" },
+  3: { text: "Interview Completed", color: "purple" },
+  4: { text: "Offered", color: "green" },
+  5: { text: "Rejected", color: "red" },
 };
 
 function AppliedJobs() {
@@ -115,6 +117,14 @@ function AppliedJobs() {
                   <Paragraph>
                     <Text strong>Contact Person:</Text>{" "}
                     {app.employer?.name} {app.employer?.surname}
+                  </Paragraph>
+                  <Paragraph>
+                    <Text strong>Email:</Text>{" "}
+                    {app.employer?.email ? (
+                      <a href={`mailto:${app.employer.email}`}>{app.employer.email}</a>
+                    ) : (
+                      "-"
+                    )}
                   </Paragraph>
                   {app.employer?.websiteUrl && (
                     <Paragraph>

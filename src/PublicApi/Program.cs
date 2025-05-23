@@ -46,6 +46,7 @@ builder.Services.AddDbContext<DbContext>(options =>
 
 builder.Services.AddScoped<IEmployerService, EmployerService>();
 builder.Services.AddScoped<IJobSeekerService, JobSeekerService>();
+builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
 builder.Services.AddScoped<CloudinaryImageServiceAdapter>();
 builder.Services.AddSingleton(serviceProvider =>

@@ -24,6 +24,7 @@ import skillsReducer from "./slices/skillsSlice";
 import educationReducer from "./slices/educationSlice";
 import experienceReducer from "./slices/experienceSlice";
 import getJobApplicationsReducer from "./slices/getJobApplicationsSlice";
+import jobSeekerResumeReducer from "./slices/jobSeekerResumeSlice";
 
 const persistConfig = {
   key: "root",
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
   skills: skillsReducer,
   education: educationReducer,
   experience: experienceReducer,
+  jobSeekerResume: jobSeekerResumeReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

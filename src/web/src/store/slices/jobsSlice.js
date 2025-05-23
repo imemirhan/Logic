@@ -25,6 +25,7 @@ export const getJobsByEmployerId = createAsyncThunk(
 export const createJob = createAsyncThunk(
   "jobs/createJob",
   async (jobData) => {
+    console.log(jobData);
     const response = await api.post("/jobs", jobData);
     return response.data.job; // Assuming response has a `job` property
   }
@@ -45,6 +46,14 @@ export const deleteJob = createAsyncThunk(
   async (jobId) => {
     await api.delete(`/jobs/${jobId}`);
     return jobId; // So we can remove it from state
+  }
+);
+
+export const getRecentJobs = createAsyncThunk(
+  "jobs/getRecentJobs",
+  async (params = {}) => {
+    const response = await api.get("/jobs/recent", { params });
+    return response.data;
   }
 );
 
@@ -89,6 +98,20 @@ const jobsSlice = createSlice({
         state.pageSize = action.payload.pageSize;
       })
       .addCase(getJobsByEmployerId.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getRecentJobs.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getRecentJobs.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.jobs = action.payload.jobs;
+        state.totalItems = action.payload.totalItems;
+        state.page = action.payload.page;
+        state.pageSize = action.payload.pageSize;
+      })  
+      .addCase(getRecentJobs.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })

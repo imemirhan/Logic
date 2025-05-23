@@ -32,6 +32,29 @@ public class JobService : IJobService
         Guard.Against.Null(job, nameof(job));
         return Result.Success(job);
     }
+
+    public async Task<Result<Job>> IncrementApplicationCountAsync(int jobId)
+    {
+        Guard.Against.Null(jobId, nameof(jobId));
+        var job = await _jobRepository.GetByIdAsync(jobId);
+        Guard.Against.Null(job, nameof(job));
+        job.IncrementApplicantCount();
+        await _jobRepository.UpdateAsync(job);
+        await _jobRepository.SaveChangesAsync();
+        return Result.Success(job);
+    }
+
+    public async Task<List<Job>> GetRecentJobsAsync()
+    {
+        var twoDaysAgo = DateTime.UtcNow.AddDays(-2);
+        var recentJobs = (await _jobRepository.ListAsync())
+            .Where(job => job.CreatedAt >= twoDaysAgo)
+            .OrderByDescending(job => job.CreatedAt)
+            .Take(5)
+            .ToList();
+        Guard.Against.Null(recentJobs, nameof(recentJobs));
+        return recentJobs;
+    }
     
     public async Task<Result<List<Job>>> GetJobListByEmployerIdAsync(int employerId)
     {

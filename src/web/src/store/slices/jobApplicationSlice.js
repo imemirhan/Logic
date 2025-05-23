@@ -40,6 +40,23 @@ export const fetchApplicationsByJobSeekerId = createAsyncThunk(
   }
 );
 
+// Update a job application
+export const updateJobApplication = createAsyncThunk(
+  "jobApplications/updateJobApplication",
+  async ({ id, updateData }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/job-applications/${id}`, {
+        jobApplication: updateData,
+      });
+      return response.data.jobApplication;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || "Failed to update job application"
+      );
+    }
+  }
+);
+
 const initialState = {
   applicationStatus: "idle",
   applicationError: null,
@@ -53,6 +70,9 @@ const initialState = {
   applicationsByJobSeeker: [],
   jobSeekerApplicationsStatus: "idle",
   jobSeekerApplicationsError: null,
+
+  updateStatus: "idle",
+  updateError: null,
 };
 
 const jobApplicationSlice = createSlice({
@@ -71,6 +91,9 @@ const jobApplicationSlice = createSlice({
       state.applicationsByJobSeeker = [];
       state.jobSeekerApplicationsStatus = "idle";
       state.jobSeekerApplicationsError = null;
+
+      state.updateStatus = "idle";
+      state.updateError = null;
     },
   },
   extraReducers: (builder) => {
@@ -118,6 +141,30 @@ const jobApplicationSlice = createSlice({
       .addCase(fetchApplicationsByJobSeekerId.rejected, (state, action) => {
         state.jobSeekerApplicationsStatus = "failed";
         state.jobSeekerApplicationsError = action.payload;
+      })
+
+      // updateJobApplication
+      .addCase(updateJobApplication.pending, (state) => {
+        state.updateStatus = "loading";
+        state.updateError = null;
+      })
+      .addCase(updateJobApplication.fulfilled, (state, action) => {
+        state.updateStatus = "succeeded";
+        state.updateError = null;
+
+        const updated = action.payload;
+        const index = state.applications.findIndex(app => app.id === updated.id);
+        if (index !== -1) {
+          state.applications[index] = updated;
+        }
+
+        if (state.application?.id === updated.id) {
+          state.application = updated;
+        }
+      })
+      .addCase(updateJobApplication.rejected, (state, action) => {
+        state.updateStatus = "failed";
+        state.updateError = action.payload || action.error.message;
       });
   },
 });

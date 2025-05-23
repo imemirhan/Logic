@@ -2,16 +2,15 @@
 
 namespace PublicApi.JobSeekerEndpoints;
 
-public class AddJobSeekerResumeResponse : BaseResponse
+public class DeleteJobSeekerResumeResponse : BaseResponse
 {
-    public AddJobSeekerResumeResponse(Guid correlationId)
+    public DeleteJobSeekerResumeResponse(Guid correlationId)
     {
     }
 
-    public AddJobSeekerResumeResponse()
+    public DeleteJobSeekerResumeResponse()
     {
     }
 
     public StatusCodeHttpResult StatusCode { get; set; }
 }
-    
