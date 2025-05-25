@@ -1,13 +1,10 @@
 ﻿using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
 using Infrastructure.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Logging;
 using MinimalApi.Endpoint;
 
 namespace PublicApi.JobSeekerEndpoints

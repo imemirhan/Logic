@@ -126,11 +126,11 @@ function Profile() {
       } else if (activeModal === "Education") {
         await dispatch(addEducation({
           jobSeekerId: user.id,
-          schoolName: values.schoolName,
           degree: values.degree,
-          fieldOfStudy: values.fieldOfStudy,
-          startDate: values.startDate,
-          endDate: values.endDate,
+          branch: values.branch,
+          institution: values.schoolName,
+          startYear: values.startDate,
+          endYear: values.endDate,
         })).unwrap();
         Swal.fire({
           title: "Success!",
@@ -324,7 +324,7 @@ function Profile() {
           </Form.Item>
           <Form.Item
             label="Field of Study"
-            name="fieldOfStudy"
+            name="branch"
             rules={[{ required: true, message: "Please enter the field of study" }]}
           >
             <Input />

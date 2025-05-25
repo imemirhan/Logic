@@ -19,7 +19,7 @@ public class Job : BaseEntity, IAggregateRoot
     public bool IsRemote { get; private set; }
     public JobStatus Status { get; private set; }
     public int ApplicantCount { get; private set; } = 0;
-    
+    public string? Tags { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
@@ -30,7 +30,7 @@ public class Job : BaseEntity, IAggregateRoot
 
     public Job(DateTime createdAt, int employerId, string title, string description, string location,
                EmploymentType employmentType, decimal salaryRange, DateTime postedDate,
-               DateTime expirationDate, bool isRemote = false)
+               DateTime expirationDate, bool isRemote = false, string? tags = null)
     {
         Guard.Against.Null(createdAt, nameof(createdAt));
         Guard.Against.NullOrEmpty(title, nameof(title));
@@ -61,6 +61,7 @@ public class Job : BaseEntity, IAggregateRoot
         ExpirationDate = expirationDate;
         IsRemote = isRemote;
         Status = JobStatus.Open;
+        Tags = tags;
     }
 
     public void UpdateJobInfo(
@@ -71,7 +72,8 @@ public class Job : BaseEntity, IAggregateRoot
         long salaryRange,
         DateTime expirationDate,
         bool isRemote,
-        JobStatus status)
+        JobStatus status,
+        string? tags = null)
     {
         Title = title;
         Description = description;
@@ -82,6 +84,7 @@ public class Job : BaseEntity, IAggregateRoot
         IsRemote = isRemote;
         Status = status;
         UpdatedAt = DateTime.UtcNow;
+        Tags = tags ?? Tags;
     }
 
 

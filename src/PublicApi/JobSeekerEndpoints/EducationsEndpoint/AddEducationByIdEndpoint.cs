@@ -44,7 +44,7 @@ public class AddEducationByIdEndpoint : IEndpoint<IResult, AddEducationByIdReque
         if (jobSeeker == null)
             return Results.NotFound($"JobSeeker with ID {request.JobSeekerId} not found");
 
-        var newEducation = new Education(request.JobSeekerId, request.Degree, request.Institution, request.StartYear, request.GraduationYear);
+        var newEducation = new Education(request.JobSeekerId, request.Degree, request.Branch, request.Institution, request.StartDate, request.GraduationDate);
     
         jobSeeker.AddEducation(newEducation);
     

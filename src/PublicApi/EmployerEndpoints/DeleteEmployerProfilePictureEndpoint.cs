@@ -2,7 +2,6 @@
 using CloudinaryDotNet.Actions;
 using ApplicationCore.Entities.EmployerAggregate;
 using ApplicationCore.Interfaces;
-using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;

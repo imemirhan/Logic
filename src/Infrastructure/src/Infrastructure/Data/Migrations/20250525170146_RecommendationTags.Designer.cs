@@ -3,17 +3,20 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Infrastructure.Data.Migrations
+namespace Infrastructure.src.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250525170146_RecommendationTags")]
+    partial class RecommendationTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,10 +44,6 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Facebook")
                         .HasColumnType("text");
 
@@ -66,10 +65,6 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -219,8 +214,8 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("GraduationDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("GraduationYear")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Institution")
                         .IsRequired()
@@ -229,8 +224,8 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("JobSeekerId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("StartYear")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

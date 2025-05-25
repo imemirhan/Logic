@@ -4,24 +4,23 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using MinimalApi.Endpoint;
 
 namespace PublicApi.JobEndpoints;
 
-public class UpdateJobEndpoint : IEndpoint<IResult, UpdateJobRequest, IRepository<Job>>
+public class UpdateJobEndpoint : IEndpoint<IResult, UpdateJobRequest, IRepository<Job>, ITagGeneratorService>
 {
     public UpdateJobEndpoint() { }
 
     public void AddRoute(IEndpointRouteBuilder app)
     {
-        app.MapPut("api/jobs", 
-            [Authorize(Roles = Shared.Authorization.Constants.Roles.EMPLOYER, 
+        app.MapPut("api/jobs",
+            [Authorize(Roles = Shared.Authorization.Constants.Roles.EMPLOYER,
                 AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-            async (UpdateJobRequest request, IRepository<Job> jobRepo) =>
+            async (UpdateJobRequest request, IRepository<Job> jobRepo, ITagGeneratorService tagGenerator) =>
             {
-                return await HandleAsync(request, jobRepo);
+                return await HandleAsync(request, jobRepo, tagGenerator);
             })
         .WithName("UpdateJob")
         .WithDescription("Updates an existing job listing")
@@ -29,7 +28,7 @@ public class UpdateJobEndpoint : IEndpoint<IResult, UpdateJobRequest, IRepositor
         .WithTags("Job Endpoints");
     }
 
-    public async Task<IResult> HandleAsync(UpdateJobRequest request, IRepository<Job> jobRepo)
+    public async Task<IResult> HandleAsync(UpdateJobRequest request, IRepository<Job> jobRepo, ITagGeneratorService tagGenerator)
     {
         var response = new UpdateJobResponse(request.CorrelationId());
 
@@ -38,7 +37,6 @@ public class UpdateJobEndpoint : IEndpoint<IResult, UpdateJobRequest, IRepositor
         {
             return Results.NotFound($"Job with ID {request.Id} not found.");
         }
-        
 
         existingJob.UpdateJobInfo(
             request.Title,
@@ -51,6 +49,8 @@ public class UpdateJobEndpoint : IEndpoint<IResult, UpdateJobRequest, IRepositor
             request.Status
         );
 
+        // Safely recompute tags based on updated job
+        existingJob.Tags = tagGenerator.GenerateTagsForJob(existingJob);
 
         await jobRepo.UpdateAsync(existingJob);
 
@@ -69,7 +69,7 @@ public class UpdateJobEndpoint : IEndpoint<IResult, UpdateJobRequest, IRepositor
             Status = existingJob.Status,
             ApplicantCount = existingJob.ApplicantCount,
             CreatedAt = existingJob.CreatedAt,
-            UpdatedAt = existingJob.UpdatedAt
+            UpdatedAt = existingJob.UpdatedAt,
         };
 
         return Results.Ok(response);
