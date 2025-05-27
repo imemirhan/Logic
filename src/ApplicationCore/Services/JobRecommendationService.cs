@@ -53,6 +53,10 @@ public class JobRecommendationService : IJobRecommendationService
 
         foreach (var job in validJobs)
         {
+            if (job.Id == 18)
+            {
+                Console.WriteLine("Hi");
+            }
             if (string.IsNullOrEmpty(job.Tags))
             {
                 job.Tags = _tagGeneratorService.GenerateTagsForJob(job);
@@ -76,7 +80,7 @@ public class JobRecommendationService : IJobRecommendationService
                 score += RemoteMatchPoints;
             }
 
-            if (score > 0)
+            if (score > 5)
             {
                 scoredJobs.Add((job, score));
             }

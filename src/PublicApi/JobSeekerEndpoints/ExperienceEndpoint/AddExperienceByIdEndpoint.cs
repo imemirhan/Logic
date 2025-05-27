@@ -40,9 +40,15 @@ public class AddExperienceByIdEndpoint : IEndpoint<IResult, AddExperienceByIdReq
 
         if (jobSeeker == null)
             return Results.NotFound($"JobSeeker with ID {request.JobSeekerId} not found");
-
+        
+        if (request.EndDate is null) 
+            request.StillWorking = true;
+        var startDateUtc = DateTime.SpecifyKind(request.StartDate, DateTimeKind.Utc);
+        DateTime? endDateUtc = request.EndDate.HasValue 
+            ? DateTime.SpecifyKind(request.EndDate.Value, DateTimeKind.Utc)
+            : null;
         // Create a new Experience entry
-        var newExperience = new Experience(request.JobSeekerId, request.Title, request.Company, request.Years);
+        var newExperience = new Experience(request.JobSeekerId, request.Title, request.Company, startDateUtc, request.StillWorking, endDateUtc);
 
         // Set the JobSeekerId using reflection
         newExperience.GetType().GetProperty(nameof(Experience.JobSeekerId))?.SetValue(newExperience, request.JobSeekerId);
@@ -53,7 +59,7 @@ public class AddExperienceByIdEndpoint : IEndpoint<IResult, AddExperienceByIdReq
         // Save changes
         await jobSeekerRepository.UpdateAsync(jobSeeker);
         await jobSeekerRepository.SaveChangesAsync();
-
+        
         return Results.Created($"/api/experiences/{request.JobSeekerId}/{newExperience.Id}", 
             new AddExperienceByIdResponse 
             { 
@@ -62,7 +68,9 @@ public class AddExperienceByIdEndpoint : IEndpoint<IResult, AddExperienceByIdReq
                     Id = newExperience.Id,
                     Title = newExperience.Title,
                     Company = newExperience.Company,
-                    Years = newExperience.Years,
+                    StartDate = newExperience.StartDate,
+                    EndDate = newExperience.EndDate,
+                    StillWorking = newExperience.StillWorking,
                     JobSeekerId = request.JobSeekerId
                 }
             });

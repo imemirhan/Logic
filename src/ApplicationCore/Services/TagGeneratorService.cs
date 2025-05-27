@@ -10,7 +10,13 @@ public class TagGeneratorService : ITagGeneratorService
 {
     private static readonly HashSet<string> StopWords = new()
     {
-        "the", "at", "and", "for", "to", "in", "a", "an", "of", "on", "with", "as", "by", "is", "are"
+        "the", "at", "and", "for", "to", "in", "a", "an", "of", "on", "with", "as", "by", "is", "are",
+        "be", "been", "was", "were", "this", "that", "these", "those", "it", "its", "but", "or",
+        "so", "because", "about", "from", "into", "up", "down", "over", "under", "again", "further",
+        "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each",
+        "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same",
+        "than", "too", "very", "can", "will", "just", "don't", "should", "now", "who", "want", "good",
+        "wants"
     };
 
     public string GenerateTagsForJob(Job job)
@@ -24,20 +30,24 @@ public class TagGeneratorService : ITagGeneratorService
 
         // Skills
         if (jobSeeker.Skills != null)
-            tags.AddRange(jobSeeker.Skills.Select(s => s.Title.ToLower()));
-        
+            tags.AddRange(jobSeeker.Skills.SelectMany(s => ExtractKeywords(s.Title.ToLower())));
+
         // Experiences
         if (jobSeeker.Experiences != null)
         {
-            tags.AddRange(jobSeeker.Experiences.Select(e => e.Title.ToLower()));
-            tags.AddRange(jobSeeker.Experiences.Select(e => e.Company.ToLower()));
+            tags.AddRange(jobSeeker.Experiences.SelectMany(e => ExtractKeywords(e.Title.ToLower())));
+            tags.AddRange(jobSeeker.Experiences.SelectMany(e => ExtractKeywords(e.Company.ToLower())));
         }
+
+        // About Me
+        if (!string.IsNullOrWhiteSpace(jobSeeker.AboutMe))
+            tags.AddRange(ExtractKeywords(jobSeeker.AboutMe.ToLower()));
 
         // Educations
         if (jobSeeker.Educations != null)
         {
-            tags.AddRange(jobSeeker.Educations.Select(ed => ed.Degree.ToLower()));
-            tags.AddRange(jobSeeker.Educations.Select(ed => ed.Institution.ToLower()));
+            tags.AddRange(jobSeeker.Educations.SelectMany(ed => ExtractKeywords(ed.Degree.ToLower())));
+            tags.AddRange(jobSeeker.Educations.SelectMany(ed => ExtractKeywords(ed.Institution.ToLower())));
         }
 
         // Preferred Location
@@ -48,13 +58,12 @@ public class TagGeneratorService : ITagGeneratorService
         if (jobSeeker.OpenToRemote)
             tags.Add("remote");
 
-        // Remove duplicates
-        var distinctTags = tags.Distinct();
-
-        // Join with your delimiter
-        return string.Join(";", distinctTags);
+        // Remove duplicates and return as a single semicolon-delimited string
+        return string.Join(";", tags
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .Select(t => t.Trim())
+            .Distinct());
     }
-
 
     private List<string> ExtractKeywords(string text)
     {

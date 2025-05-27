@@ -29,6 +29,7 @@ import {
   Tooltip,
   Upload,
   Spin,
+  Checkbox,
   Tag,
 } from "antd";
 import Swal from "sweetalert2";
@@ -49,6 +50,10 @@ function Profile() {
   const { resumeUrl, status: resumeStatus } = useSelector((state) => state.jobSeekerResume);
   const [resumeFile, setResumeFile] = useState(null);
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
+  const [stillWorking, setStillWorking] = useState(false);
+  useEffect(() => {
+  form.setFieldsValue({ endDate: stillWorking ? null : form.getFieldValue("endDate") });
+}, [stillWorking]);
   const { skills } = useSelector((state) => state.skills);
   const { educations } = useSelector((state) => state.education);
   const { experiences } = useSelector((state) => state.experience);
@@ -112,9 +117,10 @@ function Profile() {
       } else if (activeModal === "Experience") {
         await dispatch(addExperience({
           jobSeekerId: user.id,
-          companyName: values.companyName,
-          position: values.position,
+          company: values.company,
+          title: values.title,
           startDate: values.startDate,
+          stillWorking: values.stillWorking,
           endDate: values.endDate,
         })).unwrap();
         Swal.fire({
@@ -351,14 +357,14 @@ function Profile() {
         <>
           <Form.Item
             label="Company Name"
-            name="companyName"
+            name="company"
             rules={[{ required: true, message: "Please enter the company name" }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             label="Position"
-            name="position"
+            name="title"
             rules={[{ required: true, message: "Please enter the position" }]}
           >
             <Input />
@@ -370,13 +376,26 @@ function Profile() {
           >
             <Input type="date" />
           </Form.Item>
-          <Form.Item
-            label="End Date"
-            name="endDate"
-            rules={[{ required: true, message: "Please select the end date" }]}
-          >
-            <Input type="date" />
+           <Form.Item>
+            <Checkbox
+              checked={stillWorking}
+              onChange={(e) => setStillWorking(e.target.checked)}
+            >
+              I am currently working here
+            </Checkbox>
           </Form.Item>
+          <Form.Item
+          label="End Date"
+          name="endDate"
+          rules={[
+            {
+              required: !stillWorking,
+              message: "Please select the end date",
+            },
+          ]}
+        >
+          <Input type="date" disabled={stillWorking} />
+        </Form.Item>
         </>
       );
     }
@@ -682,15 +701,31 @@ function Profile() {
                     maxWidth: 400,
                   }}
                 >
-                  {console.log("Experience:", exp.id)}
+                  {console.log("Experience:", exp)}
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 15, fontWeight: 600, color: "#1976d2" }}>
-                      Şirket: {exp.company || "Company"}
-                      {exp.title && <><br/>Konum: {exp.title}</>}
+                      Company: {exp.company || "Company"}
+                      {exp.title && <><br/>Position: {exp.title}</>}
                     </div>
                     <div style={{ fontSize: 13, color: "#888" }}>
-                      {exp.years && <>Geçirilien yıl: {exp.years}</>}
-                      {exp.endDate && <> - {exp.endDate}</>}
+                      Date:
+                      {exp.startDate && (
+                        <>: {new Date(exp.startDate).toLocaleDateString(undefined, {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}</>
+                      )}
+                      {" "}
+                      {exp.stillWorking ? (
+                        <>- Working</>
+                      ) : exp.endDate && (
+                        <>- {new Date(exp.endDate).toLocaleDateString(undefined, {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}</>
+                      )}
                     </div>
                   </div>
                   <Button

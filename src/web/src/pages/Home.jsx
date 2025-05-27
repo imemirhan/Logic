@@ -12,6 +12,8 @@ import { faSearch, faMapMarkerAlt, faPlus } from "@fortawesome/free-solid-svg-ic
 import feature1 from "../assets/feature1.jpg";
 import feature2 from "../assets/feature2.jpg";
 import feature3 from "../assets/feature3.jpg";
+import { fetchRecommendedJobs } from "../store/slices/getRecommendedJobSlice";
+
 
 const { Title, Paragraph } = Typography;
 
@@ -34,6 +36,13 @@ function Home() {
     navigate(`/browse?${queryParams.toString()}`);
   };
   const { user } = useSelector((state) => state.userSlice);
+  const { jobs: recommendedJobs } = useSelector((state) => state.getRecommendedJobs);
+  useEffect(() => {
+  if (user?.id) {
+    dispatch(fetchRecommendedJobs(user.id));
+  }
+}, [dispatch, user?.id]);
+  console.log("Recommended Jobs:", recommendedJobs);
   const recentJobs = [
     {
       title: "Software Engineer",
@@ -62,6 +71,11 @@ function Home() {
     }, 7000);
     return () => clearInterval(interval);
   }, []);
+
+  const jobsToShow =
+    user?.role === 0 && Array.isArray(recommendedJobs) && recommendedJobs.length > 0
+      ? recommendedJobs
+      : recentJobs;
   return (
     <div className={styles.homeContainer}>
       {/* Hero Section */}
@@ -146,36 +160,37 @@ function Home() {
             <br />
             <br />
             <br />
-            {/* Recent Jobs Carousel */}
-      <div className={styles.carouselSection}>
-        <Title level={2} className={styles.carouselTitle}>
-          Recent Jobs
-        </Title>
-        <Carousel
-          ref={carouselRef}
-          autoplay={false}
-          dots
-          className={styles.carousel}
-          arrows
-        >
-          {recentJobs.map((job, index) => (
-            <div key={index} className={styles.carouselItem}>
-              <Title level={4} className={styles.jobTitle}>
-                {job.title}
+           <div className={styles.carouselSection}>
+              <Title level={2} className={styles.carouselTitle}>
+                {user?.role === 0 && jobsToShow === recommendedJobs && recommendedJobs.length > 0
+                  ? "Recommended Jobs For You"
+                  : "Recent Jobs"}
               </Title>
-              <Paragraph className={styles.jobCompany}>
-                <strong>Company:</strong> {job.company}
-              </Paragraph>
-              <Paragraph className={styles.jobLocation}>
-                <strong>Location:</strong> {job.location}
-              </Paragraph>
-              <Paragraph className={styles.jobDescription}>
-                {job.description}
-              </Paragraph>
+              <Carousel
+                ref={carouselRef}
+                autoplay={false}
+                dots
+                className={styles.carousel}
+                arrows
+              >
+                {jobsToShow.map((job, index) => (
+                  <div key={index} className={styles.carouselItem}>
+                    <Title level={4} className={styles.jobTitle}>
+                      {job.title}
+                    </Title>
+                    <Paragraph className={styles.jobCompany}>
+                      <strong>Company:</strong> {job.company || job.companyName}
+                    </Paragraph>
+                    <Paragraph className={styles.jobLocation}>
+                      <strong>Location:</strong> {job.location}
+                    </Paragraph>
+                    <Paragraph className={styles.jobDescription}>
+                      {job.description}
+                    </Paragraph>
+                  </div>
+                ))}
+              </Carousel>
             </div>
-          ))}
-        </Carousel>
-      </div>
             <br />
             <br />
             <br />
