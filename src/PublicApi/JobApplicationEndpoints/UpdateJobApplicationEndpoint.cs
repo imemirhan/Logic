@@ -44,14 +44,6 @@ public class UpdateJobApplicationEndpoint
         if (dto.Status.HasValue)
             jobApp.UpdateStatus(dto.Status.Value);
 
-        if (dto.InterviewScheduledDate.HasValue)
-            jobApp.ScheduleInterview(dto.InterviewScheduledDate.Value, dto.InterviewNotes);
-        else if (dto.InterviewScheduledDate == null && jobApp.InterviewScheduledDate != null)
-            jobApp.CancelInterview();
-
-        if (!string.IsNullOrWhiteSpace(dto.EmployerFeedback))
-            jobApp.AddEmployerFeedback(dto.EmployerFeedback);
-
         await repo.UpdateAsync(jobApp);
 
         response.JobApplication = new JobApplicationReadDto
@@ -62,9 +54,6 @@ public class UpdateJobApplicationEndpoint
             EmployerId = jobApp.EmployerId,
             CoverLetter = jobApp.CoverLetter,
             Status = jobApp.Status,
-            InterviewScheduledDate = jobApp.InterviewScheduledDate,
-            InterviewNotes = jobApp.InterviewNotes,
-            EmployerFeedback = jobApp.EmployerFeedback,
             CreatedAt = jobApp.CreatedAt,
             UpdatedAt = jobApp.UpdatedAt
         };

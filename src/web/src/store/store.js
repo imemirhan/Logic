@@ -26,6 +26,8 @@ import experienceReducer from "./slices/experienceSlice";
 import getJobApplicationsReducer from "./slices/getJobApplicationsSlice";
 import jobSeekerResumeReducer from "./slices/jobSeekerResumeSlice";
 import getRecommendedJobReducer from "./slices/getRecommendedJobSlice";
+import interviewReducer from './slices/interviewSlice';
+import jobSeekerNotificationsReducer from './slices/notificationSlice';
 
 
 const persistConfig = {
@@ -50,6 +52,8 @@ const rootReducer = combineReducers({
   experience: experienceReducer,
   jobSeekerResume: jobSeekerResumeReducer,
   getRecommendedJobs: getRecommendedJobReducer,
+  interviews: interviewReducer,
+  jobSeekerNotifications: jobSeekerNotificationsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

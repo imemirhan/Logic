@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using ApplicationCore.Entities;
 using ApplicationCore.Entities.EmployerAggregate;
+using ApplicationCore.Entities.InterviewAggregate;
 using ApplicationCore.Entities.JobAggregate;
 using ApplicationCore.Entities.JobSeekerAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,8 @@ public class AppDbContext : DbContext
     public DbSet<Skill> Skills { get; set; }
     public DbSet<Education> Educations { get; set; }
     public DbSet<Experience> Experiences { get; set; }
+    public DbSet<Interviews> Interviews { get; set; }
+    public DbSet<JobSeekerNotifications> JobSeekerNotifications { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

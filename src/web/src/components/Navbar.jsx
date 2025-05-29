@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Layout, Button, Dropdown, Avatar, Drawer } from "antd";
+import React, { useState, useRef, useEffect } from "react";
+import { Layout, Button, Dropdown, Avatar, Drawer, List, Divider } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../store/slices/userSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -10,18 +10,26 @@ import {
   AppstoreOutlined,
   MenuOutlined,
 } from "@ant-design/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-regular-svg-icons";
 import styles from "./styles/Navbar.module.css";
 import Swal from "sweetalert2";
+import { getNotOpenedNotificationsByJobSeekerId } from "../store/slices/notificationSlice"; // adjust path as needed
 
 const { Header } = Layout;
 
 function Navbar() {
   const { user } = useSelector((state) => state.userSlice);
+  const notifications = useSelector((state) => state.jobSeekerNotifications.notifications || []);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const isLoggedIn = user !== null;
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // New state to toggle notifications dropdown visibility
+  const [notifVisible, setNotifVisible] = useState(false);
+  const notifRef = useRef(null);
 
   const handleLogout = () => {
     Swal.fire({
@@ -45,7 +53,6 @@ function Navbar() {
     { key: "3", label: <span onClick={handleLogout}>Logout</span> },
   ].filter(Boolean);
 
-  // Navigation links for both desktop and mobile
   const navLinks = (
     <>
       <Link
@@ -78,6 +85,27 @@ function Navbar() {
       </Link>
     </>
   );
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(getNotOpenedNotificationsByJobSeekerId(user.id));
+    }
+  }, [user, dispatch]);
+  // Close notifications dropdown if clicked outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setNotifVisible(false);
+      }
+    }
+    if (notifVisible) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [notifVisible]);
 
   return (
     <Layout>
@@ -97,7 +125,7 @@ function Navbar() {
             aria-label="Open navigation menu"
           />
         </div>
-        <div className={styles.buttons}>
+        <div className={styles.buttons} style={{ display: "flex", alignItems: "center", gap: 16 }}>
           {!isLoggedIn ? (
             <Button type="primary" className={styles.navButton}>
               <Link to="/login" className={styles.buttonLink}>
@@ -105,21 +133,90 @@ function Navbar() {
               </Link>
             </Button>
           ) : (
-            <Dropdown menu={{ items: menuItems }} trigger={['click']}>
-              <span className={styles.userDropdown}>
-                <span className={styles.userName}>
-                  {`${user.name} ${user.lastName || user.surname || ""}`.trim() || "User"}
+            <>
+              {/* Notification bell icon */}
+              <div
+                ref={notifRef}
+                style={{ position: "relative", cursor: "pointer" }}
+                onClick={() => setNotifVisible((v) => !v)}
+                aria-label="Toggle notifications dropdown"
+              >
+                <FontAwesomeIcon style={{color: "white"}} icon={faBell} size="lg" />
+                {/* Red badge circle */}
+                {notifications?.length > 0 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      right: 0,
+                      width: 10,
+                      height: 10,
+                      backgroundColor: "red",
+                      borderRadius: "50%",
+                      border: "2px solid white",
+                    }}
+                  />
+                )}
+                {/* You can add a badge here if you want */}
+                {notifVisible && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      marginTop: 8,
+                      width: 280,
+                      maxHeight: 320,
+                      overflowY: "auto",
+                      backgroundColor: "#fff",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                      borderRadius: 4,
+                      zIndex: 1000,
+                      padding: 8,
+                    }}
+                  >
+                    <List
+                      size="small"
+                      dataSource={notifications}
+                      locale={{ emptyText: "No notifications" }}
+                      renderItem={(item) => (
+                        <List.Item>
+                          <List.Item.Meta
+                            title={item.message}
+                            description={new Date(item.createdAt).toLocaleString()}
+                          />
+                        </List.Item>
+                      )}
+                    />
+                    <Divider style={{ margin: "8px 0" }} />
+                    <Button
+                      type="link"
+                      style={{ width: "100%", textAlign: "center" }}
+                      onClick={() => {
+                        // Will implement in next prompt
+                        setNotifVisible(false);
+                      }}
+                    >
+                      See All
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
+                <span className={styles.userDropdown} style={{ marginLeft: 16 }}>
+                  <span className={styles.userName}>
+                    {`${user.name} ${user.lastName || user.surname || ""}`.trim() || "User"}
+                  </span>
+                  <Avatar
+                    src={user.profileImageUrl || "https://picsum.photos/200/300"}
+                    alt="User"
+                    className={styles.avatar}
+                  />
                 </span>
-                <Avatar
-                  src={user.profileImageUrl || "https://picsum.photos/200/300"}
-                  alt="User"
-                  className={styles.avatar}
-                />
-              </span>
-            </Dropdown>
+              </Dropdown>
+            </>
           )}
         </div>
-        {/* Drawer for mobile navigation */}
         <Drawer
           title="Menu"
           placement="right"
@@ -144,18 +241,20 @@ function Navbar() {
                   Sign In
                 </Button>
               ) : (
-                <Dropdown menu={{ items: menuItems }} trigger={['click']}>
-                  <span className={styles.userDropdown} style={{ marginTop: 16 }}>
-                    <span className={styles.userName}>
-                      {`${user.name} ${user.lastName || user.surname || ""}`.trim() || "User"}
+                <>
+                  <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
+                    <span className={styles.userDropdown} style={{ marginTop: 16 }}>
+                      <span className={styles.userName}>
+                        {`${user.name} ${user.lastName || user.surname || ""}`.trim() || "User"}
+                      </span>
+                      <Avatar
+                        src={user.profileImageUrl || "https://picsum.photos/200/300"}
+                        alt="User"
+                        className={styles.avatar}
+                      />
                     </span>
-                    <Avatar
-                      src={user.profileImageUrl || "https://picsum.photos/200/300"}
-                      alt="User"
-                      className={styles.avatar}
-                    />
-                  </span>
-                </Dropdown>
+                  </Dropdown>
+                </>
               )}
             </div>
           </div>

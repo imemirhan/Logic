@@ -66,9 +66,6 @@ public class CreateJobApplicationEndpoint
             EmployerId = created.EmployerId,
             CoverLetter = created.CoverLetter,
             Status = created.Status,
-            InterviewScheduledDate = created.InterviewScheduledDate,
-            InterviewNotes = created.InterviewNotes,
-            EmployerFeedback = created.EmployerFeedback,
             CreatedAt = created.CreatedAt,
             UpdatedAt = created.UpdatedAt
         };

@@ -18,10 +18,6 @@ public class JobApplication : BaseEntity, IAggregateRoot
     
     public string? CoverLetter { get; private set; }
     public ApplicationStatus Status { get; private set; } = ApplicationStatus.Submitted;
-    public DateTime? InterviewScheduledDate { get; private set; }
-    public string? InterviewNotes { get; private set; }
-
-    public string? EmployerFeedback { get; private set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
@@ -51,32 +47,6 @@ public class JobApplication : BaseEntity, IAggregateRoot
             throw new ArgumentException("Invalid application status.");
         }
         Status = newStatus;
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    public void ScheduleInterview(DateTime interviewDate, string? notes = null)
-    {
-        Guard.Against.Default(interviewDate, nameof(interviewDate));
-
-        if (interviewDate <= DateTime.UtcNow)
-            throw new ArgumentException("Interview date must be in the future.");
-
-        InterviewScheduledDate = interviewDate;
-        InterviewNotes = notes;
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    public void AddEmployerFeedback(string feedback)
-    {
-        Guard.Against.NullOrEmpty(feedback, nameof(feedback));
-        EmployerFeedback = feedback;
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    public void CancelInterview()
-    {
-        InterviewScheduledDate = null;
-        InterviewNotes = null;
         UpdatedAt = DateTime.UtcNow;
     }
 

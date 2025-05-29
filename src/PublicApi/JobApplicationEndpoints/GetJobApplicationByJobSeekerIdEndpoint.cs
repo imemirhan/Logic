@@ -42,9 +42,6 @@ public class GetJobApplicationsByJobSeekerIdEndpoint
             Employer = app.Employer,
             CoverLetter = app.CoverLetter,
             Status = app.Status,
-            InterviewScheduledDate = app.InterviewScheduledDate,
-            InterviewNotes = app.InterviewNotes,
-            EmployerFeedback = app.EmployerFeedback,
             CreatedAt = app.CreatedAt,
             UpdatedAt = app.UpdatedAt
         }).ToList();

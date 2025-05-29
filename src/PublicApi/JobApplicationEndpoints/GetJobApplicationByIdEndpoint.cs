@@ -41,9 +41,6 @@ public class GetJobApplicationByIdEndpoint
             EmployerId = jobApp.EmployerId,
             CoverLetter = jobApp.CoverLetter,
             Status = jobApp.Status,
-            InterviewScheduledDate = jobApp.InterviewScheduledDate,
-            InterviewNotes = jobApp.InterviewNotes,
-            EmployerFeedback = jobApp.EmployerFeedback,
             CreatedAt = jobApp.CreatedAt,
             UpdatedAt = jobApp.UpdatedAt
         };
