@@ -33,14 +33,13 @@ public class CreateInterviewEndpoint
         IRepository<Interviews> repo)
     {
         var response = new CreateInterviewResponse(request.CorrelationId());
-        var dto = request.Interview;
 
         var interview = new Interviews(
-            jobId: dto.JobId,
-            employerId: dto.EmployerId,
-            jobSeekerId: dto.JobSeekerId,
-            interViewLink: dto.InterviewLink,
-            interviewScheduledDate: dto.InterviewScheduledDate
+            jobId: request.JobId,
+            employerId: request.EmployerId,
+            jobSeekerId: request.JobSeekerId,
+            interViewLink: request.InterViewLink,
+            interviewScheduledDate: request.InterviewScheduledDate
         );
 
         var created = await repo.AddAsync(interview);

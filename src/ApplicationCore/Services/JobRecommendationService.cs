@@ -53,10 +53,6 @@ public class JobRecommendationService : IJobRecommendationService
 
         foreach (var job in validJobs)
         {
-            if (job.Id == 18)
-            {
-                Console.WriteLine("Hi");
-            }
             if (string.IsNullOrEmpty(job.Tags))
             {
                 job.Tags = _tagGeneratorService.GenerateTagsForJob(job);

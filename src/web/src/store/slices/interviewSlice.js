@@ -5,7 +5,15 @@ import api from "../../services/api";
 export const fetchInterviewById = createAsyncThunk(
   'interviews/fetchById',
   async (interviewId, thunkAPI) => {
-    const response = await api.get(`/api/interviews/${interviewId}`);
+    const response = await api.get(`/interviews/${interviewId}`);
+    return response.data.interview;
+  }
+);
+
+export const fetchInterviewByJobSeekerId = createAsyncThunk(
+  'interviews/fetchByJobSeekerId',
+  async (jobSeekerId, thunkAPI) => {
+    const response = await api.get(`/interviews/${jobSeekerId}`);
     return response.data.interview;
   }
 );
@@ -13,7 +21,7 @@ export const fetchInterviewById = createAsyncThunk(
 export const createInterview = createAsyncThunk(
   'interviews/create',
   async (interviewData, thunkAPI) => {
-    const response = await api.post('/api/interviews', interviewData);
+    const response = await api.post('/interviews', interviewData);
     return response.data.interview;
   }
 );
@@ -21,7 +29,8 @@ export const createInterview = createAsyncThunk(
 export const updateInterview = createAsyncThunk(
   'interviews/update',
   async ({ id, data }, thunkAPI) => {
-    const response = await api.put(`/api/interviews/${id}`, data);
+    console.log("Updating interview with ID:", id, "and data:", data);
+    const response = await api.put(`/interviews/${id}`, data);
     return response.data.interview;
   }
 );
@@ -29,7 +38,7 @@ export const updateInterview = createAsyncThunk(
 export const cancelInterview = createAsyncThunk(
   'interviews/cancel',
   async (interviewId, thunkAPI) => {
-    const response = await api.delete(`/api/interviews/${interviewId}`);
+    const response = await api.delete(`/interviews/${interviewId}`);
     return interviewId; // just return id for removing or marking canceled in state
   }
 );

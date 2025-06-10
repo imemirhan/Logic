@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Layout, Button, Dropdown, Avatar, Drawer, List, Divider } from "antd";
+import { Badge, Layout, Button, Dropdown, Avatar, Drawer, List, Divider } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../store/slices/userSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -14,13 +14,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import styles from "./styles/Navbar.module.css";
 import Swal from "sweetalert2";
-import { getNotOpenedNotificationsByJobSeekerId } from "../store/slices/notificationSlice"; // adjust path as needed
+import { selectUnopenedNotifications, getNotOpenedNotificationsByJobSeekerId } from "../store/slices/notificationSlice";
 
 const { Header } = Layout;
 
 function Navbar() {
   const { user } = useSelector((state) => state.userSlice);
-  const notifications = useSelector((state) => state.jobSeekerNotifications.notifications || []);
+  const notifications = useSelector(selectUnopenedNotifications);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -106,7 +106,7 @@ function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [notifVisible]);
-
+console.log("Notifications:", notifications); 
   return (
     <Layout>
       <Header className={styles.header}>
@@ -147,8 +147,8 @@ function Navbar() {
                   <span
                     style={{
                       position: "absolute",
-                      bottom: 0,
-                      right: 0,
+                      bottom: 20,
+                      right: -5,
                       width: 10,
                       height: 10,
                       backgroundColor: "red",
@@ -192,7 +192,7 @@ function Navbar() {
                       type="link"
                       style={{ width: "100%", textAlign: "center" }}
                       onClick={() => {
-                        // Will implement in next prompt
+                        navigate("/notifications");
                         setNotifVisible(false);
                       }}
                     >

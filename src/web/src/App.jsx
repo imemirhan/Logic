@@ -18,6 +18,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CreateJob from "./pages/CreateJob";
 import JobPostings from "./pages/JobPostings";
 import JobApplicants from "./pages/JobApplicants";
+import Notifications from "./pages/Notifications";
 import { useSelector } from "react-redux";
 function App() {
   const user = useSelector((state) => state.userSlice.user);
@@ -39,6 +40,12 @@ function App() {
           path="/profile/applications"
           element={
             user?.role === 0 ? <AppliedJobs /> : <NotFound />
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            user?.role === 0 ? <ProtectedRoute><Notifications /></ProtectedRoute> : <NotFound />
           }
         />
         <Route

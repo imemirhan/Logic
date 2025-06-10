@@ -16,7 +16,7 @@ export const createJobSeekerNotification = createAsyncThunk(
 export const getNotificationsByJobSeekerId = createAsyncThunk(
   'notifications/getByJobSeekerId',
   async (jobSeekerId, thunkAPI) => {
-    const response = await api.get(`jobseeker-notifications/jobseeker/${jobSeekerId}`);
+    const response = await api.get(`jobseeker-notifications/${jobSeekerId}`);
     return response.data.notifications;
   }
 );
@@ -25,7 +25,7 @@ export const getNotificationsByJobSeekerId = createAsyncThunk(
 export const getNotOpenedNotificationsByJobSeekerId = createAsyncThunk(
   'notifications/getNotOpenedByJobSeekerId',
   async (jobSeekerId, thunkAPI) => {
-    const response = await api.get(`jobseeker-notifications/jobseeker/${jobSeekerId}/not-opened`);
+    const response = await api.get(`jobseeker-notifications/${jobSeekerId}/not-opened`);
     return response.data.notifications;
   }
 );

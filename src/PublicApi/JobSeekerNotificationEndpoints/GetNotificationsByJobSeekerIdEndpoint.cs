@@ -46,6 +46,7 @@ public class GetNotificationsByJobSeekerIdEndpoint
                 Status = n.Status,
                 InterviewId = n.InterviewId,
                 IsOpened = n.IsOpened,
+                Message =  n.Message,
                 CreatedAt = n.CreatedAt
             }).ToList()
         };

@@ -44,6 +44,7 @@ public class GetNotOpenedNotificationsByJobSeekerEndpoint
                 ForStatus = n.ForStatus,
                 ForInterview = n.ForInterview,
                 Status = n.Status,
+                Message = n.Message,
                 InterviewId = n.InterviewId,
                 IsOpened = n.IsOpened,
                 CreatedAt = n.CreatedAt

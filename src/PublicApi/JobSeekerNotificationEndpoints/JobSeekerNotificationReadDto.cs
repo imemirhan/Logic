@@ -11,7 +11,7 @@ public class JobSeekerNotificationReadDto
 
     public bool ForStatus { get; set; }
     public bool ForInterview { get; set; }
-
+    public string Message { get; set; }
     public JobApplication.ApplicationStatus? Status { get; set; }
     public long? InterviewId { get; set; }
     public bool IsOpened { get; set; }

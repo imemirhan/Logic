@@ -17,7 +17,7 @@ public class GetRecommendedJobsEndpoint : IEndpoint<IResult, GetRecommendedJobsR
 {
     public void AddRoute(IEndpointRouteBuilder app)
     {
-        app.MapPost("/jobseekers/{jobSeekerId}/recommendations", async (
+        app.MapPost("api/jobseekers/{jobSeekerId}/recommendations", async (
                 int jobSeekerId,
                 [FromBody] GetRecommendedJobsRequest request,
                 [FromServices] IJobRecommendationService recommendationService,

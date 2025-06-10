@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchApplicationsByEmployerId, updateJobApplication } from "../store/slices/jobApplicationSlice";
+import { createInterview } from "../store/slices/interviewSlice";
 import { useParams, useNavigate } from "react-router-dom";
-import { List, Card, Typography, Spin, Alert, Tag, Avatar, Divider, Modal, Form, Input, DatePicker, Select, Button, message} from "antd";
+import {
+  List, Card, Typography, Spin, Alert, Tag, Avatar, Divider, Modal, Form, Input, DatePicker, Select, Button, message
+} from "antd";
 import styles from "./styles/JobApplicants.module.css";
 import GoBack from "../components/GoBack";
 import Skill from "../components/Skill";
 import Education from "../components/Education";
 import Experience from "../components/Experience";
+import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLinkedin,
@@ -36,6 +40,10 @@ function JobApplicants() {
   const [selectedApp, setSelectedApp] = useState(null);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [showInterviewFields, setShowInterviewFields] = useState(false);
+  const [interviewLink, setInterviewLink] = useState("");
+  const [interviewDate, setInterviewDate] = useState(null);
+
   const { user } = useSelector((state) => state.userSlice);
   const {
     applicationsByEmployer,
@@ -68,11 +76,12 @@ function JobApplicants() {
 
   const jobApplicants = jobApplicationsArr.filter(app => String(app.jobId) === String(jobId));
 
-
-
   const handleEvaluate = (app) => {
     setSelectedApp(app);
     setModalVisible(true);
+    setShowInterviewFields(app.status === 2);
+    setInterviewLink("");
+    setInterviewDate(null);
     form.setFieldsValue({
       coverLetter: app.coverLetter || "",
       status: app.status ?? 0,
@@ -86,23 +95,46 @@ function JobApplicants() {
     try {
       setLoading(true);
       const values = await form.validateFields();
+
+      // If status is Interview Scheduled (2), create interview
+      if (values.status === 2) {
+        if (!interviewLink || !interviewDate) {
+          message.error("Please provide both interview link and date.");
+          setLoading(false);
+          return;
+        }
+        console.log("Dispatching interview with:", {
+        jobId: selectedApp?.id,
+        employerId: user?.id,
+        jobSeekerId: selectedApp?.jobSeekerId,
+        interViewLink: interviewLink,
+        interviewScheduledDate: interviewDate.toISOString(),
+      });
+        await dispatch(
+          createInterview({
+            jobId: selectedApp?.id,
+            employerId: user?.id,
+            jobSeekerId: selectedApp?.jobSeekerId,
+            interViewLink: interviewLink,
+            interviewScheduledDate: interviewDate.toISOString(),
+          })
+        ).unwrap();
+        message.success("Interview scheduled!");
+      }
+
+      // Always update the job application (but don't send interviewLink/interviewDate)
       await dispatch(updateJobApplication({
         id: selectedApp.id,
         updateData: {
           coverLetter: values.coverLetter,
           status: values.status,
-          interviewScheduledDate: values.interviewScheduledDate
-            ? values.interviewScheduledDate.toISOString()
-            : null,
-          interviewNotes: values.interviewNotes,
-          employerFeedback: values.employerFeedback,
         }
       })).unwrap();
+
       message.success("Application updated!");
       setModalVisible(false);
       setSelectedApp(null);
       setLoading(false);
-      // Optionally refresh applications
       dispatch(fetchApplicationsByEmployerId(user.id));
     } catch (err) {
       setLoading(false);
@@ -113,8 +145,12 @@ function JobApplicants() {
   const handleModalCancel = () => {
     setModalVisible(false);
     setSelectedApp(null);
+    setShowInterviewFields(false);
+    setInterviewLink("");
+    setInterviewDate(null);
+    form.resetFields();
   };
-
+  console.log(selectedApp);
   return (
     <>
       <div className={styles.applicantsWrapper}>
@@ -298,13 +334,26 @@ function JobApplicants() {
         onCancel={handleModalCancel}
         confirmLoading={loading}
         okText="Save"
+        destroyOnClose
       >
         <Form layout="vertical" form={form}>
           <Form.Item label="Cover Letter" name="coverLetter">
             <Input.TextArea rows={2} disabled />
           </Form.Item>
-          <Form.Item label="Status" name="status" rules={[{ required: true }]}>
-            <Select>
+          <Form.Item
+            label="Status"
+            name="status"
+            rules={[{ required: true, message: "Please select a status" }]}
+          >
+            <Select
+              onChange={(value) => {
+                setShowInterviewFields(value === 2);
+                if (value !== 2) {
+                  setInterviewLink("");
+                  setInterviewDate(null);
+                }
+              }}
+            >
               <Option value={0}>Submitted</Option>
               <Option value={1}>Under Review</Option>
               <Option value={2}>Interview Scheduled</Option>
@@ -313,15 +362,33 @@ function JobApplicants() {
               <Option value={5}>Rejected</Option>
             </Select>
           </Form.Item>
-          <Form.Item label="Interview Scheduled Date" name="interviewScheduledDate">
-            <DatePicker showTime style={{ width: "100%" }} />
-          </Form.Item>
-          <Form.Item label="Interview Notes" name="interviewNotes">
-            <Input.TextArea rows={2} />
-          </Form.Item>
-          <Form.Item label="Employer Feedback" name="employerFeedback">
-            <Input.TextArea rows={2} />
-          </Form.Item>
+          {showInterviewFields && (
+            <>
+              <Form.Item
+                label="Interview Link"
+                required
+                rules={[{ required: true, message: "Please enter the interview link" }]}
+              >
+                <Input
+                  value={interviewLink}
+                  onChange={e => setInterviewLink(e.target.value)}
+                  placeholder="Enter interview link"
+                />
+              </Form.Item>
+              <Form.Item
+                label="Interview Date"
+                required
+                rules={[{ required: true, message: "Please select the interview date" }]}
+              >
+                <DatePicker
+                  showTime
+                  value={interviewDate}
+                  onChange={setInterviewDate}
+                  style={{ width: "100%" }}
+                />
+              </Form.Item>
+            </>
+          )}
         </Form>
       </Modal>
     </>

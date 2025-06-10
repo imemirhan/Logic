@@ -42,7 +42,6 @@ function Home() {
     dispatch(fetchRecommendedJobs(user.id));
   }
 }, [dispatch, user?.id]);
-  console.log("Recommended Jobs:", recommendedJobs);
   const recentJobs = [
     {
       title: "Software Engineer",
@@ -73,8 +72,8 @@ function Home() {
   }, []);
 
   const jobsToShow =
-    user?.role === 0 && Array.isArray(recommendedJobs) && recommendedJobs.length > 0
-      ? recommendedJobs
+    user?.role === 0 && recommendedJobs.recommendedJobs?.length > 0
+      ? recommendedJobs.recommendedJobs
       : recentJobs;
   return (
     <div className={styles.homeContainer}>
@@ -162,7 +161,9 @@ function Home() {
             <br />
            <div className={styles.carouselSection}>
               <Title level={2} className={styles.carouselTitle}>
-                {user?.role === 0 && jobsToShow === recommendedJobs && recommendedJobs.length > 0
+              {console.log(jobsToShow)}
+              {console.log(recommendedJobs.length)}
+                {user?.role === 0 && recommendedJobs.recommendedJobs?.length > 0
                   ? "Recommended Jobs For You"
                   : "Recent Jobs"}
               </Title>
