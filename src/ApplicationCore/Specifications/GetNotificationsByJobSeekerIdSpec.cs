@@ -10,6 +10,8 @@ public sealed class GetNotificationsByJobSeekerIdSpec : Specification<JobSeekerN
         Query.Where(n => n.JobSeekerId == jobSeekerId)
             .Include(n => n.JobSeeker)
             .Include(n => n.Employer)
-            .Include(n => n.Job);
+            .Include(n => n.Interview)
+            .Include(n => n.Job)
+            .OrderByDescending(n => n.CreatedAt);
     }
 }

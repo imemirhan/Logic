@@ -78,8 +78,13 @@ const jobSeekerNotificationsSlice = createSlice({
       })
       .addCase(getNotificationsByJobSeekerId.fulfilled, (state, action) => {
         state.loading = false;
+        if (!action.payload || !Array.isArray(action.payload)) {
+          state.list = [];
+          state.unopenedList = [];
+          return;
+        }
         state.list = action.payload;
-        state.unopenedList = action.payload.filter(n => !n.isOpened);
+        state.unopenedList = action.payload.filter(n => n && !n.isOpened);
       })
       .addCase(getNotificationsByJobSeekerId.rejected, (state, action) => {
         state.loading = false;

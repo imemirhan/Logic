@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   List, Card, Typography, Spin, Alert, Tag, Avatar, Divider, Modal, Form, Input, DatePicker, Select, Button, message
 } from "antd";
+import { createJobSeekerNotification } from "../store/slices/notificationSlice";
 import styles from "./styles/JobApplicants.module.css";
 import GoBack from "../components/GoBack";
 import Skill from "../components/Skill";
@@ -92,55 +93,72 @@ function JobApplicants() {
   };
 
   const handleModalOk = async () => {
-    try {
-      setLoading(true);
-      const values = await form.validateFields();
+  try {
+    setLoading(true);
+    const values = await form.validateFields();
 
-      // If status is Interview Scheduled (2), create interview
-      if (values.status === 2) {
-        if (!interviewLink || !interviewDate) {
-          message.error("Please provide both interview link and date.");
-          setLoading(false);
-          return;
-        }
-        console.log("Dispatching interview with:", {
-        jobId: selectedApp?.id,
-        employerId: user?.id,
-        jobSeekerId: selectedApp?.jobSeekerId,
-        interViewLink: interviewLink,
-        interviewScheduledDate: interviewDate.toISOString(),
-      });
-        await dispatch(
-          createInterview({
-            jobId: selectedApp?.id,
-            employerId: user?.id,
-            jobSeekerId: selectedApp?.jobSeekerId,
-            interViewLink: interviewLink,
-            interviewScheduledDate: interviewDate.toISOString(),
-          })
-        ).unwrap();
-        message.success("Interview scheduled!");
+    // If status is Interview Scheduled (2), create interview and notification (forInterview)
+    if (values.status === 2) {
+      if (!interviewLink || !interviewDate) {
+        message.error("Please provide both interview link and date.");
+        setLoading(false);
+        return;
       }
+      // Create interview
+      const interview = await dispatch(
+        createInterview({
+          jobId: selectedApp?.jobId,  
+          employerId: user?.id,
+          jobSeekerId: selectedApp?.jobSeekerId,
+          interViewLink: interviewLink,
+          interviewScheduledDate: interviewDate.toISOString(),
+        })
+      ).unwrap();
 
-      // Always update the job application (but don't send interviewLink/interviewDate)
-      await dispatch(updateJobApplication({
-        id: selectedApp.id,
-        updateData: {
-          coverLetter: values.coverLetter,
+      await dispatch(
+        createJobSeekerNotification({
+          jobId: selectedApp?.jobId,
+          employerId: user?.id,
+          jobSeekerId: selectedApp?.jobSeekerId,
+          forStatus: false,
+          forInterview: true,
+          interviewId: interview?.id || interview?.data?.id,
+        })
+      );
+      message.success("Interview scheduled!");
+    } else {
+      // For any other status change, create notification for status
+      await dispatch(
+        createJobSeekerNotification({
+          jobId: selectedApp?.jobId,
+          jobSeekerId: selectedApp?.jobSeekerId,
+          employerId: user?.id,
           status: values.status,
-        }
-      })).unwrap();
-
-      message.success("Application updated!");
-      setModalVisible(false);
-      setSelectedApp(null);
-      setLoading(false);
-      dispatch(fetchApplicationsByEmployerId(user.id));
-    } catch (err) {
-      setLoading(false);
-      message.error("Failed to update application.");
+          forStatus: true,
+          forInterview: false,
+        })
+      );
     }
-  };
+
+    // Always update the job application (but don't send interviewLink/interviewDate)
+    await dispatch(updateJobApplication({
+      id: selectedApp.id,
+      updateData: {
+        coverLetter: values.coverLetter,
+        status: values.status,
+      }
+    })).unwrap();
+
+    message.success("Application updated!");
+    setModalVisible(false);
+    setSelectedApp(null);
+    setLoading(false);
+    dispatch(fetchApplicationsByEmployerId(user.id));
+  } catch (err) {
+    setLoading(false);
+    message.error("Failed to update application.");
+  }
+};
 
   const handleModalCancel = () => {
     setModalVisible(false);
@@ -150,7 +168,6 @@ function JobApplicants() {
     setInterviewDate(null);
     form.resetFields();
   };
-  console.log(selectedApp);
   return (
     <>
       <div className={styles.applicantsWrapper}>
@@ -277,7 +294,6 @@ function JobApplicants() {
                               <FontAwesomeIcon icon={faLinkedin} style={{ fontSize: 20, marginRight: 8 }} />
                             </a>
                           )}
-                          {console.log(seeker)}
                           {seeker.gitHub && (
                             <>
                               <a href={seeker.gitHub} target="_blank" rel="noopener noreferrer">

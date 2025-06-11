@@ -1,12 +1,35 @@
-import React from "react";
-import { Typography, Form, Input, Button, Row, Col } from "antd";
+import React, { useEffect } from "react";
+import { Typography, Form, Input, Button, Row, Col, message } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { createFeedback, resetFeedbackState } from "../store/slices/feedbackSlice";
 import styles from "./styles/Contact.module.css";
+import Swal from "sweetalert2"; // Add this import
 
 const { Title, Paragraph } = Typography;
 
 function Contact() {
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
+  const { status, error } = useSelector((state) => state.feedback);
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      Swal.fire({
+        title: "Thank you for your feedback! 😊🎉",
+        text: "We appreciate your input and will get back to you if needed.",
+        icon: "success",
+        confirmButtonText: "You're welcome!",
+      });
+      form.resetFields();
+      dispatch(resetFeedbackState());
+    } else if (status === "failed" && error) {
+      message.error(error);
+      dispatch(resetFeedbackState());
+    }
+  }, [status, error, dispatch, form]);
+
   const onFinish = (values) => {
-    console.log("Form Submitted:", values);
+    dispatch(createFeedback(values));
   };
 
   return (
@@ -28,6 +51,7 @@ function Contact() {
               layout="vertical"
               onFinish={onFinish}
               className={styles.contactForm}
+              form={form}
             >
               <Form.Item
                 label="Name"
@@ -57,7 +81,12 @@ function Contact() {
               </Form.Item>
 
               <Form.Item>
-                <Button type="primary" htmlType="submit" className={styles.submitButton}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className={styles.submitButton}
+                  loading={status === "loading"}
+                >
                   Send Message
                 </Button>
               </Form.Item>
@@ -72,7 +101,7 @@ function Contact() {
         <iframe
           title="Google Maps"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58205.225963830606!2d32.75701537261732!3d39.94059857754322!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14d347d520732db1%3A0xbdc57b0c0842b8d!2sAnkara!5e0!3m2!1sen!2str!4v1744364355347!5m2!1sen!2str"
-          width="100%"
+          width="80%"
           height="300"
           style={{ border: 0 }}
           allowFullScreen=""
@@ -86,20 +115,20 @@ function Contact() {
           <Col xs={24} sm={12} md={8}>
             <div className={styles.infoCard}>
               <Title level={4} className={styles.infoTitle}>Email</Title>
-              <Paragraph className={styles.infoText}>contact@dummy.com</Paragraph>
+              <Paragraph className={styles.infoText}>emir_han_ataman@hotmail.com</Paragraph>
             </div>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <div className={styles.infoCard}>
               <Title level={4} className={styles.infoTitle}>Phone</Title>
-              <Paragraph className={styles.infoText}>+1 234 567 890</Paragraph>
+              <Paragraph className={styles.infoText}>+90 535 402 93 89</Paragraph>
             </div>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <div className={styles.infoCard}>
               <Title level={4} className={styles.infoTitle}>Address</Title>
               <Paragraph className={styles.infoText}>
-                123 Dummy Street, City, Country
+                Ankara, Turkey
               </Paragraph>
             </div>
           </Col>

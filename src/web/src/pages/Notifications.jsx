@@ -18,7 +18,7 @@ function Notifications() {
       dispatch(getNotificationsByJobSeekerId(user.id));
     }
   }, [dispatch, user]);
-
+console.log("Notifications:", notifications);
   return (
     <div className={styles.notificationsContainer}>
       <Title level={2} className={styles.title}>Notifications</Title>
@@ -63,32 +63,49 @@ function Notifications() {
                   <div className={styles.notificationMeta}>
                     {notif.jobId && (
                       <div>
-                        <Text type="secondary">Job ID:</Text> <Text>{notif.jobId}</Text>
+                        <Text type="secondary">Applied Job:</Text> <Text>{notif.job.name}</Text>
                       </div>
                     )}
                     {notif.employerId && (
                       <div>
-                        <Text type="secondary">Employer ID:</Text> <Text>{notif.employerId}</Text>
+                        <Text type="secondary">Employer (Interviewer):</Text> <Text>{notif.employer.name}</Text>
                       </div>
                     )}
-                    {notif.jobSeekerId && (
+                    {notif.status !== null && (
                       <div>
-                        <Text type="secondary">Job Seeker ID:</Text> <Text>{notif.jobSeekerId}</Text>
-                      </div>
-                    )}
-                    {notif.status && (
-                      <div>
-                        <Text type="secondary">Status:</Text> <Text>{notif.status}</Text>
-                      </div>
-                    )}
-                    {notif.forStatus && (
-                      <div>
-                        <Text type="secondary">For Status:</Text> <Text>{notif.forStatus}</Text>
+                        <Text type="secondary">Status: </Text> <Text>{notif.status}</Text>
                       </div>
                     )}
                     {notif.forInterview && (
                       <div>
-                        <Text type="secondary">For Interview:</Text> <Text>{notif.forInterview}</Text>
+                        <Text type="secondary">Interview Link: </Text>
+                        {notif.interview.interviewLink? (
+                          <a
+                            href={
+                              notif.interview.interviewLink.startsWith("http")
+                                ? notif.interview.interviewLink
+                                : `https://${notif.interview.interviewLink}`
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Join Interview
+                          </a>
+                        ) : (
+                          <Text>{notif.interview.interviewLink}</Text>
+                        )}
+                        <br />
+                        <Text type="secondary">Interview Date: </Text>
+                        <Text>
+                        {new Date(notif.interview.scheduledDate).toLocaleString('en-US', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </Text>
                       </div>
                     )}
                     {notif.interviewId && (

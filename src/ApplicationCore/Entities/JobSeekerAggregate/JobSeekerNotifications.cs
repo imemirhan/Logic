@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.EmployerAggregate;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using ApplicationCore.Entities.EmployerAggregate;
 using ApplicationCore.Entities.InterviewAggregate;
 using ApplicationCore.Entities.JobAggregate;
 using ApplicationCore.Interfaces;
@@ -21,9 +22,9 @@ public class JobSeekerNotifications : BaseEntity, IAggregateRoot
     public bool ForInterview { get; private set; }
     
     public JobApplication.ApplicationStatus? Status { get; private set; }
-    public long? InterviewId { get; private set; }
-    public Interviews? Interview { get; private set; }
-    public bool IsOpened { get; private set; }
+    public int? InterviewId { get; private set; }
+    [ForeignKey("InterviewId")] public Interviews? Interview { get; private set; } = null;
+    public bool IsOpened { get; set; }
     public string Message { get; private set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -33,7 +34,7 @@ public class JobSeekerNotifications : BaseEntity, IAggregateRoot
     public JobSeekerNotifications(int jobId,
         int jobSeekerId,
         int employerId,
-        long? interviewId = null, 
+        int? interviewId = null, 
         JobApplication.ApplicationStatus? status = null,
         bool forStatus = false,
         bool forInterview = false)

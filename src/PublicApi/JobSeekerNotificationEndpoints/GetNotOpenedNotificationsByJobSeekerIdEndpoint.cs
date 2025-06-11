@@ -39,18 +39,44 @@ public class GetNotOpenedNotificationsByJobSeekerEndpoint
             {
                 Id = n.Id,
                 JobId = n.JobId,
+                Job = n.Job == null ? null : new NotifJobDto
+                {
+                    Name = n.Job.Title
+                },
                 JobSeekerId = n.JobSeekerId,
                 EmployerId = n.EmployerId,
+                Employer = n.Employer == null
+                    ? null
+                    : new NotifEmpDto
+                    {
+                        Name = n.Employer.Name,
+                    },
                 ForStatus = n.ForStatus,
                 ForInterview = n.ForInterview,
-                Status = n.Status,
-                Message = n.Message,
+                Status = n.Status == null ? null : n.Status.ToString(),
                 InterviewId = n.InterviewId,
+                Interview = n.Interview == null
+                    ? null
+                    : new InterviewDto
+                    {
+                        InterviewLink = n.Interview.InterViewLink,
+                        ScheduledDate = n.Interview.InterviewScheduledDate
+                    },
                 IsOpened = n.IsOpened,
+                Message = n.Message,
                 CreatedAt = n.CreatedAt
             }).ToList()
         };
 
-        return Results.Ok(response);
+        var result = Results.Ok(response);
+
+        // ✅ Then update IsOpened = true
+        foreach (var notification in notifications)
+        {
+            notification.IsOpened = true;
+            await repo.UpdateAsync(notification);
+        }
+
+        return result;
     }
 }

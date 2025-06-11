@@ -14,12 +14,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import styles from "./styles/Navbar.module.css";
 import Swal from "sweetalert2";
+import logo from "../assets/logo.png";
 import { selectUnopenedNotifications, getNotOpenedNotificationsByJobSeekerId } from "../store/slices/notificationSlice";
 
 const { Header } = Layout;
 
 function Navbar() {
   const { user } = useSelector((state) => state.userSlice);
+
   const notifications = useSelector(selectUnopenedNotifications);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -85,11 +87,13 @@ function Navbar() {
       </Link>
     </>
   );
-  useEffect(() => {
-    if (user?.id) {
-      dispatch(getNotOpenedNotificationsByJobSeekerId(user.id));
-    }
-  }, [user, dispatch]);
+  if(user?.role === 0) {
+    useEffect(() => {
+      if (user?.id) {
+        dispatch(getNotOpenedNotificationsByJobSeekerId(user.id));
+      }
+    }, [user, dispatch]);
+  }
   // Close notifications dropdown if clicked outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -106,13 +110,13 @@ function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [notifVisible]);
-console.log("Notifications:", notifications); 
   return (
     <Layout>
       <Header className={styles.header}>
         <div className={styles.logo}>
           <Link to="/" className={styles.buttonLink}>
-            Logic
+            <img src={logo} alt="Logo" style={{ top: "20px", height: 60, width: 60, objectFit: "contain" }} />
+              Logic
           </Link>
         </div>
         <div className={styles.menu}>{navLinks}</div>
@@ -135,6 +139,7 @@ console.log("Notifications:", notifications);
           ) : (
             <>
               {/* Notification bell icon */}
+              {isLoggedIn && user?.role === 0 && (
               <div
                 ref={notifRef}
                 style={{ position: "relative", cursor: "pointer" }}
@@ -201,7 +206,7 @@ console.log("Notifications:", notifications);
                   </div>
                 )}
               </div>
-
+              )}
               <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
                 <span className={styles.userDropdown} style={{ marginLeft: 16 }}>
                   <span className={styles.userName}>

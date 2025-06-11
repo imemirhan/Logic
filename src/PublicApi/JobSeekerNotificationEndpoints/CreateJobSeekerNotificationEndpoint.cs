@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.JobSeekerAggregate;
+﻿using ApplicationCore.Entities.JobAggregate;
+using ApplicationCore.Entities.JobSeekerAggregate;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -30,16 +31,17 @@ public class CreateJobSeekerNotificationEndpoint
     {
         var response = new CreateJobSeekerNotificationResponse(request.CorrelationId());
 
-        var dto = request.Notification;
 
         var notification = new JobSeekerNotifications(
-            jobId: dto.JobId,
-            employerId: dto.EmployerId,
-            jobSeekerId: dto.JobSeekerId,
-            forStatus: dto.ForStatus,
-            forInterview: dto.ForInterview,
-            status: dto.Status,
-            interviewId: dto.InterviewId
+            jobId: request.JobId,
+            employerId: request.EmployerId,
+            jobSeekerId: request.JobSeekerId,
+            forStatus: request.ForStatus,
+            forInterview: request.ForInterview,
+            status: request.Status.HasValue 
+                ? (JobApplication.ApplicationStatus)request.Status.Value 
+                : null,
+            interviewId: request.InterviewId
         );
 
         var created = await repo.AddAsync(notification);
@@ -52,8 +54,13 @@ public class CreateJobSeekerNotificationEndpoint
             EmployerId = created.EmployerId,
             ForStatus = created.ForStatus,
             ForInterview = created.ForInterview,
-            Status = created.Status,
+            Status = created.Status == null ? null : created.Status.ToString(),
             InterviewId = created.InterviewId,
+            Interview = created.Interview == null ? null : new InterviewDto
+            {
+                InterviewLink = created.Interview.InterViewLink,
+                ScheduledDate = created.Interview.InterviewScheduledDate
+            },
             IsOpened = created.IsOpened,
             CreatedAt = created.CreatedAt
         };

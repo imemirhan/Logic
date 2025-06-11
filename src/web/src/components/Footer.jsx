@@ -8,9 +8,9 @@ function Footer() {
         {/* Contact Information */}
         <div className={styles.contact}>
           <h3>Contact Us</h3>
-          <p>Email: contact@dummy.com</p>
-          <p>Phone: +1 234 567 890</p>
-          <p>Address: 123 Dummy Street, City, Country</p>
+          <p>Email: emir_han_ataman@hotmail.com</p>
+          <p>Phone: +90 535 402 93 89</p>
+          <p>Address: Ankara, Turkey</p>
         </div>
 
         {/* Google Maps Embed */}

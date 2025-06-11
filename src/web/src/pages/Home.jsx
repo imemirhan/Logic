@@ -161,8 +161,6 @@ function Home() {
             <br />
            <div className={styles.carouselSection}>
               <Title level={2} className={styles.carouselTitle}>
-              {console.log(jobsToShow)}
-              {console.log(recommendedJobs.length)}
                 {user?.role === 0 && recommendedJobs.recommendedJobs?.length > 0
                   ? "Recommended Jobs For You"
                   : "Recent Jobs"}

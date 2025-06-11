@@ -10,6 +10,7 @@ public sealed class GetNotOpenedMailsByJobSeekerIdSpec : Specification<JobSeeker
         Query.Where(n => n.JobSeekerId == jobSeekerId && !n.IsOpened)
             .Include(n => n.JobSeeker)
             .Include(n => n.Employer)
-            .Include(n => n.Job);
+            .Include(n => n.Job)
+            .OrderByDescending(n => n.CreatedAt);
     }
 }

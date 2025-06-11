@@ -59,12 +59,12 @@ public class JobApplication : BaseEntity, IAggregateRoot
     
     public enum ApplicationStatus
     {
-        Submitted,
-        UnderReview,
-        InterviewScheduled,
-        InterviewCompleted,
-        Offered,
-        Rejected,
-        Withdrawn
+        Submitted = 0,
+        UnderReview = 1,     
+        InterviewScheduled = 2,
+        InterviewCompleted = 3, 
+        Offered = 4,         
+        Rejected = 5,
+        Withdrawn = 6  
     }
 }

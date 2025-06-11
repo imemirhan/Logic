@@ -28,6 +28,7 @@ import jobSeekerResumeReducer from "./slices/jobSeekerResumeSlice";
 import getRecommendedJobReducer from "./slices/getRecommendedJobSlice";
 import interviewReducer from './slices/interviewSlice';
 import jobSeekerNotificationsReducer from './slices/notificationSlice';
+import feedbackReducer from './slices/feedbackSlice';
 
 
 const persistConfig = {
@@ -54,6 +55,7 @@ const rootReducer = combineReducers({
   getRecommendedJobs: getRecommendedJobReducer,
   interviews: interviewReducer,
   jobSeekerNotifications: jobSeekerNotificationsReducer,
+  feedback: feedbackReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

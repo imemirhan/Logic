@@ -11,6 +11,6 @@ public class JobSeekerNotificationCreateDto
     public bool ForStatus { get; set; }
     public bool ForInterview { get; set; }
 
-    public JobApplication.ApplicationStatus Status { get; set; }
-    public long? InterviewId { get; set; }
+    public JobApplication.ApplicationStatus? Status { get; set; }
+    public int? InterviewId { get; set; }
 }

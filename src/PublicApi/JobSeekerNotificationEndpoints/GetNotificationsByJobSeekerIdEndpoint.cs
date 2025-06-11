@@ -16,19 +16,21 @@ public class GetNotificationsByJobSeekerIdEndpoint
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app.MapGet("api/jobseeker-notifications/{jobSeekerId}",
-            [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER, AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-            async (int jobSeekerId, IRepository<JobSeekerNotifications> repo) =>
-            {
-                var request = new GetNotificationsByJobSeekerIdRequest { JobSeekerId = jobSeekerId };
-                return await HandleAsync(request, repo);
-            })
+                [Authorize(Roles = Shared.Authorization.Constants.Roles.JOBSEEKER,
+                    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+                async (int jobSeekerId, IRepository<JobSeekerNotifications> repo) =>
+                {
+                    var request = new GetNotificationsByJobSeekerIdRequest { JobSeekerId = jobSeekerId };
+                    return await HandleAsync(request, repo);
+                })
             .WithName("GetNotificationsByJobSeekerId")
             .WithDescription("Gets all notifications for a specific job seeker")
             .Produces<GetNotificationsByJobSeekerIdResponse>(StatusCodes.Status200OK)
             .WithTags("Job Seeker Notifications");
     }
 
-    public async Task<IResult> HandleAsync(GetNotificationsByJobSeekerIdRequest request, IRepository<JobSeekerNotifications> repo)
+    public async Task<IResult> HandleAsync(GetNotificationsByJobSeekerIdRequest request,
+        IRepository<JobSeekerNotifications> repo)
     {
         var notifySpec = new GetNotificationsByJobSeekerIdSpec(request.JobSeekerId);
         var notifications = await repo.ListAsync(notifySpec);
@@ -39,14 +41,31 @@ public class GetNotificationsByJobSeekerIdEndpoint
             {
                 Id = n.Id,
                 JobId = n.JobId,
+                Job = n.Job == null ? null : new NotifJobDto
+                {
+                    Name = n.Job.Title
+                },
                 JobSeekerId = n.JobSeekerId,
                 EmployerId = n.EmployerId,
+                Employer = n.Employer == null
+                    ? null
+                    : new NotifEmpDto
+                    {
+                        Name = n.Employer.Name,
+                    },
                 ForStatus = n.ForStatus,
                 ForInterview = n.ForInterview,
-                Status = n.Status,
+                Status = n.Status == null ? null : n.Status.ToString(),
                 InterviewId = n.InterviewId,
+                Interview = n.Interview == null
+                    ? null
+                    : new InterviewDto
+                    {
+                        InterviewLink = n.Interview.InterViewLink,
+                        ScheduledDate = n.Interview.InterviewScheduledDate
+                    },
                 IsOpened = n.IsOpened,
-                Message =  n.Message,
+                Message = n.Message,
                 CreatedAt = n.CreatedAt
             }).ToList()
         };
