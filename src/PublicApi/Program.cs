@@ -109,7 +109,7 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Logic API", Version = "v1" });
     c.EnableAnnotations();
     c.SchemaFilter<CustomSchemaFilters>();
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -190,7 +190,7 @@ app.UseSwagger();
 // specifying the Swagger JSON endpoint.
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Logic API V1");
 });
 
 app.MapControllers();
