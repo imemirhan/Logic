@@ -1,0 +1,45 @@
+services:
+  publicapi:
+    image: publicapi
+    build:
+      context: .
+      dockerfile: src/PublicApi/Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__LogicDb=Host=logicdb;Database=logic;Username=postgres;Password=123
+      - ConnectionStrings__LogicIdentityDb=Host=identitydb;Database=logicidentity;Username=postgres;Password=123
+    depends_on:
+      - logicdb
+      - identitydb
+
+  logicdb:
+    image: postgres:15
+    container_name: logicdb
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=logic
+    ports:
+      - "5432:5432"
+    volumes:
+      - logicdata:/var/lib/postgresql/data
+
+  identitydb:
+    image: postgres:15
+    container_name: identitydb
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=logicidentity
+    ports:
+      - "5433:5432"
+    volumes:
+      - identitydata:/var/lib/postgresql/data
+
+volumes:
+  logicdata:
+  identitydata:
