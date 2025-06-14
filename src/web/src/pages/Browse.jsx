@@ -37,17 +37,27 @@ function Browse() {
     dispatch(getJobs({
       title: filters.title,
       location: filters.location,
-      jobType: filters.jobType.find(type => type !== "Remote"),
+      jobType: jobTypeEnum,
       isRemote: filters.jobType.includes("Remote"),
-      page: pagination.page,
-      pageSize: pagination.pageSize,
+      page: 1,
+      pageSize: 10,
     }));
   }, []);
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
+  const employmentTypeMap = {
+    "Full-Time": 0,
+    "Part-Time": 1,
+    "Contract": 2,
+    "Internship": 3,
+    "Remote": 4,
+    "Hybrid": 5,
+  };
 
+  const selectedType = filters.jobType.find(type => type !== "Remote");
+  const jobTypeEnum = employmentTypeMap[selectedType] ?? null;
   const handleApplyFilters = () => {
     const params = new URLSearchParams();
 
@@ -62,7 +72,7 @@ function Browse() {
 
     dispatch(getJobs({
       ...filters,
-      jobType: filters.jobType.find((type) => type !== "Remote"),
+      jobType: jobTypeEnum,
       isRemote: filters.jobType.includes("Remote"),
       page: 1,
       pageSize: pagination.pageSize,
@@ -93,6 +103,7 @@ function Browse() {
       pageSize,
     }));
   };
+  console.log(jobs);
   return (
     <Layout className={styles.layout}>
       <Content className={styles.container}>

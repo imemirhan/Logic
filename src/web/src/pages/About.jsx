@@ -2,6 +2,8 @@ import React from "react";
 import { Typography, Row, Col, Card, Divider } from "antd";
 import { TeamOutlined, SmileOutlined, BulbOutlined, StarFilled } from "@ant-design/icons";
 import styles from "./styles/About.module.css";
+import emir from "../assets/emir.jpg"
+import berke from "../assets/berke.jpg"
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -96,10 +98,10 @@ function About() {
           <Col xs={24} sm={12} md={6}>
             <Card className={styles.teamCard} hoverable>
               <img
-                src="https://picsum.photos/200/300?random=1"
-                alt="Emirhan Ataman"
-                className={styles.teamImage}
-                style={{ borderRadius: "50%", width: 120, height: 120, objectFit: "cover", margin: "0 auto" }}
+                  src={emir}
+                  alt="Emirhan Ataman"
+                  className={styles.teamImage}
+                  style={{ borderRadius: "50%", width: 120, height: 120, objectFit: "cover", margin: "0 auto" }}
               />
               <Title level={4} className={styles.teamName}>Emirhan Ataman</Title>
               <Paragraph className={styles.teamRole}>Jr. Software Developer</Paragraph>
@@ -111,10 +113,10 @@ function About() {
           <Col xs={24} sm={12} md={6}>
             <Card className={styles.teamCard} hoverable>
               <img
-                src="https://picsum.photos/200/300?random=2"
-                alt="Berke Özeken"
-                className={styles.teamImage}
-                style={{ borderRadius: "50%", width: 120, height: 120, objectFit: "cover", margin: "0 auto" }}
+                  src={berke}
+                  alt="Berke Özeken"
+                  className={styles.teamImage}
+                  style={{ borderRadius: "50%", width: 120, height: 120, objectFit: "cover", margin: "0 auto" }}
               />
               <Title level={4} className={styles.teamName}>Berke Özeken</Title>
               <Paragraph className={styles.teamRole}>Software Engineering Student</Paragraph>

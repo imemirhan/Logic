@@ -1,42 +1,184 @@
+.link {
+  text-decoration: none;
+}
+
 .jobCard {
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin-bottom: 12px;
+  border-radius: 14px;
+  padding: 22px 28px 18px 28px;
+  box-shadow: 0 2px 12px rgba(30, 136, 229, 0.07);
+  transition: transform 0.22s, box-shadow 0.22s;
+  margin-bottom: 18px;
+  background: #fff;
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .jobCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px) scale(1.012);
+  box-shadow: 0 8px 24px rgba(30, 136, 229, 0.13);
+  border-color: #1976d2;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.logoAndTitle {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.employerLogo {
+  border: 2px solid #e3eafc;
+  background: #f7faff;
+  flex-shrink: 0;
 }
 
 .jobTitle {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #1a237e;
+  margin: 0;
+  line-height: 1.2;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.employerName {
+  font-size: 1rem;
+  color: #1976d2;
+  font-weight: 500;
+  margin-top: 2px;
+  letter-spacing: 0.1px;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.infoRow {
+  margin-bottom: 6px;
+  color: #607d8b;
+  font-size: 0.98rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .jobLocation {
-  font-size: 14px;
-  color: #7b7b7b;
-  margin-bottom: 10px;
+  font-size: 0.98rem;
+  color: #607d8b;
+  font-weight: 500;
 }
 
 .jobDescription {
-  font-size: 14px;
-  color: #4a4a4a;
-  margin-bottom: 15px;
+  color: #263238;
+  font-size: 1rem;
+  margin: 8px 0 0 0;
+  min-height: 36px;
+  line-height: 1.5;
+  word-break: break-word;
 }
 
 .applyButton {
-  background-color: #4a90e2;
-  border-color: #4a90e2;
-  color: white;
+  background-color: #1976d2;
+  border-color: #1976d2;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 0 22px;
+  height: 38px;
+  transition: background 0.2s, border 0.2s;
+  margin-left: auto;
+  margin-top: 4px;
 }
 
 .applyButton:hover {
-  background-color: #3a7bd5;
-  border-color: #3a7bd5;
+  background-color: #1251a3;
+  border-color: #1251a3;
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .jobCard {
+    padding: 16px 10px 12px 10px;
+  }
+  .jobTitle {
+    font-size: 1.05rem;
+    max-width: 180px;
+  }
+  .employerName {
+    font-size: 0.95rem;
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  .jobCard {
+    padding: 10px 4px 8px 4px;
+    min-width: 320px; /* Prevents card from shrinking too much */
+    min-height: 120px;
+    overflow-x: auto; /* Allow horizontal scroll if needed */
+  }
+  .headerRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+  }
+  .logoAndTitle {
+    gap: 10px;
+    min-width: 0;
+  }
+  .jobTitle {
+    font-size: 0.98rem;
+    max-width: 180px;
+  }
+  .employerLogo {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .applyButton {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
+    padding: 0 0;
+    height: 34px;
+    font-size: 15px;
+  }
+  .employerName {
+    font-size: 0.9rem;
+    max-width: 120px;
+  }
+  .jobDescription {
+    font-size: 0.95rem;
+    min-height: 24px;
+  }
+}
+
+@media (max-width: 400px) {
+  .jobCard {
+    padding: 6px 2px 4px 2px;
+    min-width: 260px; /* Still prevent over-shrinking */
+  }
+  .jobTitle {
+    font-size: 0.9rem;
+    max-width: 100px;
+  }
+  .employerName {
+    font-size: 0.8rem;
+    max-width: 80px;
+  }
 }

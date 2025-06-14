@@ -40,17 +40,36 @@ public class GetAllJobsEndpoint : IEndpoint<IResult, GetAllJobsRequest, IReposit
             jobs = jobs.Where(j => j.Location.ToLower().Contains(normalizedLocation));
         }
 
-        if (request.JobType.HasValue)
-            jobs = jobs.Where(j => j.EType == request.JobType.Value);
+        if (request.JobType >= 0)
+            jobs = jobs.Where(j => j.EType == (EmploymentType)request.JobType);
 
         var totalItems = await jobs.CountAsync();
 
         var pagedJobs = await jobs
+            .Include(j => j.Employer)
             .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync();
 
-        var jobDtos = _mapper.Map<List<JobReadDto>>(pagedJobs);
+        var jobDtos = pagedJobs.Select(j => new JobReadDto
+        {
+            Id = j.Id,
+            EmployerId = j.EmployerId,
+            EmployerName = j.Employer.Name,          // example property
+            EmployerLogoUrl = j.Employer.ProfileImageUrl,    // example property
+            Title = j.Title,
+            Description = j.Description,
+            Location = j.Location,
+            EType = j.EType,
+            SalaryRange = j.SalaryRange,
+            IsRemote = j.IsRemote,
+            Status = j.Status,
+            ApplicantCount = j.ApplicantCount,
+            PostedDate = j.PostedDate,
+            ExpirationDate = j.ExpirationDate,
+            CreatedAt = j.CreatedAt,
+            UpdatedAt = j.UpdatedAt
+        }).ToList();
 
         return Results.Ok(new GetAllJobsResponse(request.CorrelationId())
         {
@@ -76,7 +95,7 @@ public class GetAllJobsEndpoint : IEndpoint<IResult, GetAllJobsRequest, IReposit
                     {
                         Title = title,
                         Location = location,
-                        JobType = jobType,
+                        JobType = jobType.HasValue ? (int)jobType.Value : -1,
                         Page = page,
                         PageSize = pageSize
                     };

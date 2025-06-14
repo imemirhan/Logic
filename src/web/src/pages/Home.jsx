@@ -85,26 +85,25 @@ function Home() {
             Make the Best Decision for Your Career.
           </Paragraph>
           <div className={styles.searchBar}>
-            <Space.Compact compact>
-             <Input
-                style={{ width: "60%" }}
-                placeholder="Job title, keywords, or company"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                prefix={<FontAwesomeIcon icon={faSearch} />}
-              />
-              <Input
-                style={{ width: "30%" }}
-                placeholder="City, state, or zip code"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                prefix={<FontAwesomeIcon icon={faMapMarkerAlt} />}
-              />
-              <Button type="primary" onClick={handleSearch} className={styles.searchButton}>
-                Find Jobs
-              </Button>
-            </Space.Compact>
-
+              <Space.Compact compact={true}>
+                  <Input
+                      style={{ width: "60%" }}
+                      placeholder="Job title, keywords, or company"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      prefix={<FontAwesomeIcon icon={faSearch} />}
+                  />
+                  <Input
+                      style={{ width: "30%" }}
+                      placeholder="City, state, or zip code"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      prefix={<FontAwesomeIcon icon={faMapMarkerAlt} />}
+                  />
+                  <Button type="primary" onClick={handleSearch} className={styles.searchButton}>
+                      Find Jobs
+                  </Button>
+              </Space.Compact>
           </div>
             <br />
             <br />

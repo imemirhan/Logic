@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.JobAggregate;
+﻿using ApplicationCore.Entities.EmployerAggregate;
+using ApplicationCore.Entities.JobAggregate;
 
 namespace PublicApi.JobEndpoints;
 
@@ -6,6 +7,8 @@ public class JobReadDto
 {
     public int Id { get; set; }
     public int EmployerId{ get; set; }
+    public string EmployerName { get; set; } = default!;
+    public string? EmployerLogoUrl { get; set; } = default!;
     public string Title { get; set; } = default!;
     public string Description { get; set; } = default!;
     public string Location { get; set; } = default!;

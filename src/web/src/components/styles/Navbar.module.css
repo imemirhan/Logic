@@ -222,22 +222,99 @@
   .buttons {
     gap: 8px;
   }
+  /* Allow horizontal scrolling on small screens if content overflows */
+  .header {
+    overflow-x: auto;
+    min-width: 320px;
+  }
+  .logo {
+    min-width: 90px;
+    max-width: 50vw;
+  }
 }
 
 @media (max-width: 480px) {
   .header {
-    height: 48px;
-    padding: 0 2px;
+    height: 44px;
+    padding: 0 1vw;
   }
   .logo {
-    font-size: 15px;
-    line-height: 48px;
+    font-size: 13px;
+    line-height: 44px;
+    max-width: 38vw;
   }
   .avatar {
-    width: 32px;
-    height: 32px;
+    width: 26px;
+    height: 26px;
   }
   .userName {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: middle;
   }
+  .drawerMenu .menuItem {
+    font-size: 15px;
+    padding: 14px 12px;
+  }
+  .drawerButtons {
+    padding: 12px 12px;
+  }
+  /* Prevent elements from shrinking too much and allow x-axis scroll if needed */
+  .header {
+    min-width: 260px;
+    overflow-x: auto;
+  }
+  .logo {
+    min-width: 60px;
+    max-width: 38vw;
+  }
+  .buttons,
+  .userDropdown {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 370px) {
+  .logo {
+    font-size: 11px;
+    max-width: 28vw;
+  }
+  .userName {
+    font-size: 0.75rem;
+    max-width: 40px;
+  }
+  /* For very small screens, ensure header is always scrollable horizontally */
+  .header {
+    min-width: 220px;
+    overflow-x: auto;
+  }
+  .logo {
+    min-width: 40px;
+    max-width: 28vw;
+  }
+}
+
+@media (max-width: 400px) {
+  .mobileDrawer .ant-drawer-content {
+    width: 100vw !important;
+    min-width: 0 !important;
+  }
+}
+
+.drawerMenu .menuItem,
+.drawerButtons .navButton {
+  min-height: 44px;
+  font-size: 1rem;
+}
+
+.mobileDrawer .ant-drawer-body {
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.mobileDrawer .ant-drawer-body::-webkit-scrollbar {
+  display: none;
 }

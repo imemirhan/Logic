@@ -82,3 +82,61 @@
   background-color: #039acb; /* Darker shade on hover */
   border-color: #039acb;
 }
+
+/* Responsive styles */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+  .leftSection,
+  .rightSection {
+    flex: 1 1 100%;
+    min-width: 0;
+    min-height: 220px;
+  }
+  .leftSection {
+    height: 180px;
+    max-height: 220px;
+  }
+  .rightSection {
+    min-height: 320px;
+    padding: 24px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+  .leftSection {
+    display: none;
+  }
+  .rightSection {
+    flex: 1 1 100%;
+    min-width: 0;
+    min-height: 100vh;
+    padding: 18px 0;
+    background: #fff;
+  }
+  .formContainer {
+    max-width: 98vw;
+    padding: 10px 4vw;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .title {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .formContainer {
+    padding: 6px 2vw;
+  }
+  .title {
+    font-size: 1.1rem;
+  }
+}
